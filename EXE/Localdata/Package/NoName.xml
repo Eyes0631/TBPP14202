@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220325144731" LastTime="">
+  <Fields>
+    <F視覺JobName Type="String" Value="XXX" />
+    <FCCD_Focus_Z Type="Int" Value="0" />
+    <FDeviceTable Type="SubPackage" FolderPath="D:\Socuse\TBPP14200\EXE\LocalData\DeviceTable" Value="" />
+    <FKitTable Type="SubPackage" FolderPath="D:\Socuse\TBPP14200\EXE\LocalData\KitTable" Value="TestKit" />
+    <FBoardTable Type="SubPackage" FolderPath="D:\Socuse\TBPP14200\EXE\LocalData\BoardTable" Value="TESTBOARD" />
+    <FLinkType Type="Int" Value="-1" />
+    <FVisionJobName Type="String" Value="" />
+    <FDT_HDT_BF_DES_AF Type="Int" Value="200" />
+    <FDT_HDT_BF_DES_BF Type="Int" Value="200" />
+    <FDT_HDT_BF_DES Type="Int" Value="200" />
+    <FDT_HDT_BF_VAC Type="Int" Value="200" />
+    <FDT_HDT_BIB_DES_AF Type="Int" Value="10" />
+    <FDT_HDT_BIB_DES_BF Type="Int" Value="10" />
+    <FDT_HDT_BIB_DES Type="Int" Value="10" />
+    <FDT_HDT_BIB_VAC Type="Int" Value="10" />
+    <FOffset_HDT_BIB_B_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_Y Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_X Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_KIT_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_KIT_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_KIT_Y Type="Int" Value="0" />
+    <FOffset_HDT_BIB_B_KIT_X Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_KIT_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_KIT_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_KIT_Y Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_KIT_X Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_Y Type="Int" Value="0" />
+    <FOffset_HDT_BIB_A_X Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_X Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_KIT_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_KIT_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_KIT_Y Type="Int" Value="0" />
+    <FOffset_HDT_BF_B_KIT_X Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_KIT_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_KIT_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_KIT_Y Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_KIT_X Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_Z_PLACE Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_Z_PICKUP Type="Int" Value="0" />
+    <FOffset_HDT_BF_A_X Type="Int" Value="0" />
+    <FDT_HDT_ST_SlowSpeed_Dis_Place_BSM Type="Int" Value="0" />
+    <FDT_HDT_BIB_SlowSpeed_Dis_Pick_BSM Type="Int" Value="0" />
+    <FDT_HDT_BIB_SlowSpeed_BSM Type="Int" Value="5000" />
+    <FDT_HDT_BIB_SlowSpeed_Dis_KSM Type="Int" Value="0" />
+    <FDT_HDT_BIB_SlowSpeed_KSM Type="Int" Value="5000" />
+    <FDT_HDT_BF_SlowSpeed_BowlFeeder Type="Int" Value="5000" />
+    <FDT_HDT_BF_SlowSpeed_Dis_Pick_BowlFeeder Type="Int" Value="0" />
+    <FDT_HDT_BF_SlowSpeed_Dis Type="Int" Value="0" />
+    <FDT_HDT_BF_SlowSpeed Type="Int" Value="5000" />
+    <FClamsSheelBaseYOffset Type="Int" Value="0" />
+    <FOpenAction_ZDown1 Type="Int" Value="0" />
+    <FRotateOffset Type="Int" Value="0" />
+    <FClamsSheelOpenDetectYPos Type="Int" Value="0" />
+    <FClamsSheelCloseDetectYPos Type="Int" Value="0" />
+    <FClamsSheelOpenDetectZPos Type="Int" Value="0" />
+    <FClamsSheelCloseDetectZPos Type="Int" Value="0" />
+    <FCloseAction_YOffset Type="Int" Value="0" />
+    <FCloseAction_ZDown2 Type="Int" Value="0" />
+    <FCloseAction_YDis1 Type="Int" Value="5000" />
+    <FCloseAction_ZDown1 Type="Int" Value="0" />
+    <FOpenAction_YOffset Type="Int" Value="5000" />
+  </Fields>
+</Table>

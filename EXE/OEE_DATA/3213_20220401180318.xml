@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>64998.9067362</Index>
+    <EquimentID />
+    <LotNo>3213</LotNo>
+    <OPID>213</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>NoName1</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-01T18:03:18.9067362+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>123</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Untested</Type>
+        <Qty>
+          <Process>893</Process>
+          <Completed>893</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>65027.910141399996</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:03:47.9101414+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65050.487737699994</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:04:10.4877377+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0002</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65181.499233899995</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:06:21.4992339+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0003</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65272.7052242</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:07:52.7052242+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0004</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65378.221928499996</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:09:38.2219285+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0005</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65468.906314</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:11:08.906314+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0006</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65573.7966935</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:12:53.7966935+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0007</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65664.4112661</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:14:24.4112661+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0008</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65769.0313688</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:16:09.0313688+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0009</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65859.860367699992</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:17:39.8603677+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0010</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65965.0090568</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:19:25.0090568+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0011</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>66055.4241627</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:20:55.4241627+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0012</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>66160.3883446</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:22:40.3883446+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0013</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>66250.860298799991</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:24:10.8602988+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0014</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>66356.2104482</Index>
+      <LotCreateDateTime>64998.9067362</LotCreateDateTime>
+      <StartTime>2022-04-01T18:25:56.2104482+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0015</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

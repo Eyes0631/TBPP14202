@@ -1,0 +1,29 @@
+
+[IJBarcodeReader] (介面)
+    - bool DisableAutoTrigger() : Disable Auto Trigger
+    - bool Enable() : Enable the laser
+    - bool Disable() : Disable the laser
+    - bool Trigger() : Trigger the reader
+    - bool DeTrigger() : De-trigger the reader
+    - bool GetResult(ref string barcode) : Get the barcode
+
+[JBarcodeReaderAbstract] (抽象類別，繼承 IJBarcodeReader 介面)
+    - bool Open()
+    - void Close()
+    - bool DisableAutoTrigger() : 抽象函式，
+    - bool Enable() : 抽象函式，
+    - bool Disable() : 抽象函式，
+    - bool Trigger() : 抽象函式，
+    - bool DeTrigger() : 抽象函式，
+    - bool GetResult(ref string barcode) : 抽象函式，
+
+[JBarcodeReader_CipherLab] (繼承 JBarcodeReaderAbstract 類別)
+
+[JBarcodeReader_OpticonNLV] (繼承 JBarcodeReaderAbstract 類別)
+
+[JBarCodeReaderUC]
+    - Type : 取得或設定條碼槍的類型
+    - ComPort : 取得或設定條碼槍的ComPort，1 代表 COM1，12 代表 COM12，以此類推
+    - Active : 取得或設定條碼槍是否啟用
+    - void ReadBarcodeTaskReset() : 
+    - BARCODE_READER_RESULT ReadBarcode(ref string barcode) : 

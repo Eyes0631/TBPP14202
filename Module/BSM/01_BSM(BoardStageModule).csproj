@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == 'x86' ">x86</Platform>
+    <ProjectGuid>{1791ADE4-BFD7-4DFB-8BE3-9EDBAEAE17E6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BSM</RootNamespace>
+    <AssemblyName>BSM</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\EXE\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="KCSDK">
+      <HintPath>..\..\ProVDLL\KCSDK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\ProVDLL\NPOI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProVIFM">
+      <HintPath>..\..\ProVDLL\ProVIFM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProVSDK">
+      <HintPath>..\..\ProVDLL\ProVSDK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BSM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BSM.Designer.cs">
+      <DependentUpon>BSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BSM.resx">
+      <DependentUpon>BSM.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonObj\CommonObj.csproj">
+      <Project>{6454511f-87c1-4893-b3cf-a58f0479d24c}</Project>
+      <Name>CommonObj</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PaeLib\PaeLibComponent\PaeLibComponent%28v1.2%29.csproj">
+      <Project>{82d5fa0c-8101-4e21-ab45-3e4e95fe25cb}</Project>
+      <Name>PaeLibComponent%28v1.2%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PaeLib\PaeLibGeneral\PaeLibGeneral.csproj">
+      <Project>{b9624dc5-82dd-4802-8607-c663a1955e24}</Project>
+      <Name>PaeLibGeneral</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PaeLib\PaeLibProVSDKEx\PaeLibProVSDKEx%28v1.5%29.csproj">
+      <Project>{820ca3c7-9f27-4912-93bb-c3beee9c6ef0}</Project>
+      <Name>PaeLibProVSDKEx%28v1.5%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>call $(SolutionDir)$(SolutionName)\AfterComplierBat\CopyFile.bat  $(TargetPath) $(SolutionDir)EXE\Module\$(TargetName)\</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>42875.2983639</Index>
+    <EquimentID />
+    <LotNo>13</LotNo>
+    <OPID>123123</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>LOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-07-19T11:54:35.2983639+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>23123</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>42897.981382</Index>
+      <LotCreateDateTime>42875.2983639</LotCreateDateTime>
+      <StartTime>2022-07-19T11:54:57.981382+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>123</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>42902.2814054</Index>
+      <LotCreateDateTime>42875.2983639</LotCreateDateTime>
+      <StartTime>2022-07-19T11:55:02.2814054+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>12312312</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>42909.1042191</Index>
+      <LotCreateDateTime>42875.2983639</LotCreateDateTime>
+      <CarrierStartDateTime>42902.2814054</CarrierStartDateTime>
+      <StartTime>2022-07-19T11:55:09.1042191+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E6102</AlarmCode>
+      <AlarmModule>BFM</AlarmModule>
+      <AlarmMessage>BLM 1 Bowl Feeder No Parts Timeout</AlarmMessage>
+      <AlarmTime>6</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

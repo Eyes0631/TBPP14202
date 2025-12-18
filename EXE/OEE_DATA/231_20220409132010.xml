@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>48010.3782794</Index>
+    <EquimentID />
+    <LotNo>231</LotNo>
+    <OPID>123</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>3.2X2.5</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-09T13:20:10.3782794+08:00</StartTime>
+    <EndTime>2022-04-09T13:21:07.8854406+08:00</EndTime>
+    <RunTime>42</RunTime>
+    <StopTime>5</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>123123</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>48013.0561152</Index>
+      <LotCreateDateTime>48010.3782794</LotCreateDateTime>
+      <StartTime>2022-04-09T13:20:13.0561152+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>48013.3622961</Index>
+      <LotCreateDateTime>48010.3782794</LotCreateDateTime>
+      <StartTime>2022-04-09T13:20:13.3622961+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0002</ID>
+      <ReadMap>0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

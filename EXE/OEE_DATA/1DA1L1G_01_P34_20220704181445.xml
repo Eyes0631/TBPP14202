@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>65685.2293699</Index>
+    <EquimentID />
+    <LotNo>1DA1L1G_01_P34</LotNo>
+    <OPID>12312</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>LOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-07-04T18:14:45.2293699+08:00</StartTime>
+    <EndTime>2022-07-04T18:15:05.6317579+08:00</EndTime>
+    <RunTime>6</RunTime>
+    <StopTime>5</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>1312</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Untested</Type>
+        <Qty>
+          <Process>87</Process>
+          <Completed>77</Completed>
+          <Missing>10</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>65689.2982394</Index>
+      <LotCreateDateTime>65685.2293699</LotCreateDateTime>
+      <StartTime>2022-07-04T18:14:49.2982394+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>98</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,8,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,00,00,00,00,00,00,0,8</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65695.5346494</Index>
+      <LotCreateDateTime>65685.2293699</LotCreateDateTime>
+      <StartTime>2022-07-04T18:14:55.5346494+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>112</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,8,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,00,00,00,00,00,00,0,8</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65704.2527846</Index>
+      <LotCreateDateTime>65685.2293699</LotCreateDateTime>
+      <StartTime>2022-07-04T18:15:04.2527846+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>123</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,8,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,00,00,00,00,00,00,0,8</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

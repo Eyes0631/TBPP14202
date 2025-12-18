@@ -1,0 +1,691 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C66B8F43-866D-4779-9BC4-DDFE29A70385}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TBPP14200</RootNamespace>
+    <AssemblyName>TBPP14200</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>發行\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WZ1440</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\EXE\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>prov.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>279F234F4EFD7A026E0652DAD35E4028068D130E</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>TBPP14200_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AdvMotAPI">
+      <HintPath>..\ProVDLL\AdvMotAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Automation.BDaq4">
+      <HintPath>..\ProVDLL\Automation.BDaq4.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonObj">
+      <HintPath>..\ProVDLL\CommonObj.dll</HintPath>
+    </Reference>
+    <Reference Include="DbMessenger">
+      <HintPath>..\ProVDLL\DbMessenger.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetZip">
+      <HintPath>..\ProVDLL\DotNetZip.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\ProVDLL\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\ProVDLL\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="KCSDK">
+      <HintPath>..\ProVDLL\KCSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LogAnalyzer">
+      <HintPath>..\ProVDLL\LogAnalyzer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ProVIFM">
+      <HintPath>..\ProVDLL\ProVIFM.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ProVSDK, Version=1.0.8.9, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ProVDLL\ProVSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="ProVTool, Version=1.0.0.5, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ProVDLL\ProVTool.dll</HintPath>
+    </Reference>
+    <Reference Include="Sanford.StateMachineToolkit">
+      <HintPath>..\ProVDLL\Sanford.StateMachineToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="SharedMemory, Version=1.0.1.0, Culture=neutral, PublicKeyToken=3c6f10d5f3df8ab7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ProVDLL\SharedMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormSet\BoardIDForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\BoardIDForm.Designer.cs">
+      <DependentUpon>BoardIDForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\DateSelectF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\DateSelectF.Designer.cs">
+      <DependentUpon>DateSelectF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\LotInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\LotInfoForm.Designer.cs">
+      <DependentUpon>LotInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\MainFlowSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\MainFlowSelectForm.Designer.cs">
+      <DependentUpon>MainFlowSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\ParamTransactionF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\ParamTransactionF.designer.cs">
+      <DependentUpon>ParamTransactionF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\ReportF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\ReportF.Designer.cs">
+      <DependentUpon>ReportF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\BasePackageExF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kernal\BasePackageExF.designer.cs">
+      <DependentUpon>BasePackageExF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\BaseOptionF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kernal\BaseOptionF.designer.cs">
+      <DependentUpon>BaseOptionF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Communication\SECS\EQPData.cs" />
+    <Compile Include="Communication\SECS\EventReport.cs" />
+    <Compile Include="Communication\SECS\ProVCommFSM.cs" />
+    <Compile Include="Communication\SECS\ProVControlFSM.cs" />
+    <Compile Include="Communication\SECS\ProVGemF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Communication\SECS\ProVGemF.designer.cs">
+      <DependentUpon>ProVGemF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Communication\SECS\ProVLimitFSM.cs" />
+    <Compile Include="Communication\SECS\ProVProcessFSM.cs" />
+    <Compile Include="Communication\SECS\ProVSpoolFSM.cs" />
+    <Compile Include="FormSet\HistoryLogger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\HistoryLogger.designer.cs">
+      <DependentUpon>HistoryLogger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\BaseLotEndForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kernal\BaseLotEndForm.designer.cs">
+      <DependentUpon>BaseLotEndForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\BaseLotStartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kernal\BaseLotStartForm.designer.cs">
+      <DependentUpon>BaseLotStartForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\IsClientIntf.cs" />
+    <Compile Include="FormSet\PackageSelectF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\PackageSelectF.Designer.cs">
+      <DependentUpon>PackageSelectF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\BasePackageF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kernal\BasePackageF.designer.cs">
+      <DependentUpon>BasePackageF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\BannerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\BannerForm.designer.cs">
+      <DependentUpon>BannerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\UserLoginEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\UserLoginEx.designer.cs">
+      <DependentUpon>UserLoginEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\AlarmSystem.cs" />
+    <Compile Include="MainF2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainF2.Designer.cs">
+      <DependentUpon>MainF2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainF3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainF3.designer.cs">
+      <DependentUpon>MainF3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\PackageSelectExF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\PackageSelectExF.designer.cs">
+      <DependentUpon>PackageSelectExF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\AlarmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\AlarmForm.designer.cs">
+      <DependentUpon>AlarmForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\BoardTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\BoardTable.Designer.cs">
+      <DependentUpon>BoardTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\DeviceTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\DeviceTable.Designer.cs">
+      <DependentUpon>DeviceTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\KitTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\KitTable.Designer.cs">
+      <DependentUpon>KitTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\PackageExF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\PackageExF.designer.cs">
+      <DependentUpon>PackageExF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\MainFlowF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\MainFlowF.designer.cs">
+      <DependentUpon>MainFlowF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\PackageF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\PackageF.designer.cs">
+      <DependentUpon>PackageF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\InitialForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\InitialForm.designer.cs">
+      <DependentUpon>InitialForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\LotendSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\LotendSelectForm.designer.cs">
+      <DependentUpon>LotendSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\LoggerFactory.cs" />
+    <Compile Include="Kernal\MSS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kernal\MSS.Designer.cs">
+      <DependentUpon>MSS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Snippet\UserSnippet.cs" />
+    <Compile Include="MainF1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainF1.Designer.cs">
+      <DependentUpon>MainF1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\OptionF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\OptionF.Designer.cs">
+      <DependentUpon>OptionF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\ModuleContainerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\ModuleContainerForm.designer.cs">
+      <DependentUpon>ModuleContainerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SysDefine.cs" />
+    <Compile Include="FormSet\UserLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\UserLogin.designer.cs">
+      <DependentUpon>UserLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kernal\StateThread.cs" />
+    <Compile Include="Snippet\VisionObj.cs" />
+    <Compile Include="User%28使用者修改%29\結批流程\LotEndForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\結批流程\LotEndForm.designer.cs">
+      <DependentUpon>LotEndForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\開批流程\LotStartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\開批流程\LotStartForm.designer.cs">
+      <DependentUpon>LotStartForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\內參設定.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\內參設定.designer.cs">
+      <DependentUpon>內參設定.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\內參密碼輸入.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\內參密碼輸入.designer.cs">
+      <DependentUpon>內參密碼輸入.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\預防保養\PMItemF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\預防保養\PMItemF.Designer.cs">
+      <DependentUpon>PMItemF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\預防保養\PMSettingF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\預防保養\PMSettingF.Designer.cs">
+      <DependentUpon>PMSettingF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSet\UserManagment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSet\UserManagment.designer.cs">
+      <DependentUpon>UserManagment.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FormSet\BoardIDForm.resx">
+      <DependentUpon>BoardIDForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\DateSelectF.resx">
+      <DependentUpon>DateSelectF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\LotInfoForm.resx">
+      <DependentUpon>LotInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\MainFlowSelectForm.resx">
+      <DependentUpon>MainFlowSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\ParamTransactionF.resx">
+      <DependentUpon>ParamTransactionF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\ReportF.resx">
+      <DependentUpon>ReportF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kernal\BasePackageExF.resx">
+      <DependentUpon>BasePackageExF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kernal\BaseOptionF.resx">
+      <DependentUpon>BaseOptionF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Communication\SECS\ProVGemF.resx">
+      <DependentUpon>ProVGemF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\PackageSelectF.resx">
+      <DependentUpon>PackageSelectF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\HistoryLogger.resx">
+      <DependentUpon>HistoryLogger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kernal\BaseLotEndForm.resx">
+      <DependentUpon>BaseLotEndForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kernal\BaseLotStartForm.resx">
+      <DependentUpon>BaseLotStartForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kernal\BasePackageF.resx">
+      <DependentUpon>BasePackageF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\BannerForm.resx">
+      <DependentUpon>BannerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\UserLoginEx.resx">
+      <DependentUpon>UserLoginEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainF2.resx">
+      <DependentUpon>MainF2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainF3.resx">
+      <DependentUpon>MainF3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\PackageSelectExF.resx">
+      <DependentUpon>PackageSelectExF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\AlarmForm.resx">
+      <DependentUpon>AlarmForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\BoardTable.resx">
+      <DependentUpon>BoardTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\DeviceTable.resx">
+      <DependentUpon>DeviceTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\KitTable.resx">
+      <DependentUpon>KitTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\PackageExF.resx">
+      <DependentUpon>PackageExF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\MainFlowF.resx">
+      <DependentUpon>MainFlowF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\PackageF.resx">
+      <DependentUpon>PackageF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\InitialForm.resx">
+      <DependentUpon>InitialForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\LotendSelectForm.resx">
+      <DependentUpon>LotendSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kernal\MSS.resx">
+      <DependentUpon>MSS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainF1.resx">
+      <DependentUpon>MainF1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\OptionF.resx">
+      <DependentUpon>OptionF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\ModuleContainerForm.resx">
+      <DependentUpon>ModuleContainerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="FormSet\UserLogin.resx">
+      <DependentUpon>UserLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\結批流程\LotEndForm.resx">
+      <DependentUpon>LotEndForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\開批流程\LotStartForm.resx">
+      <DependentUpon>LotStartForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\內參設定.resx">
+      <DependentUpon>內參設定.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\內參密碼輸入.resx">
+      <DependentUpon>內參密碼輸入.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\預防保養\PMItemF.resx">
+      <DependentUpon>PMItemF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\預防保養\PMSettingF.resx">
+      <DependentUpon>PMSettingF.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSet\UserManagment.resx">
+      <DependentUpon>UserManagment.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="AfterComplierBat\CopyFile.bat" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="TBPP14200_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\provlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UserLogin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\top view.JPG" />
+    <None Include="Image\Bowl Feeder.png" />
+    <None Include="Image\BowlFeeder PnP.png" />
+    <None Include="Image\Right Kit Shuttle.png" />
+    <None Include="Image\Left Kit Shuttle.png" />
+    <None Include="Image\未命名.png" />
+    <None Include="Image\Right Board.png" />
+    <None Include="Image\Left Board.png" />
+    <None Include="Image\Clamsheel.png" />
+    <None Include="Image\Transfer.png" />
+    <None Include="Image\LoadUnload.png" />
+    <Content Include="prov.ico" />
+    <None Include="Resources\numpad1.png" />
+    <None Include="Resources\btnUserManagement_en.png" />
+    <None Include="Resources\btnUserManagement.png" />
+    <None Include="Resources\btnLang_en.png" />
+    <None Include="Resources\btnPackage_en.png" />
+    <None Include="Resources\btnOption_en.png" />
+    <None Include="Resources\btnManual_en.png" />
+    <None Include="Resources\btnHome_en.png" />
+    <None Include="Resources\btnHistory_en.png" />
+    <None Include="Resources\btnAuto_en.png" />
+    <None Include="Resources\btnExit_en.png" />
+    <None Include="Resources\btnStart_en.png" />
+    <None Include="Resources\btnPause_en.png" />
+    <None Include="Resources\btnReset_en.png" />
+    <None Include="Resources\btnChangeUser_tw.jpg" />
+    <None Include="Resources\btnStart_tw.png" />
+    <None Include="Resources\btnReset_tw.png" />
+    <None Include="Resources\btnPause_tw.png" />
+    <None Include="Resources\btnPackage_tw.png" />
+    <None Include="Resources\btnOption_tw.png" />
+    <None Include="Resources\btnManual_tw.png" />
+    <None Include="Resources\btnLang_tw.png" />
+    <None Include="Resources\btnHome_tw.png" />
+    <None Include="Resources\btnHistory_tw.png" />
+    <None Include="Resources\btnExit_tw.png" />
+    <None Include="Resources\btnAuto_tw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PaeLib\PaeLibComponent\PaeLibComponent%28v1.2%29.csproj">
+      <Project>{82d5fa0c-8101-4e21-ab45-3e4e95fe25cb}</Project>
+      <Name>PaeLibComponent%28v1.2%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaeLib\PaeLibGeneral\PaeLibGeneral.csproj">
+      <Project>{b9624dc5-82dd-4802-8607-c663a1955e24}</Project>
+      <Name>PaeLibGeneral</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaeLib\PaeLibProVSDKEx\PaeLibProVSDKEx%28v1.5%29.csproj">
+      <Project>{820ca3c7-9f27-4912-93bb-c3beee9c6ef0}</Project>
+      <Name>PaeLibProVSDKEx%28v1.5%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Reactor_Enabled="0" Reactor_Commands="" Reactor_Project="D:\ProVDLL\KCSDK\Package.nrproj" Reactor_Configuration="ALL" Reactor_Output="D:\ProVDLL\KCSDK.dll" Reactor_Deploy="0" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

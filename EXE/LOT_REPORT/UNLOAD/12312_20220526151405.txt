@@ -1,0 +1,25 @@
+[Lot Info]
+Lot_Number=12312
+OPID=12312
+DiePak_Type=
+Device_Type=3.2X2.5
+Test_Program=
+Mode=UNLOAD
+Recipe=3.2X2.5
+Lot_StartTime=2022/05/26 15:14:05
+Lot_EndTime=2022/05/26 15:14:54
+Lot_Qty=31231
+LoadProcess_Qty=0
+LoadCompleted_Qty=0
+LoadMissing_Qty=0
+UnloadProcess_Qty=128
+UnloadCompleted_Qty=128
+UnloadMissing_Qty=0
+Bin1_Qty=128
+Bin2_Qty=0
+Bin3_Qty=0
+Bin4_Qty=0
+Bin5_Qty=0
+Total_DiePak=0
+
+[DiePak Info]

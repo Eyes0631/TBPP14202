@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>47232.8537982</Index>
+    <EquimentID />
+    <LotNo>123123</LotNo>
+    <OPID>123123</OPID>
+    <Mode>UNLOAD</Mode>
+    <Recipe>3.2X2.5</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-14T13:07:12.8537982+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>23213</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList />
+  <AlarmList>
+    <JALM>
+      <Index>47247.4198322</Index>
+      <LotCreateDateTime>47232.8537982</LotCreateDateTime>
+      <CarrierStartDateTime>0</CarrierStartDateTime>
+      <StartTime>2022-04-14T13:07:27.4198322+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5004</AlarmCode>
+      <AlarmModule>MAA</AlarmModule>
+      <AlarmMessage>光閘處偵測異常</AlarmMessage>
+      <AlarmTime>1631</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

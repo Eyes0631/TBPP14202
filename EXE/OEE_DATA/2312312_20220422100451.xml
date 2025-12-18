@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>36291.264548399995</Index>
+    <EquimentID />
+    <LotNo>2312312</LotNo>
+    <OPID>213213</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>3.2X2.5</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-22T10:04:51.2645484+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>21321321</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Untested</Type>
+        <Qty>
+          <Process>124</Process>
+          <Completed>124</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>36508.3238908</Index>
+      <LotCreateDateTime>36291.264548399995</LotCreateDateTime>
+      <StartTime>2022-04-22T10:08:28.3238908+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>37250.7174736</Index>
+      <LotCreateDateTime>36291.264548399995</LotCreateDateTime>
+      <StartTime>2022-04-22T10:20:50.7174736+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0002</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>36551.1812499</Index>
+      <LotCreateDateTime>36291.264548399995</LotCreateDateTime>
+      <CarrierStartDateTime>36508.3238908</CarrierStartDateTime>
+      <StartTime>2022-04-22T10:09:11.1812499+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5702</AlarmCode>
+      <AlarmModule>HDT</AlarmModule>
+      <AlarmMessage>手臂A吸取時真空建立異常 [1,1]</AlarmMessage>
+      <AlarmTime>2488995</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>37991.6364646</Index>
+      <LotCreateDateTime>36291.264548399995</LotCreateDateTime>
+      <CarrierStartDateTime>37250.7174736</CarrierStartDateTime>
+      <StartTime>2022-04-22T10:33:11.6364646+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5005</AlarmCode>
+      <AlarmModule>MAA</AlarmModule>
+      <AlarmMessage>PassBox not in position</AlarmMessage>
+      <AlarmTime>24119</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

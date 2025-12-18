@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>59014.3908353</Index>
+    <EquimentID />
+    <LotNo>243</LotNo>
+    <OPID>3564q</OPID>
+    <Mode>UNLOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-19T16:23:34.3908353+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>5367</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Tested</Type>
+        <Qty>
+          <Process>123</Process>
+          <Completed>123</Completed>
+          <Missing>2</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin1</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>123</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>59080.6755165</Index>
+      <LotCreateDateTime>59014.3908353</LotCreateDateTime>
+      <StartTime>2022-04-19T16:24:40.6755165+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,X,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>59183.6370846</Index>
+      <LotCreateDateTime>59014.3908353</LotCreateDateTime>
+      <StartTime>2022-04-19T16:26:23.6370846+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0002</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,X,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>59211.94237</Index>
+      <LotCreateDateTime>59014.3908353</LotCreateDateTime>
+      <CarrierStartDateTime>59183.6370846</CarrierStartDateTime>
+      <StartTime>2022-04-19T16:26:51.94237+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5702</AlarmCode>
+      <AlarmModule>HDT</AlarmModule>
+      <AlarmMessage>手臂B吸取時真空建立異常 [1,1]</AlarmMessage>
+      <AlarmTime>0</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

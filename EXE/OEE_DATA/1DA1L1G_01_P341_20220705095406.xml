@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>35646.6774636</Index>
+    <EquimentID />
+    <LotNo>1DA1L1G_01_P341</LotNo>
+    <OPID>312312</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>UNLOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-07-05T09:54:06.6774636+08:00</StartTime>
+    <EndTime>2022-07-05T09:56:39.5392657+08:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>153</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>1313213</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList />
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

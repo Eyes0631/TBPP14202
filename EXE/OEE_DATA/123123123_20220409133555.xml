@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>48955.1110148</Index>
+    <EquimentID />
+    <LotNo>123123123</LotNo>
+    <OPID>123213</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>3.2X2.5</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-09T13:35:55.1110148+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>132213</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>48958.4032084</Index>
+      <LotCreateDateTime>48955.1110148</LotCreateDateTime>
+      <StartTime>2022-04-09T13:35:58.4032084+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>48958.6884459</Index>
+      <LotCreateDateTime>48955.1110148</LotCreateDateTime>
+      <StartTime>2022-04-09T13:35:58.6884459+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0002</ID>
+      <ReadMap>0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>48967.7841127</Index>
+      <LotCreateDateTime>48955.1110148</LotCreateDateTime>
+      <CarrierStartDateTime>48958.6884459</CarrierStartDateTime>
+      <StartTime>2022-04-09T13:36:07.7841127+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E6115</AlarmCode>
+      <AlarmModule>BFM</AlarmModule>
+      <AlarmMessage>BLM 2 放置後檢查到吸嘴上仍有產品</AlarmMessage>
+      <AlarmTime>0</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>49157.286174099994</Index>
+      <LotCreateDateTime>48955.1110148</LotCreateDateTime>
+      <CarrierStartDateTime>48958.6884459</CarrierStartDateTime>
+      <StartTime>2022-04-09T13:39:17.2861741+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E0503</AlarmCode>
+      <AlarmModule>SYS</AlarmModule>
+      <AlarmMessage>執行MainFlow.MainRun發生例外</AlarmMessage>
+      <AlarmTime>66546</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

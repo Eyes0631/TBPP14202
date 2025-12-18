@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>40353.2884325</Index>
+    <EquimentID />
+    <LotNo>123</LotNo>
+    <OPID>312</OPID>
+    <DeviceType>2.0X1.6</DeviceType>
+    <Mode>LOAD</Mode>
+    <Recipe>2.0X1.6</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-05-16T11:12:33.2884325+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>123123</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList />
+  <AlarmList>
+    <JALM>
+      <Index>49737.6877901</Index>
+      <LotCreateDateTime>40353.2884325</LotCreateDateTime>
+      <CarrierStartDateTime>0</CarrierStartDateTime>
+      <StartTime>2022-05-16T13:48:57.6877901+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E063</AlarmCode>
+      <AlarmModule>MainFlowF</AlarmModule>
+      <AlarmMessage>FC_ShuttleB CAS1 flow action not setting</AlarmMessage>
+      <AlarmTime>69631</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

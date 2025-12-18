@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20200813164104" LastTime="">
+  <Fields>
+    <FDryRun Type="Boolean" Value="True" />
+    <F機台速率 Type="Int" Value="100" />
+    <FCommProtocol Type="Int" Value="0" />
+    <FDryRun_NoDevice Type="Boolean" Value="True" />
+    <FDryRun_NoBoard Type="Boolean" Value="True" />
+    <FNoUseBoardID Type="Boolean" Value="False" />
+    <FUseBoardIDKeyin Type="Boolean" Value="True" />
+  </Fields>
+</Table>

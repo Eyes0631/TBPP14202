@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220409100206" LastTime="">
+  <Fields>
+    <FDevice_Width Type="Int" Value="2000" />
+    <FDevice_Thickness Type="Int" Value="550" />
+  </Fields>
+</Table>

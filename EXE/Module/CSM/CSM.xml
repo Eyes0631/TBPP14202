@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220331170504" LastTime="">
+  <Fields>
+    <FRightInLeftOut Type="Boolean" Value="True" />
+    <FDoNotUseRightCassette Type="Boolean" Value="False" />
+    <FDoNotUseLeftCassette Type="Boolean" Value="False" />
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="True" />
+    <FModuleID Type="Int" Value="63" />
+  </Fields>
+</Table>

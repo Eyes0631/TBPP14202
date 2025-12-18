@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>51887.357946</Index>
+    <EquimentID />
+    <LotNo>2131243</LotNo>
+    <OPID>554345</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-20T14:24:47.357946+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>5235</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Untested</Type>
+        <Qty>
+          <Process>404</Process>
+          <Completed>404</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>51991.4490036</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:26:31.4490036+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>52324.437774499995</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:32:04.4377745+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0002</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>52740.341188399994</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:39:00.3411884+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0003</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>53045.354244899994</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:44:05.3542449+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0004</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>53270.8619853</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:47:50.8619853+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0005</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>53523.574000199995</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:52:03.5740002+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0006</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>53929.397894199996</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <StartTime>2022-04-20T14:58:49.3978942+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0007</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>51887.3808872</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>0</CarrierStartDateTime>
+      <StartTime>2022-04-20T14:24:47.3808872+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5005</AlarmCode>
+      <AlarmModule>MAA</AlarmModule>
+      <AlarmMessage>PassBox not in position</AlarmMessage>
+      <AlarmTime>11749</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>51887.399833799995</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>0</CarrierStartDateTime>
+      <StartTime>2022-04-20T14:24:47.3998338+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5006</AlarmCode>
+      <AlarmModule>MAA</AlarmModule>
+      <AlarmMessage>BinBox not in position</AlarmMessage>
+      <AlarmTime>529</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>52181.880131499995</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>51991.4490036</CarrierStartDateTime>
+      <StartTime>2022-04-20T14:29:41.8801315+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E6118</AlarmCode>
+      <AlarmModule>BFM</AlarmModule>
+      <AlarmMessage>BLM 1 等待CCD回應超時</AlarmMessage>
+      <AlarmTime>1686784</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>56716.9416938</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>53929.397894199996</CarrierStartDateTime>
+      <StartTime>2022-04-20T15:45:16.9416938+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E021</AlarmCode>
+      <AlarmModule>HDT</AlarmModule>
+      <AlarmMessage>[ MT_HDT_A_AxisZ ] 反轉硬體極限</AlarmMessage>
+      <AlarmTime>4490830</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>60259.0232369</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>53929.397894199996</CarrierStartDateTime>
+      <StartTime>2022-04-20T16:44:19.0232369+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5704</AlarmCode>
+      <AlarmModule>HDT</AlarmModule>
+      <AlarmMessage>手臂A高度安全保護啟動，請確認Z軸高度位於安全位置</AlarmMessage>
+      <AlarmTime>28493</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>63507.5660275</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>53929.397894199996</CarrierStartDateTime>
+      <StartTime>2022-04-20T17:38:27.5660275+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E022</AlarmCode>
+      <AlarmModule>HDT</AlarmModule>
+      <AlarmMessage>[ MT_HDT_B_AxisZ ] 正轉硬體極限</AlarmMessage>
+      <AlarmTime>0</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>76401.3749805</Index>
+      <LotCreateDateTime>51887.357946</LotCreateDateTime>
+      <CarrierStartDateTime>53929.397894199996</CarrierStartDateTime>
+      <StartTime>2022-04-20T21:13:21.3749805+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5002</AlarmCode>
+      <AlarmModule>MAA</AlarmModule>
+      <AlarmMessage>空壓偵測錯誤，請檢查</AlarmMessage>
+      <AlarmTime>39668577</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

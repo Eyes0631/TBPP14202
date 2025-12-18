@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>48285.2574533</Index>
+    <EquimentID />
+    <LotNo>1233</LotNo>
+    <OPID>312</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>LOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-05-25T13:24:45.2574533+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>3123</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>48287.7372051</Index>
+      <LotCreateDateTime>48285.2574533</LotCreateDateTime>
+      <StartTime>2022-05-25T13:24:47.7372051+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>48287.752216299996</Index>
+      <LotCreateDateTime>48285.2574533</LotCreateDateTime>
+      <CarrierStartDateTime>48287.7372051</CarrierStartDateTime>
+      <StartTime>2022-05-25T13:24:47.7522163+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E0503</AlarmCode>
+      <AlarmModule>SYS</AlarmModule>
+      <AlarmMessage>An exception occurs when executing MainRun</AlarmMessage>
+      <AlarmTime>199116</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092202" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="True" />
+    <FModuleID Type="Int" Value="53" />
+    <FPos_Rotato_V Type="Int" Value="0" />
+    <FPos_Rotato_H Type="Int" Value="0" />
+    <FPos_Second_Close_Z Type="Int" Value="0" />
+    <FPos_First_Close_Z Type="Int" Value="0" />
+    <FPos_Safe_Z Type="Int" Value="0" />
+    <FPos_Open_Z Type="Int" Value="0" />
+    <FPos_Base_H_Y Type="Int" Value="0" />
+    <FPos_Base_V_Y Type="Int" Value="0" />
+    <FCHM_U_Resolation Type="Int" Value="0" />
+    <FMT_CHM_U_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_CHM_U_SPEED Type="Int" Value="10000" />
+    <FMT_CHM_Y_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_CHM_Y_SPEED Type="Int" Value="10000" />
+    <FMT_CHM_Z_ACC__MULTIPLE Type="Int" Value="1" />
+    <FMT_CHM_Z_SPEED Type="Int" Value="10000" />
+  </Fields>
+</Table>

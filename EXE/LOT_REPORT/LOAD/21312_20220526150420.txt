@@ -1,0 +1,25 @@
+[Lot Info]
+Lot_Number=21312
+OPID=12312
+DiePak_Type=
+Device_Type=5X3.2
+Test_Program=
+Mode=LOAD
+Recipe=5X3.2
+Lot_StartTime=2022/05/26 15:04:20
+Lot_EndTime=2022/05/26 15:04:53
+Lot_Qty=123123
+LoadProcess_Qty=0
+LoadCompleted_Qty=0
+LoadMissing_Qty=0
+UnloadProcess_Qty=0
+UnloadCompleted_Qty=0
+UnloadMissing_Qty=0
+Bin1_Qty=0
+Bin2_Qty=0
+Bin3_Qty=0
+Bin4_Qty=0
+Bin5_Qty=0
+Total_DiePak=0
+
+[DiePak Info]

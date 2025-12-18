@@ -1,0 +1,45 @@
+[Lot Info]
+Lot_Number=123123
+OPID=123
+DiePak_Type=
+Device_Type=
+Test_Program=
+Mode=LOAD
+Recipe=5X3.2
+Lot_StartTime=2022/04/20 13:40:59
+Lot_EndTime=2022/04/20 14:22:38
+Lot_Qty=123
+LoadProcess_Qty=11
+LoadCompleted_Qty=0
+LoadMissing_Qty=0
+UnloadProcess_Qty=0
+UnloadCompleted_Qty=0
+UnloadMissing_Qty=0
+Bin1_Qty=0
+Bin2_Qty=0
+Bin3_Qty=0
+Bin4_Qty=0
+Bin5_Qty=0
+Total_DiePak=2
+
+[DiePak Info]
+DiePak_ID=TEST0001
+DiePak_StartTime=2022/04/20 13:41:28
+DiePak_EndTime=0001/01/01 00:00:00
+DeiPak_CostTime=03:14:08
+DiePak_Empty=0
+DiePak_Bin1=0
+DiePak_Bin2=0
+DiePak_Bin3=0
+DiePak_Bin4=0
+DiePak_Bin5=0
+DiePak_ID=TEST0002
+DiePak_StartTime=2022/04/20 13:41:28
+DiePak_EndTime=0001/01/01 00:00:00
+DeiPak_CostTime=03:14:08
+DiePak_Empty=0
+DiePak_Bin1=0
+DiePak_Bin2=0
+DiePak_Bin3=0
+DiePak_Bin4=0
+DiePak_Bin5=0

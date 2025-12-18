@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>47769.016487</Index>
+    <EquimentID />
+    <LotNo>1DA145J_P19</LotNo>
+    <OPID>123</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>UNLOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-05-29T13:16:09.016487+08:00</StartTime>
+    <EndTime>2022-05-29T13:17:18.9068613+08:00</EndTime>
+    <RunTime>21</RunTime>
+    <StopTime>5</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>2345</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Tested</Type>
+        <Qty>
+          <Process>256</Process>
+          <Completed>256</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin1</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>230</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin10</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>4</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin8</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>18</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin9</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>4</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>47782.849272299994</Index>
+      <LotCreateDateTime>47769.016487</LotCreateDateTime>
+      <StartTime>2022-05-29T13:16:22.8492723+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1297</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,8,10,8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>47796.563947899995</Index>
+      <LotCreateDateTime>47769.016487</LotCreateDateTime>
+      <StartTime>2022-05-29T13:16:36.5639479+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1296</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,8,10,8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>47809.2919403</Index>
+      <LotCreateDateTime>47769.016487</LotCreateDateTime>
+      <StartTime>2022-05-29T13:16:49.2919403+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1297</ID>
+      <ReadMap>1,1,8,1,1,1,1,1,9,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,8,8,1,1,1,1,1,9,8,8,8,8,1,1,1,1,8,1,1,1,1,1,1,8,1,9,9,1,1,1,1,1,1,1,10,1,1,10</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>47830.2257294</Index>
+      <LotCreateDateTime>47769.016487</LotCreateDateTime>
+      <StartTime>2022-05-29T13:17:10.2257294+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0004</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092212" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="False" />
+    <FModuleID Type="Int" Value="55" />
+    <FPos_BSM_B_Work_HeadB Type="Int" Value="-466800" />
+    <FPos_BSM_B_Work_HeadA Type="Int" Value="-368100" />
+    <FPos_BSM_B_Waiting Type="Int" Value="-693000" />
+    <FPos_BSM_A_Work_HeadB Type="Int" Value="-465800" />
+    <FPos_BSM_A_Work_HeadA Type="Int" Value="-367000" />
+    <FPos_BSM_A_Waiting Type="Int" Value="-692000" />
+    <FDoNotUseRightStage Type="Boolean" Value="False" />
+    <FDoNotUseLeftStage Type="Boolean" Value="False" />
+    <FMT_BSM_StageB_Y_ACC_MULTIPLE Type="Int" Value="10" />
+    <FMT_BSM_StageB_Y_SPEED Type="Int" Value="800000" />
+    <FMT_BSM_StageA_Y_ACC_MULTIPLE Type="Int" Value="10" />
+    <FMT_BSM_StageA_Y_SPEED Type="Int" Value="800000" />
+  </Fields>
+</Table>

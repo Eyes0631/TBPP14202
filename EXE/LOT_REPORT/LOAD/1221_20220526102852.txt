@@ -1,0 +1,25 @@
+[Lot Info]
+Lot_Number=1221
+OPID=3131
+DiePak_Type=
+Device_Type=5X3.2
+Test_Program=
+Mode=LOAD
+Recipe=5X3.2
+Lot_StartTime=2022/05/26 10:28:52
+Lot_EndTime=2022/05/26 10:29:30
+Lot_Qty=123123
+LoadProcess_Qty=22
+LoadCompleted_Qty=11
+LoadMissing_Qty=0
+UnloadProcess_Qty=0
+UnloadCompleted_Qty=0
+UnloadMissing_Qty=0
+Bin1_Qty=11
+Bin2_Qty=0
+Bin3_Qty=0
+Bin4_Qty=0
+Bin5_Qty=0
+Total_DiePak=0
+
+[DiePak Info]

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092229" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="False" />
+    <FModuleID Type="Int" Value="59" />
+    <FPos_ShuttleB_BFM_B_Y Type="Int" Value="-914000" />
+    <FPos_ShuttleB_BFM_A_Y Type="Int" Value="-29300" />
+    <FPos_ShuttleB_HDT_B_Y Type="Int" Value="-525700" />
+    <FPos_ShuttleB_HDT_A_Y Type="Int" Value="-427200" />
+    <FPos_ShuttleA_BFM_B_Y Type="Int" Value="-913000" />
+    <FPos_ShuttleA_BFM_A_Y Type="Int" Value="-27500" />
+    <FPos_ShuttleA_HDT_B_Y Type="Int" Value="-523500" />
+    <FPos_ShuttleA_HDT_A_Y Type="Int" Value="-425900" />
+    <FDoNotUseRightShuttle Type="Boolean" Value="False" />
+    <FDoNotUseLeftShuttle Type="Boolean" Value="False" />
+    <FMT_KSM_ShuttleB_Y_ACC_MULTIPLE Type="Int" Value="10" />
+    <FMT_KSM_ShuttleB_Y_SPEED Type="Int" Value="800000" />
+    <FMT_KSM_ShuttleA_Y_ACC_MULTIPLE Type="Int" Value="10" />
+    <FMT_KSM_ShuttleA_Y_SPEED Type="Int" Value="800000" />
+  </Fields>
+</Table>

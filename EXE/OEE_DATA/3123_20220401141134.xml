@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>51094.6159401</Index>
+    <EquimentID />
+    <LotNo>3123</LotNo>
+    <OPID>123</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>NoName1</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-01T14:11:34.6159401+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>123</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>51100.0394407</Index>
+      <LotCreateDateTime>51094.6159401</LotCreateDateTime>
+      <StartTime>2022-04-01T14:11:40.0394407+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>51131.7204327</Index>
+      <LotCreateDateTime>51094.6159401</LotCreateDateTime>
+      <CarrierStartDateTime>51100.0394407</CarrierStartDateTime>
+      <StartTime>2022-04-01T14:12:11.7204327+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E0506</AlarmCode>
+      <AlarmModule>SYS</AlarmModule>
+      <AlarmMessage>CallProc [BFM.GetBasicPos] 錯誤，請檢查!</AlarmMessage>
+      <AlarmTime>0</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>51131.763318</Index>
+      <LotCreateDateTime>51094.6159401</LotCreateDateTime>
+      <CarrierStartDateTime>51100.0394407</CarrierStartDateTime>
+      <StartTime>2022-04-01T14:12:11.763318+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E0503</AlarmCode>
+      <AlarmModule>SYS</AlarmModule>
+      <AlarmMessage>執行MainFlow.MainRun發生例外</AlarmMessage>
+      <AlarmTime>0</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

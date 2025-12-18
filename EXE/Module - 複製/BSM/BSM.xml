@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092212" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="False" />
+    <FModuleID Type="Int" Value="55" />
+  </Fields>
+</Table>

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092150" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="True" />
+    <FModuleID Type="Int" Value="51" />
+    <FPos_StageA_Station_U Type="Int" Value="0" />
+    <FPos_StageA_Check_Z Type="Int" Value="0" />
+    <FPos_StageA_Station_X Type="Int" Value="0" />
+    <FPos_StageA_BIB_Y Type="Int" Value="0" />
+    <FPos_Safe_Y Type="Int" Value="0" />
+    <FPos_StageA_Down_Z Type="Int" Value="0" />
+    <FPos_StageA_Top_Z Type="Int" Value="0" />
+    <FPos_StageB_Station_U Type="Int" Value="0" />
+    <FPos_StageB_Check_Z Type="Int" Value="0" />
+    <FPos_StageB_Station_X Type="Int" Value="0" />
+    <FPos_StageB_BIB_Y Type="Int" Value="0" />
+    <FPos_StageB_Down_Z Type="Int" Value="0" />
+    <FPos_StageB_Top_Z Type="Int" Value="0" />
+    <FPos_LoadA_Station_U Type="Int" Value="0" />
+    <FPos_LoadA_Check_Z Type="Int" Value="0" />
+    <FPos_LoadA_Station_X Type="Int" Value="0" />
+    <FPos_LoadA_BIB_Y Type="Int" Value="0" />
+    <FPos_LoadA_Down_Z Type="Int" Value="0" />
+    <FPos_LoadA_Top_Z Type="Int" Value="0" />
+    <FPos_LoadB_Station_U Type="Int" Value="0" />
+    <FPos_LoadB_Check_Z Type="Int" Value="0" />
+    <FPos_LoadB_Station_X Type="Int" Value="0" />
+    <FPos_LoadB_BIB_Y Type="Int" Value="0" />
+    <FPos_LoadB_Down_Z Type="Int" Value="0" />
+    <FPos_LoadB_Top_Z Type="Int" Value="0" />
+    <FPos_Clamsheel_Station_U Type="Int" Value="0" />
+    <FPos_ClamSheel_Check_Z Type="Int" Value="0" />
+    <FPos_ClamSheel_Station_X Type="Int" Value="0" />
+    <FPos_ClamSheel_BIB_Y Type="Int" Value="0" />
+    <FPos_ClamSheel_Down_Z Type="Int" Value="0" />
+    <FPos_ClamSheel_Top_Z Type="Int" Value="0" />
+    <FPos_BARCODE_Station_U Type="Int" Value="0" />
+    <FPos_BARCODE_Station_X Type="Int" Value="0" />
+    <FPos_BARCODE_Check_Z Type="Int" Value="0" />
+    <FPos_Waiting_X Type="Int" Value="0" />
+    <FPos_Safe_X Type="Int" Value="0" />
+    <FTRM_U_Resolation Type="Int" Value="0" />
+    <FMT_TRM_U_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_TRM_U_SPEED Type="Int" Value="10000" />
+    <FMT_TRM_Y_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_TRM_Y_SPEED Type="Int" Value="10000" />
+    <FMT_TRM_X_ACC__MULTIPLE Type="Int" Value="1" />
+    <FMT_TRM_X_SPEED Type="Int" Value="10000" />
+    <FMT_TRM_Z_ACC__MULTIPLE Type="Int" Value="1" />
+    <FMT_TRM_Z_SPEED Type="Int" Value="10000" />
+  </Fields>
+</Table>

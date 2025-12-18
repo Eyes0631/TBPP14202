@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>62163.3975141</Index>
+    <EquimentID />
+    <LotNo>1DA145J_P19</LotNo>
+    <OPID>123</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>LOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-07-21T17:16:03.3975141+08:00</StartTime>
+    <EndTime>2022-07-21T17:16:26.1626399+08:00</EndTime>
+    <RunTime>1</RunTime>
+    <StopTime>12</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>321</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Untested</Type>
+        <Qty>
+          <Process>26</Process>
+          <Completed>10</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>62175.694217599994</Index>
+      <LotCreateDateTime>62163.3975141</LotCreateDateTime>
+      <StartTime>2022-07-21T17:16:15.6942176+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1296</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,8,00,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>62183.8439947</Index>
+      <LotCreateDateTime>62163.3975141</LotCreateDateTime>
+      <StartTime>2022-07-21T17:16:23.8439947+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1297</ID>
+      <ReadMap>0,0,8,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,8,8,0,0,0,0,0,9,8,8,8,8,0,0,0,0,8,0,0,0,0,0,0,8,0,9,9,0,0,0,0,0,0,0,00,0,0,00</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>47982.6996819</Index>
+    <EquimentID />
+    <LotNo>12312</LotNo>
+    <OPID>123</OPID>
+    <Mode>LOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-18T13:19:42.6996819+08:00</StartTime>
+    <EndTime>0001-01-01T00:00:00</EndTime>
+    <RunTime>0</RunTime>
+    <StopTime>0</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>12312321</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Untested</Type>
+        <Qty>
+          <Process>19</Process>
+          <Completed>8</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>48038.9043282</Index>
+      <LotCreateDateTime>47982.6996819</LotCreateDateTime>
+      <StartTime>2022-04-18T13:20:38.9043282+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>TEST0001</ID>
+      <ReadMap>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,X,</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList>
+    <JALM>
+      <Index>48545.8900857</Index>
+      <LotCreateDateTime>47982.6996819</LotCreateDateTime>
+      <CarrierStartDateTime>48038.9043282</CarrierStartDateTime>
+      <StartTime>2022-04-18T13:29:05.8900857+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E0503</AlarmCode>
+      <AlarmModule>SYS</AlarmModule>
+      <AlarmMessage>執行HDT.MainRun發生例外</AlarmMessage>
+      <AlarmTime>339887</AlarmTime>
+    </JALM>
+    <JALM>
+      <Index>52737.702987599994</Index>
+      <LotCreateDateTime>47982.6996819</LotCreateDateTime>
+      <CarrierStartDateTime>48038.9043282</CarrierStartDateTime>
+      <StartTime>2022-04-18T14:38:57.7029876+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <AlarmCode>E5006</AlarmCode>
+      <AlarmModule>MAA</AlarmModule>
+      <AlarmMessage>BinBox not in position</AlarmMessage>
+      <AlarmTime>78659</AlarmTime>
+    </JALM>
+  </AlarmList>
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

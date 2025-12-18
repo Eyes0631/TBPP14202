@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220314115050" LastTime="">
+  <Fields>
+    <FBoard_Length Type="Int" Value="251500" />
+    <FBoard_Width Type="Int" Value="270000" />
+    <FBoard_XShift Type="Int" Value="20500" />
+    <FBoard_YShift Type="Int" Value="59500" />
+    <FBoard_Depth Type="Int" Value="2000" />
+    <FBoard_XN Type="Int" Value="8" />
+    <FBoard_XPitch Type="Int" Value="31750" />
+    <FBoard_Thickness Type="Int" Value="11600" />
+    <FBoard_YN Type="Int" Value="8" />
+    <FBoard_Height Type="Int" Value="9500" />
+    <FBoard_YPitch Type="Int" Value="25400" />
+    <FPinDIr Type="Int" Value="0" />
+    <FClamsheelDir Type="Int" Value="2" />
+  </Fields>
+</Table>

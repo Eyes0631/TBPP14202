@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092202" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="False" />
+    <FModuleID Type="Int" Value="53" />
+    <FPos_Rotato_V Type="Int" Value="90" />
+    <FPos_Rotato_H Type="Int" Value="0" />
+    <FPos_Second_Close_Z Type="Int" Value="0" />
+    <FPos_First_Close_Z Type="Int" Value="0" />
+    <FPos_Safe_Z Type="Int" Value="-500" />
+    <FPos_Open_Z Type="Int" Value="0" />
+    <FPos_Base_H_Y Type="Int" Value="-29000" />
+    <FPos_Base_V_Y Type="Int" Value="-31500" />
+    <FCHM_U_Resolation Type="Int" Value="0" />
+    <FMT_CHM_U_ACC_MULTIPLE Type="Int" Value="10" />
+    <FMT_CHM_U_SPEED Type="Int" Value="100000" />
+    <FMT_CHM_Y_ACC_MULTIPLE Type="Int" Value="10" />
+    <FMT_CHM_Y_SPEED Type="Int" Value="800000" />
+    <FMT_CHM_Z_ACC__MULTIPLE Type="Int" Value="10" />
+    <FMT_CHM_Z_SPEED Type="Int" Value="100000" />
+    <FPos_CHM_RotateResolution Type="Int" Value="180800" />
+    <FPos_CHM_RotateBase Type="Int" Value="-47950" />
+    <FMT_CHM_Z_ACC_MULTIPLE Type="Int" Value="6" />
+    <FDoNotUseOpenDetect Type="Boolean" Value="True" />
+    <FDoNotUseCloseDetect Type="Boolean" Value="True" />
+  </Fields>
+</Table>

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20220111092236" LastTime="">
+  <Fields>
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="True" />
+    <FModuleID Type="Int" Value="61" />
+    <FPos_HDT1_Shuttle_B_Place_Z Type="Int" Value="0" />
+    <FPos_HDT1_ShuttleBPlace_X Type="Int" Value="0" />
+    <FPos_HDT1_Zero_U Type="Int" Value="0" />
+    <FPos_HDT1_GarbageCan_X Type="Int" Value="0" />
+    <FPos_HDT1_Shuttle_A_Place_Z Type="Int" Value="0" />
+    <FPos_HDT1_Pick_Z Type="Int" Value="0" />
+    <FPos_HDT1_WaitPlace_X Type="Int" Value="0" />
+    <FPos_HDT1_Grab_X Type="Int" Value="0" />
+    <FPos_HDT1_ShuttleAPlace_X Type="Int" Value="0" />
+    <FPos_HDT1_Pick_X Type="Int" Value="0" />
+    <FPos_HDT1_Safe_Z Type="Int" Value="0" />
+    <FPos_HDT2_ShuttleBPlace_X Type="Int" Value="0" />
+    <FPos_HDT2_Zero_U Type="Int" Value="0" />
+    <FPos_HDT2_GarbageCan_X Type="Int" Value="0" />
+    <FPos_HDT2_Shuttle_A_Place_Z Type="Int" Value="0" />
+    <FPos_HDT2_Pick_Z Type="Int" Value="0" />
+    <FPos_HDT2_WaitPlace_X Type="Int" Value="0" />
+    <FPos_HDT2_Grab_X Type="Int" Value="0" />
+    <FPos_HDT2_ShuttleAPlace_X Type="Int" Value="0" />
+    <FPos_HDT2_Pick_X Type="Int" Value="0" />
+    <FPos_HDT2_Safe_Z Type="Int" Value="0" />
+    <FInspectionNGResponseTimes Type="Int" Value="2000" />
+    <FInspectionNGOverTimes Type="Int" Value="5" />
+    <FBowlFeederPickRetryNGTimes Type="Int" Value="1" />
+    <FMotorMoveAdjDelayTM Type="Int" Value="100" />
+    <FNextPartDelayTime Type="Int" Value="100" />
+    <FNoPartsAlarmDelayTime Type="Int" Value="100" />
+    <FDoNotUseBFM2Module Type="Boolean" Value="True" />
+    <FDoNotUseBFM1Module Type="Boolean" Value="False" />
+    <FEnableCCDFunction Type="Boolean" Value="False" />
+    <FMT_HDT_U_RESOLUTION Type="Int" Value="10000" />
+    <FMT_HDT_X_TriggerACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_HDT_X_TriggerSPEED Type="Int" Value="10000" />
+    <FMT_HDT_U_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_HDT_U_SPEED Type="Int" Value="10000" />
+    <FMT_HDT_Z_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_HDT_Z_SPEED Type="Int" Value="10000" />
+    <FMT_HDT_X_ACC_MULTIPLE Type="Int" Value="1" />
+    <FMT_HDT_X_SPEED Type="Int" Value="10000" />
+    <FEnableBFM2CCDFunction Type="Boolean" Value="False" />
+    <FEnableBFM1CCDFunction Type="Boolean" Value="False" />
+    <FGarbageCanDestoryTime Type="Int" Value="200" />
+    <FBFM2CcdPortNo Type="Int" Value="0" />
+    <FBFM2CcdIP Type="Int" Value="0" />
+    <FBFM1CcdPortNo Type="Int" Value="0" />
+    <FBFM1CcdIP Type="Int" Value="0" />
+  </Fields>
+</Table>

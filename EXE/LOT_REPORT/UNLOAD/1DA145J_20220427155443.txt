@@ -1,0 +1,45 @@
+[Lot Info]
+Lot_Number=1DA145J
+OPID=1234
+DiePak_Type=
+Device_Type=5X3.2
+Test_Program=
+Mode=UNLOAD
+Recipe=5X3.2
+Lot_StartTime=2022/04/27 15:54:43
+Lot_EndTime=2022/04/27 15:55:55
+Lot_Qty=4321
+LoadProcess_Qty=0
+LoadCompleted_Qty=0
+LoadMissing_Qty=0
+UnloadProcess_Qty=10
+UnloadCompleted_Qty=10
+UnloadMissing_Qty=0
+Bin1_Qty=10
+Bin2_Qty=0
+Bin3_Qty=0
+Bin4_Qty=0
+Bin5_Qty=0
+Total_DiePak=2
+
+[DiePak Info]
+DiePak_ID=1296
+DiePak_StartTime=2022/04/27 15:55:49
+DiePak_EndTime=0001/01/01 00:00:00
+DeiPak_CostTime=03:14:08
+DiePak_Empty=0
+DiePak_Bin1=64
+DiePak_Bin2=0
+DiePak_Bin3=0
+DiePak_Bin4=0
+DiePak_Bin5=0
+DiePak_ID=TEST0002
+DiePak_StartTime=2022/04/27 15:55:54
+DiePak_EndTime=0001/01/01 00:00:00
+DeiPak_CostTime=03:14:08
+DiePak_Empty=3
+DiePak_Bin1=0
+DiePak_Bin2=1
+DiePak_Bin3=0
+DiePak_Bin4=0
+DiePak_Bin5=0

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>65907.6974026</Index>
+    <EquimentID />
+    <LotNo>1DA145J</LotNo>
+    <OPID>12312</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>UNLOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-04-27T18:18:27.6974026+08:00</StartTime>
+    <EndTime>2022-04-27T18:19:04.5263446+08:00</EndTime>
+    <RunTime>13</RunTime>
+    <StopTime>1</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>123123</LotQty>
+    <BinQtyList />
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>65937.1727906</Index>
+      <LotCreateDateTime>65907.6974026</LotCreateDateTime>
+      <StartTime>2022-04-27T18:18:57.1727906+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1296</ID>
+      <ReadMap>11111011111118111111111111111111111111111111111111811111111881111</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>65940.0636559</Index>
+      <LotCreateDateTime>65907.6974026</LotCreateDateTime>
+      <StartTime>2022-04-27T18:19:00.0636559+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1297</ID>
+      <ReadMap>1297</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>

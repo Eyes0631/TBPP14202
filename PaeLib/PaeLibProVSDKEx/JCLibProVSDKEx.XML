@@ -1,0 +1,814 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JCLibProVSDKEx</name>
+    </assembly>
+    <members>
+        <member name="T:JCLibProVSDKEx.JCylinder">
+            <summary>
+            氣缸元件類別 Cylinder Component
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JCylinder.#ctor(ProVLib.OutBit,ProVLib.OutBit,ProVLib.InBit,ProVLib.InBit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:JCLibProVSDKEx.JCylinder"/> class.
+            </summary>
+            <param name="obOn">The ob on.</param>
+            <param name="obOff">The ob off.</param>
+            <param name="ibOn">The ib on.</param>
+            <param name="ibOff">The ib off.</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.JCylinder.#ctor(ProVLib.OutBit,ProVLib.InBit,ProVLib.InBit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:JCLibProVSDKEx.JCylinder"/> class.
+            </summary>
+            <param name="obOn">The ob on.</param>
+            <param name="ibOn">The ib on.</param>
+            <param name="ibOff">The ib off.</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.JCylinder.On(System.Int32,System.Int32)">
+            <summary>
+            設定氣缸控制的 DO 訊號為 ON
+            </summary>
+            <param name="on_ms">On delay time.</param>
+            <param name="timeout_ms">等待 ON 的 timeout 時間.</param>
+            <returns>
+                <p>crDONE : 氣缸 ON 且持續了 on_ms 的時間.</p>
+                <p>crBUSY : 等待氣缸 ON 且等待時間未超過 timeout_ms.</p>
+                <p>crER_TIMEOUT : 等待時間超過 timeout_ms，但氣缸仍未 ON.</p>
+            </returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JCylinder.Off(System.Int32,System.Int32)">
+            <summary>
+            設定氣缸控制的 DO 訊號為 OFF
+            </summary>
+            <param name="off_ms">Off delay time.</param>
+            <param name="timeout_ms">等待 OFF 的 timeout 時間.</param>
+            <returns>
+                <c>crDONE</c> 氣缸 OFF 且持續了 off_ms 的時間.
+                <c>crBUSY</c> 等待氣缸 OFF 且等待時間未超過 timeout_ms.
+                <c>crER_TIMEOUT</c> 等待時間超過 timeout_ms，但氣缸仍未 OFF.
+            </returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JCylinder.Free">
+            <summary>
+            Frees this instance.
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JCylinder.OnCtrlValue">
+            <summary>
+            取得控制氣缸 ON 的 DO 的 ON/OFF 訊號 
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JCylinder.OffCtrlValue">
+            <summary>
+            取得控制氣缸 OFF 的 DO 的 ON/OFF 訊號 
+            </summary>
+            <value>
+              <c>true</c> if OFF; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:JCLibProVSDKEx.JDigitalInput">
+            <summary>
+            數位輸入訊號元件類別 Digital Input Component
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JDigitalInput.#ctor(ProVLib.InBit)">
+            <summary>
+            Initializes a new instance of the <see cref="T:JCLibProVSDKEx.JDigitalInput"/> class.
+            </summary>
+            <param name="ibComp">The ib comp.</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.JDigitalInput.On(System.Int32,System.Int32)">
+            <summary>
+            判斷 DI 的 ON 訊號
+            </summary>
+            <param name="on_ms">On delay time.</param>
+            <param name="timeout_ms">等待 ON 的 timeout 時間.</param>
+            <returns>
+                <c>TRUE_ON_DONE_OK</c> 訊號 ON 且持續了 on_ms 的時間.
+                <c>NONE_WAITING_BUSY</c> 等待訊號 ON 且等待時間未超過 timeout_ms.
+                <c>FALSE_OFF_TIMEOUT_NG</c> 等待時間超過 timeout_ms，但訊號仍未 ON.
+            </returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JDigitalInput.Off(System.Int32,System.Int32)">
+            <summary>
+            判斷 DI 的 OFF 訊號
+            </summary>
+            <param name="on_ms">Off delay time.</param>
+            <param name="timeout_ms">等待 OFF 的 timeout 時間.</param>
+            <returns>
+                <c>TRUE_ON_DONE_OK</c> 訊號 OFF 且持續了 off_ms 的時間.
+                <c>NONE_WAITING_BUSY</c> 等待訊號 OFF 且等待時間未超過 timeout_ms.
+                <c>FALSE_OFF_TIMEOUT_NG</c> 等待時間超過 timeout_ms，但訊號仍未 OFF.
+            </returns>
+        </member>
+        <member name="P:JCLibProVSDKEx.JDigitalInput.Simulation">
+            <summary>
+            是否開啟模擬功能
+            </summary>
+            <value>
+              <c>true</c> if simulation; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JDigitalInput.ValueOn">
+            <summary>
+            取得 DI 的 ON/OFF 訊號 (Read-Only)
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:JCLibProVSDKEx.JMotor">
+            <summary>
+            搭載防撞系統的馬達元件
+            </summary>
+            -----------------------------------------------------------------------------------------
+            使用說明 :
+            -----------------------------------------------------------------------------------------
+            1. 初始化 : JMotor mt = new JMotor(馬達元件, 路線編號, 優先權);
+                       注意!!同路線之優先權不可重複，否則會無法移動
+            -----------------------------------------------------------------------------------------
+            2. 設定起始位置 : mt.InitialPosition = 同一路線上絕對座標的起始值。
+            3. 設定尺寸 : mt.MoverSize = 移動物件的尺寸大小。
+            4. 設定安全距離 : mt.SafeDistance = 移動物件之間的安全距離。
+            【以上 2~3 項，於初始化後設定，設定後若需變更，建議重新歸零，否則可能會導致保護失效】
+            -----------------------------------------------------------------------------------------
+            5. 馬達歸零重置 : mt.HomeReset();
+            6. 馬達歸零 : mt.Home(); 回傳值型態 bool
+            7. 馬達移動 : mt.Goto(要移動的相對位置); 回傳值型態 bool
+            -----------------------------------------------------------------------------------------
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.#cctor">
+            <summary>
+            JMotor 靜態建構子
+            靜態建構函式可以用來初始化任何靜態資料，或執行只需執行一次的特定動作。 
+            在建立第一個執行個體或參考任何靜態成員之前，會自動呼叫靜態建構函式。
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.#ctor(ProVLib.Motor,System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            JMotor 建構子
+            </summary>
+            <param name="mt">Motor物件</param>
+            <param name="line_id">路線編號</param>
+            <param name="priority_l">低優先權設定值(數字越大，優先權越高)</param>
+            <param name="priority_h">高優先權設定值(數字越大，優先權越高)</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.SetLowPriority">
+            <summary>
+            優先權設定為低值
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.SetHeightPriority">
+            <summary>
+            優先權設定為高值
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.Goto(System.Int32)">
+            <summary>
+            馬達移動
+            </summary>
+            <param name="Pos">The position.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.HomeReset">
+            <summary>
+            馬達歸零重置
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.Home">
+            <summary>
+            馬達歸零
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JMotor.CanMoveTo(System.Int32)">
+            <summary>
+            取得可移動位置
+            </summary>
+            <param name="ReleativePos">The releative position.</param>
+            <returns></returns>
+        </member>
+        <member name="P:JCLibProVSDKEx.JMotor.Simulation">
+            <summary>
+            是否開啟模擬功能
+            </summary>
+            <value>
+              <c>true</c> if simulation; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JMotor.RelCurrentPos">
+            <summary>
+            台車目前相對座標位置 (即馬達回朔位置，不包含 Para_InitialPos 值)
+            </summary>
+            <value>
+            The relative current position.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JMotor.RelTargetPos">
+            <summary>
+            台車目標相對座標位置 (即使用者指定的目標位置，不包含 Para_InitialPos 值)
+            </summary>
+            <value>
+            The relative target position.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JMotor.AbsCurrentPos">
+            <summary>
+            台車目前絕對座標位置 (Para_InitialPos + 馬達回朔位置)
+            </summary>
+            <value>
+            The current position.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JMotor.AbsTargetPos">
+            <summary>
+            台車目標絕對座標位置 (Para_InitialPos + 使用者指定的目標位置)
+            </summary>
+            <value>
+            The target position.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JMotor.AbsLockedPos">
+            <summary>
+            台車鎖定絕對座標位置 (防撞機制演算後可鎖定的絕對座標位置，已包含 Para_InitialPos 值)
+            注意!!使用者不可直接設定此值，使用者僅可設定 RelativeTargetPos
+            </summary>
+            <value>
+            The locked position.
+            </value>
+        </member>
+        <member name="T:JCLibProVSDKEx.NozzleState">
+            <summary>
+            吸嘴狀態列舉
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.NozzleActionState">
+            <summary>
+            吸嘴使用狀態列舉
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.JNozzle">
+            <summary>
+            吸嘴元件類別 Nozzle Component
+            </summary>
+        </member>
+        <member name="F:JCLibProVSDKEx.JNozzle._ActionState">
+            <summary>
+            吸嘴動作狀態
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.CylinderOn(System.Int32,System.Int32)">
+            <summary>
+            吸嘴氣缸 ON
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.CylinderOff(System.Int32,System.Int32)">
+            <summary>
+            吸嘴氣缸 OFF
+            </summary>
+            <param name="off_ms">The off ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.VacuumCheck(System.Int32,System.Int32)">
+            <summary>
+            吸嘴真空檢知(單純判斷真空值，不做真空建立動作)
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.VacuumOnAndCheck(System.Int32,System.Int32)">
+            <summary>
+            吸嘴真空建立，並做真空檢知
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.VacuumOn(System.Int32)">
+            <summary>
+            吸嘴真空建立
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.VacuumOff(System.Int32)">
+            <summary>
+            吸嘴真空關閉
+            </summary>
+            <param name="off_ms">The off ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.DestoryOn(System.Int32)">
+            <summary>
+            吸嘴破壞開啟，並於 on_ms 時間後關閉
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzle.DestoryOff(System.Int32)">
+            <summary>
+            吸嘴破壞關閉
+            </summary>
+            <param name="off_ms">The off ms.</param>
+            <returns></returns>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.State">
+            <summary>
+            吸嘴狀態
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.CyOnSensorValue">
+            <summary>
+            吸嘴氣缸ON Sensor輸入訊號ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if [cy on sensor value]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.CyOffSensorValue">
+            <summary>
+            吸嘴氣缸OFF Sensor輸入訊號ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.CyCtrlValue">
+            <summary>
+            吸嘴控制氣缸輸出訊號控制ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.VacuumValueOn">
+            <summary>
+            吸嘴真空檢知Sensor輸入訊號ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if [vacuum value]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.VacuumValueOff">
+            <summary>
+            吸嘴真空檢知Sensor輸入訊號OFF
+            </summary>
+            <value>
+              <c>true</c> if [vacuum value]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.VacuumCtrlValue">
+            <summary>
+            吸嘴真空輸出訊號控制ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JNozzle.DestoryCtrlValue">
+            <summary>
+            吸嘴破壞輸出訊號控制ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.InitialNozzle(System.UInt32,System.UInt32,ProVLib.OutBit,ProVLib.InBit,ProVLib.InBit,ProVLib.InBit,ProVLib.OutBit,ProVLib.OutBit)">
+            <summary>
+            初始化吸嘴陣列
+            </summary>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+            <param name="obCy">The ob cy.</param>
+            <param name="ibCyOn">The ib cy on.</param>
+            <param name="ibCyOff">The ib cy off.</param>
+            <param name="ibVac">The ib vac.</param>
+            <param name="obVac">The ob vac.</param>
+            <param name="obDes">The ob DES.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.SetNozzlesState(JCLibProVSDKEx.NozzleState[0:,0:])">
+            <summary>
+            Sets the state of the nozzles.
+            </summary>
+            <param name="state">The state.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleUp(JCLibProVSDKEx.TripletRestult[0:,0:]@,JCLibProVSDKEx.NozzleActionState,System.Int32,System.Int32)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴氣缸上升，其它放下
+            </summary>
+            <param name="crRet">結果陣列</param>
+            <param name="state">指定吸嘴狀態(符合此狀態的吸嘴才會有作用)</param>
+            <param name="delay_ms">The delay ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleDown(JCLibProVSDKEx.TripletRestult[0:,0:]@,JCLibProVSDKEx.NozzleActionState,System.Int32,System.Int32)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴氣缸放下，其他上升
+            </summary>
+            <param name="crRet">結果陣列</param>
+            <param name="state">指定吸嘴狀態(符合此狀態的吸嘴才會有作用)</param>
+            <param name="delay_ms">The delay ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleVacuumValueOn(JCLibProVSDKEx.NozzleActionState)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴真空ON狀態
+            </summary>
+            <param name="state">The state.</param>
+            <returns>
+            1:Sensor On, 0:Sensor Off, -1:不使用
+            </returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleVacuumValueOff(JCLibProVSDKEx.NozzleActionState)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴真空OFF狀態
+            </summary>
+            <param name="state">The state.</param>
+            <returns>
+            1:Sensor On, 0:Sensor Off, -1:不使用
+            </returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleVacuumOn(JCLibProVSDKEx.NozzleActionState,System.Int32)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴開真空
+            </summary>
+            <param name="crRet">結果陣列</param>
+            <param name="state">指定吸嘴狀態(符合此狀態的吸嘴才會有作用)</param>
+            <param name="delay_ms">The delay ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleVacuumOff(JCLibProVSDKEx.NozzleActionState,System.Int32)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴關真空
+            </summary>
+            <param name="crRet">結果陣列</param>
+            <param name="state">指定吸嘴狀態(符合此狀態的吸嘴才會有作用)</param>
+            <param name="delay_ms">The delay ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleDestroyOn(JCLibProVSDKEx.NozzleActionState,System.Int32)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴開破壞
+            </summary>
+            <param name="crRet">結果陣列</param>
+            <param name="state">指定吸嘴狀態(符合此狀態的吸嘴才會有作用)</param>
+            <param name="delay_ms">The delay ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JNozzleSet.NozzleDestroyOff(JCLibProVSDKEx.NozzleActionState,System.Int32)">
+            <summary>
+            吸嘴陣列中符合指定狀態的吸嘴關破壞,其它開破壞
+            </summary>
+            <param name="crRet">結果陣列</param>
+            <param name="state">指定吸嘴狀態(符合此狀態的吸嘴才會有作用)</param>
+            <param name="delay_ms">The delay ms.</param>
+            <returns></returns>
+        </member>
+        <member name="T:JCLibProVSDKEx.BinDefine">
+            <summary>
+            TrayData Bin 值共用定義列舉
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.JPnPHead">
+            <summary>
+            取放頭類別
+            </summary>
+        </member>
+        <member name="F:JCLibProVSDKEx.JPnPHead.HeadCenterOffset">
+            <summary>
+            取放手臂中心與基準位置的 Offset (若吸嘴的基準在中心則為 0)
+            </summary>
+        </member>
+        <member name="F:JCLibProVSDKEx.JPnPHead.mRelativePos">
+            <summary>
+            TrayData 計算出來的取料點位(相對於基準點位置)
+            </summary>
+        </member>
+        <member name="F:JCLibProVSDKEx.JPnPHead.mAbsolutePos">
+            <summary>
+            實際取放手臂的取料點位(直接移動至此位置進行取料)
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.#ctor(ProVLib.TrayData,ProVLib.TrayData,ProVLib.TrayData,JCLibProVSDKEx.TrayCorner,JCLibProVSDKEx.TrayCorner)">
+            <summary>
+            建構子
+            </summary>
+            <param name="head"></param>
+            <param name="src"></param>
+            <param name="trg"></param>
+            <param name="srcBase"></param>
+            <param name="trgBase"></param>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.SetPitch(System.Int32,System.Int32)">
+            <summary>
+            設定取放手臂X, Y Pitch
+            </summary>
+            <param name="xp"></param>
+            <param name="yp"></param>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.GetNozzleState">
+            <summary>
+            取得吸嘴狀態陣列
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.CalcPos(ProVLib.TrayData,System.Byte[],System.Byte[],System.Drawing.Point@,System.Boolean,System.Int32)">
+            <summary>
+            計算 PnP Head 取放點位
+            </summary>
+            <param name="tdTray">PnP Head 取放目標</param>
+            <param name="head_bin">PnP Head 吸嘴上的 Bin 值</param>
+            <param name="tray_bin">取放盤上的 Bin 值</param>
+            <param name="pos">TrayData 計算出來的取放點位</param>
+            <param name="PnPCount">設定取放數量，0 代表不限制</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.CalcNozzleOffset(JCLibProVSDKEx.TrayCorner)">
+            <summary>
+            計算 PnP Head 吸嘴中心基準點與第一支取放吸嘴的偏移量
+            </summary>
+            <param name="trayPnP">Tray的取放起始角落位置</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.CalcPnPPos(JCLibProVSDKEx.TrayDataEx,System.Byte[],System.Byte[],System.Boolean,System.Int32)">
+            <summary>
+            計算 PnP Head 取放點位
+            </summary>
+            <param name="PnPTray">取放目標 TrayDataEx 物件</param>
+            <param name="head_bin">吸嘴上的 Bin 資料</param>
+            <param name="tray_bin">取放目標盤上的 Bin 資料</param>
+            <param name="ColFirst">true:行(Y方向)優先取放，false:列(X方向)優先取放</param>
+            <param name="PnPCount">設定取放數量，0 代表不限制</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.CalcPickupPos(System.Byte[],System.Byte[],System.Boolean,System.Int32)">
+            <summary>
+            計算 PnP Head 取料點位
+            </summary>
+            <param name="head_bin">吸嘴上的 Bin 資料</param>
+            <param name="tray_bin">取放目標盤上的 Bin 資料</param>
+            <param name="ColFirst">true:行(Y方向)優先取放，false:列(X方向)優先取放</param>
+            <param name="PnPCount">設定取放數量，0 代表不限制</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.CalcPlacePos(System.Byte[],System.Byte[],System.Boolean)">
+            <summary>
+            計算 PnP Head 放料點位
+            </summary>
+            <param name="head_bin">吸嘴上的 Bin 資料</param>
+            <param name="tray_bin">取放目標盤上的 Bin 資料</param>
+            <param name="ColFirst">true:行(Y方向)優先取放，false:列(X方向)優先取放</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JPnPHead.DataExchange">
+            <summary>
+            PnP Head 與目標 Tray 資料交換
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JPnPHead.Nozzles">
+            <summary>
+            吸嘴 TrayDataEx 物件 (ReadOnly)
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JPnPHead.SourceTray">
+            <summary>
+            取料盤 TrayDataEx 物件 (ReadOnly)
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JPnPHead.TargetTray">
+            <summary>
+            放料盤 TrayDataEx 物件 (ReadOnly)
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JPnPHead.RelativePos">
+            <summary>
+            TrayData 計算出來的取料點位(相對於基準點位置) (ReadOnly)
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.JPnPHead.AbsolutePos">
+            <summary>
+            實際取放手臂的取料點位(直接移動至此位置進行取料) (ReadOnly)
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.TripletRestult">
+            <summary>
+            三態 (使用於基礎元件, JDI, JCY, JVCC, JNOZ...etc)
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.JVacuum">
+            <summary>
+            真空產生器元件類別 Vacuum Component
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.JVacuum.VacuumCheck(System.Int32,System.Int32)">
+            <summary>
+            真空檢知 (不包含開真空)
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JVacuum.VacuumOnAndCheck(System.Int32,System.Int32)">
+            <summary>
+            開真空並檢知
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JVacuum.VacuumOn(System.Int32)">
+            <summary>
+            開真空
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <param name="timeout_ms">The timeout ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JVacuum.VacuumOff(System.Int32)">
+            <summary>
+            關真空
+            </summary>
+            <param name="off_ms">The off ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JVacuum.DestoryOn(System.Int32)">
+            <summary>
+            開破壞，並延遲 on_ms 時間後關閉
+            </summary>
+            <param name="on_ms">The on ms.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.JVacuum.DestoryOff(System.Int32)">
+            <summary>
+            關破壞
+            </summary>
+            <param name="off_ms">The off ms.</param>
+            <returns></returns>
+        </member>
+        <member name="P:JCLibProVSDKEx.JVacuum.VacuumValueOn">
+            <summary>
+            取得真空檢知ON的結果 (Read-Only)
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JVacuum.VacuumValueOff">
+            <summary>
+            取得真空檢知OFF的結果 (Read-Only)
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JVacuum.VacuumCtrlValue">
+            <summary>
+            取得與設定真空建立開關的 ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:JCLibProVSDKEx.JVacuum.DestoryCtrlValue">
+            <summary>
+            取得與設定破壞產生開關的 ON/OFF
+            </summary>
+            <value>
+              <c>true</c> if ON; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:JCLibProVSDKEx.TrayCorner">
+            <summary>
+            盤角落
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.TrayID">
+            <summary>
+            Tray Identity
+            </summary>
+        </member>
+        <member name="T:JCLibProVSDKEx.TrayDataEx">
+            <summary>
+            ProVSDK TrayData 增強版
+            </summary>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.#ctor(ProVLib.TrayData,JCLibProVSDKEx.TrayCorner)">
+            <summary>
+            建構子
+            </summary>
+            <param name="td">TrayData 物件</param>
+            <param name="baseCorner">Tray 基準點角落位置</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.SetTrayData(ProVLib.TrayData,JCLibProVSDKEx.TrayCorner)">
+            <summary>
+            設定TrayData物件資料
+            </summary>
+            <param name="td">TrayData 物件</param>
+            <param name="baseCorner">Tray 基準點角落位置</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.SetInfo(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            設定 Tray 資訊
+            </summary>
+            <param name="bxn">Block X Number</param>
+            <param name="byn">Block Y Number</param>
+            <param name="bxp">Block X Pitch</param>
+            <param name="byp">Block Y Pitch</param>
+            <param name="xn">Unit X Number per Block</param>
+            <param name="yn">Unit Y Number per Block</param>
+            <param name="xp">Unit X Pitch</param>
+            <param name="yp">Unit Y Pitch</param>
+            <param name="xo">X Offset (The Center of First Col to the Edge)</param>
+            <param name="yo">Y Offset (The Center of First Row to the Edge)</param>
+            <param name="xbp">X Base Position</param>
+            <param name="ybp">Y Base Position</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.GetTrayOffset">
+            <summary>
+            取得基準點與取放起始點的X, Y Offset
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.ResetBlockBin(System.Int32,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            重新設定指定的x, y 位置Block內的Bin資料
+            </summary>
+            <param name="bx">指定的x Block位置</param>
+            <param name="by">指定的y Block位置</param>
+            <param name="bins">要重新設定的Bin資料陣列</param>
+            <param name="type">設定方式，0 : 隨機，1 : 依序</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.ResetBin(System.Byte[],System.Int32)">
+            <summary>
+            重新設定 bin map
+            </summary>
+            <param name="bins">bin array</param>
+            <param name="type">設定方式，0:隨機, 1:依序</param>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.IsFull(System.Byte[])">
+            <summary>
+            是否全部的Bin都包含在指定的Bin資料陣列中
+            </summary>
+            <param name="bins">指定的Bin資料陣列</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.IsEmpty(System.Byte[])">
+            <summary>
+            是否全部的Bin都不包含在指定的Bin資料陣列中
+            </summary>
+            <param name="bins">指定的Bin資料陣列</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.IsContain(System.Byte[])">
+            <summary>
+            是否有包含指定的Bin資料陣列中的任一個Bin
+            </summary>
+            <param name="bins">指定的Bin資料陣列</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.BinCount(System.Byte[])">
+            <summary>
+            取得包含在指定的Bin資料陣列中Bin的數量
+            </summary>
+            <param name="bins">指定的Bin資料陣列</param>
+            <returns></returns>
+        </member>
+        <member name="M:JCLibProVSDKEx.TrayDataEx.BinReplace(System.Byte,System.Byte)">
+            <summary>
+            替換Bin資料
+            </summary>
+            <param name="oldBin">原始Bin資料(被取代)</param>
+            <param name="newBin">新的Bin資料(用來取代)</param>
+        </member>
+        <member name="P:JCLibProVSDKEx.TrayDataEx.Tray">
+            <summary>
+            TrayData 物件 (存取限於目前組件)
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.TrayDataEx.BasePos">
+            <summary>
+            基準點資訊 (唯讀)
+            </summary>
+        </member>
+        <member name="P:JCLibProVSDKEx.TrayDataEx.PnPStartingCorner">
+            <summary>
+            盤取放起始角落位置
+            </summary>
+        </member>
+    </members>
+</doc>

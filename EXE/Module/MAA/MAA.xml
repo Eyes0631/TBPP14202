@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Table Version="V2" CreateTime="20200729135649" LastTime="">
+  <Fields>
+    <FSafeDoorSW Type="Boolean" Value="False" />
+    <FUseContinueMode Type="Boolean" Value="False" />
+    <FUseModule Type="Boolean" Value="True" />
+    <FModuleID Type="Int" Value="50" />
+  </Fields>
+</Table>

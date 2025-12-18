@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-16"?>
+<JOEE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LotInfo>
+    <Index>47933.594755699996</Index>
+    <EquimentID />
+    <LotNo>1DA145J_P19</LotNo>
+    <OPID>123123</OPID>
+    <DeviceType>5X3.2</DeviceType>
+    <Mode>UNLOAD</Mode>
+    <Recipe>5X3.2</Recipe>
+    <Version>1.0.0.1</Version>
+    <StartTime>2022-05-29T13:18:53.5947557+08:00</StartTime>
+    <EndTime>2022-05-29T13:20:51.0217129+08:00</EndTime>
+    <RunTime>22</RunTime>
+    <StopTime>4</StopTime>
+    <AlarmTime>0</AlarmTime>
+    <LotQty>213123</LotQty>
+    <BinQtyList>
+      <JBIN>
+        <Type>Tested</Type>
+        <Qty>
+          <Process>319</Process>
+          <Completed>319</Completed>
+          <Missing>1</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin1</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>290</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin10</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>4</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin8</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>21</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin9</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>4</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+      <JBIN>
+        <Type>Bin20</Type>
+        <Qty>
+          <Process>0</Process>
+          <Completed>0</Completed>
+          <Missing>0</Missing>
+        </Qty>
+      </JBIN>
+    </BinQtyList>
+  </LotInfo>
+  <DiePakList>
+    <JCARRIER>
+      <Index>47951.1011351</Index>
+      <LotCreateDateTime>47933.594755699996</LotCreateDateTime>
+      <StartTime>2022-05-29T13:19:11.1011351+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1296</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,8,10,8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>47958.6214354</Index>
+      <LotCreateDateTime>47933.594755699996</LotCreateDateTime>
+      <StartTime>2022-05-29T13:19:18.6214354+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1297</ID>
+      <ReadMap>1,1,8,1,1,1,1,1,9,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,8,8,1,1,1,1,1,9,8,8,8,8,1,1,1,1,8,1,1,1,1,1,1,8,1,9,9,1,1,1,1,1,1,1,10,1,1,10</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>47979.347077499995</Index>
+      <LotCreateDateTime>47933.594755699996</LotCreateDateTime>
+      <StartTime>2022-05-29T13:19:39.3470775+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>3672</ID>
+      <ReadMap>1,1,1,1,20,1,1,1,1,1,8,8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>48019.959769199995</Index>
+      <LotCreateDateTime>47933.594755699996</LotCreateDateTime>
+      <StartTime>2022-05-29T13:20:19.9597692+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>1296</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,1,8,1,1,1,1,1,1,1,8,10,8,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+    <JCARRIER>
+      <Index>48042.0023408</Index>
+      <LotCreateDateTime>47933.594755699996</LotCreateDateTime>
+      <StartTime>2022-05-29T13:20:42.0023408+08:00</StartTime>
+      <EndTime>0001-01-01T00:00:00</EndTime>
+      <ID>3459</ID>
+      <ReadMap>1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1</ReadMap>
+      <WriteMap />
+    </JCARRIER>
+  </DiePakList>
+  <AlarmList />
+  <DeviceIDList />
+  <ICIDList />
+</JOEE>
