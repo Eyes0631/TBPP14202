@@ -246,12 +246,15 @@
             this.tpPosition.Controls.Add(this.tabControl1);
             this.tpPosition.Controls.SetChildIndex(this.tabControl1, 0);
             // 
+            // tpFlow
+            // 
+            this.tpFlow.Size = new System.Drawing.Size(901, 471);
+            // 
             // tpSuperSetting
             // 
             this.tpSuperSetting.Controls.Add(this.groupBox12);
             this.tpSuperSetting.Controls.Add(this.groupBox11);
             this.tpSuperSetting.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tpSuperSetting.Size = new System.Drawing.Size(901, 471);
             this.tpSuperSetting.Controls.SetChildIndex(this.groupBox11, 0);
             this.tpSuperSetting.Controls.SetChildIndex(this.groupBox12, 0);
             // 
@@ -259,6 +262,7 @@
             // 
             this.TabFlow.Controls.Add(this.tabPage1);
             this.TabFlow.Controls.Add(this.tabPage2);
+            this.TabFlow.Size = new System.Drawing.Size(897, 467);
             this.TabFlow.Controls.SetChildIndex(this.tabPage2, 0);
             this.TabFlow.Controls.SetChildIndex(this.tabPage1, 0);
             this.TabFlow.Controls.SetChildIndex(this.tpAuto, 0);
@@ -277,6 +281,7 @@
             this.tpHome.Controls.Add(this.flowChart1);
             this.tpHome.Controls.Add(this.FC_TRM_HOME);
             this.tpHome.Controls.Add(this.flowChart4);
+            this.tpHome.Size = new System.Drawing.Size(889, 425);
             // 
             // tpAuto
             // 
@@ -292,7 +297,7 @@
             this.tpAuto.Controls.Add(this.flowChart29);
             this.tpAuto.Controls.Add(this.FC_TRM_GET);
             this.tpAuto.Location = new System.Drawing.Point(4, 38);
-            this.tpAuto.Size = new System.Drawing.Size(985, 424);
+            this.tpAuto.Size = new System.Drawing.Size(889, 425);
             this.tpAuto.Text = "Get Action";
             // 
             // dFieldEdit9

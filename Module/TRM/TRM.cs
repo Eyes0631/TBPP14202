@@ -551,6 +551,18 @@ namespace TRM
         #endregion
 
         #region 公用函數
+
+        /// <summary>
+        /// Slot:0~Max
+        /// Result ex: 1,1,1,1,1,1,1
+        /// </summary>
+        /// <param name="station">LOAD_A(Left) or LOAD_B(Right)</param>
+        /// <returns>0:Empty 1:Have Board</returns>
+        public string GetMappingResult(TRMStation station)
+        {
+            return "1,1,1,1,1,1,1";
+        }
+
         public string ReaderBarcode()
         {
             string sRet = "";
@@ -643,7 +655,7 @@ namespace TRM
 
         //Mars modifyed 20220223
         //public ThreeValued SetActionCommand_TRM(TRMStation Station, ACTIONMODE Mode, BasePosInfo Pos)
-        public ThreeValued SetActionCommand_TRM(TRMStation Station, ACTIONMODE Mode)
+        public ThreeValued SetActionCommand_TRM(TRMStation Station, ACTIONMODE Mode, int Slot)
         {
             TRM_Command = ThreeValued.FALSE;
 
@@ -1299,19 +1311,19 @@ namespace TRM
         private void button5_Click(object sender, EventArgs e)
         {
             //SetActionCommand_TRM(TRMStation.LOAD_A, ACTIONMODE.GET, nowPos);
-            SetActionCommand_TRM(TRMStation.LOAD_A, ACTIONMODE.GET);
+            SetActionCommand_TRM(TRMStation.LOAD_A, ACTIONMODE.GET, 0);
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             //SetActionCommand_TRM(TRMStation.LOAD_A, ACTIONMODE.PUT, nowPos);
-            SetActionCommand_TRM(TRMStation.LOAD_A, ACTIONMODE.PUT);
+            SetActionCommand_TRM(TRMStation.LOAD_A, ACTIONMODE.PUT, 0);
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
             //SetActionCommand_TRM(TRMStation.STAGE_CH, ACTIONMODE.MOVE, nowPos);
-            SetActionCommand_TRM(TRMStation.STAGE_CH, ACTIONMODE.MOVE);
+            SetActionCommand_TRM(TRMStation.STAGE_CH, ACTIONMODE.MOVE, 0);
         }
 
         private FlowChart.FCRESULT flowChart39_Run()

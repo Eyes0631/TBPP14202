@@ -43,6 +43,13 @@ namespace CommonObj
     #endregion
 
     #region enum
+    public enum TrayID
+    { 
+        NONE = -1,
+        LEFT = 0,
+        RIGHT = 1
+    }
+
     public enum CommandReturn
     {
         CR_IDLE,
@@ -110,6 +117,7 @@ namespace CommonObj
         GRAB_CCD,
         GRAB_CCD_AF,
         READ,
+        SCAN,   //新增
     }
 
     public enum CommonDirection
@@ -288,6 +296,8 @@ namespace CommonObj
         RIGHTKIT,
         MIDDLEKIT,
         SAFE,
+        LEFTTRAY,
+        RIGHTTRAY,
     }
 
     public enum LinkMode
@@ -298,6 +308,86 @@ namespace CommonObj
     #endregion
 
     #region class
+    //v2.0.0.1 add 
+    public class BoardInfo
+    {
+        public string BID { get; set; }
+        public int Slot { get; set; }
+        public string BeforeMap { get; set; }
+        public string AfterMap { get; set; }
+        public TRMStation NowStation { get; set; }
+        public JActionFlag State {get; set; }
+
+        public BoardInfo()
+        {
+            //建構
+            this.BID = string.Empty;
+            this.Slot = -1;
+            this.BeforeMap = string.Empty;
+            this.AfterMap = string.Empty;
+            this.NowStation = TRMStation.NONE;
+            this.State = new JActionFlag();
+        }
+
+        public void Reset()
+        {
+            this.BID = string.Empty;
+            this.Slot = -1;
+            this.BeforeMap = string.Empty;
+            this.AfterMap = string.Empty;
+            this.NowStation = TRMStation.NONE;
+            this.State.Reset();
+        }
+
+        public BoardInfo Clone()
+        {
+            BoardInfo info = new BoardInfo();
+            info.BID = this.BID;
+            info.Slot = this.Slot;
+            info.BeforeMap = this.BeforeMap;
+            info.AfterMap = this.AfterMap;
+            info.NowStation = this.NowStation;
+            info.State = new JActionFlag();
+            if (this.State.IsDoIt()) info.State.DoIt();
+            else if (this.State.IsDoing()) info.State.Doing();
+            else if (this.State.IsDone()) info.State.Done();
+
+            return info;
+        }
+    }
+
+    public class CassetteInfo
+    {
+        public CassetteID ID { get; set; }
+        public JActionFlag State { get; set; }
+        public List<BoardInfo> BIBlist;
+
+        public CassetteInfo(CassetteID id)
+        {
+            this.ID = id;
+            this.State = new JActionFlag();
+            BIBlist = new List<BoardInfo>();
+
+            for (int i = 0; i < 25; i++)    //先假設最大值為25
+            {
+                BIBlist.Add(new BoardInfo() { Slot = i });
+            }
+        }
+
+        public void Reset()
+        {
+            this.State.Reset();
+            BIBlist.Clear();
+        }
+
+        public void SetBoardInfo(BoardInfo info, int slot)
+        {
+            if (info == null) return;
+            if (slot < 0 || slot >= BIBlist.Count) return;
+            BIBlist[slot] = info.Clone();
+            BIBlist[slot].Slot = slot;
+        }
+    }
 
     public class BoardMapInfo
     {

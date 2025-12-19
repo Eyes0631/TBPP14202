@@ -817,6 +817,8 @@ namespace BFM
 
         public ThreeValued IsAxisZHomeOK(BowlFeederID ID)
         {
+            if (GetUseModule() == false)
+                return ThreeValued.TRUE;
             ThreeValued TRet = ThreeValued.UNKNOWN;
             switch (ID)
             {
@@ -852,6 +854,7 @@ namespace BFM
         /// /<returns></returns>
         public bool IsAxisZSafety(BowlFeederID ID)
         {
+            if (GetUseModule() == false) return true;
             switch (ID)
             {
                 case BowlFeederID.BF_A:

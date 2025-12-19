@@ -398,10 +398,6 @@
             this.tpSetting.Controls.SetChildIndex(this.groupBox13, 0);
             this.tpSetting.Controls.SetChildIndex(this.groupBox14, 0);
             // 
-            // tpFlow
-            // 
-            this.tpFlow.Size = new System.Drawing.Size(1077, 544);
-            // 
             // tpSuperSetting
             // 
             this.tpSuperSetting.Controls.Add(this.groupBox18);
@@ -419,7 +415,6 @@
             // 
             this.TabFlow.Controls.Add(this.tabPage3);
             this.TabFlow.Controls.Add(this.tabPage8);
-            this.TabFlow.Size = new System.Drawing.Size(1073, 540);
             this.TabFlow.Controls.SetChildIndex(this.tabPage8, 0);
             this.TabFlow.Controls.SetChildIndex(this.tabPage3, 0);
             this.TabFlow.Controls.SetChildIndex(this.tpAuto, 0);
@@ -461,14 +456,13 @@
             this.tpHome.Controls.Add(this.FC_Home_HDT1_Home_XUHome);
             this.tpHome.Controls.Add(this.FC_Home_HDT1_Home_ZHome);
             this.tpHome.Controls.Add(this.FC_Home_HDT1_Home_Start);
-            this.tpHome.Size = new System.Drawing.Size(1065, 498);
             this.tpHome.Text = "Home";
             // 
             // tpAuto
             // 
             this.tpAuto.Controls.Add(this.tabControl3);
             this.tpAuto.Location = new System.Drawing.Point(4, 38);
-            this.tpAuto.Size = new System.Drawing.Size(1065, 498);
+            this.tpAuto.Size = new System.Drawing.Size(985, 424);
             this.tpAuto.Text = "Pick";
             // 
             // tabControl1
@@ -3762,7 +3756,7 @@
             this.tabPage3.Controls.Add(this.tabControl4);
             this.tabPage3.Location = new System.Drawing.Point(4, 38);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1065, 498);
+            this.tabPage3.Size = new System.Drawing.Size(985, 424);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Place";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -3775,7 +3769,7 @@
             this.tabControl4.Location = new System.Drawing.Point(0, 0);
             this.tabControl4.Name = "tabControl4";
             this.tabControl4.SelectedIndex = 0;
-            this.tabControl4.Size = new System.Drawing.Size(1065, 498);
+            this.tabControl4.Size = new System.Drawing.Size(985, 424);
             this.tabControl4.TabIndex = 0;
             // 
             // tabPage11
@@ -3800,7 +3794,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 35);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(1057, 459);
+            this.tabPage11.Size = new System.Drawing.Size(977, 385);
             this.tabPage11.TabIndex = 0;
             this.tabPage11.Text = "Hdt1";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -4855,7 +4849,7 @@
             this.tabPage8.Controls.Add(this.tabControl7);
             this.tabPage8.Location = new System.Drawing.Point(4, 38);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(1065, 498);
+            this.tabPage8.Size = new System.Drawing.Size(985, 424);
             this.tabPage8.TabIndex = 5;
             this.tabPage8.Text = "Bowl Feeder";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -4868,7 +4862,7 @@
             this.tabControl7.Location = new System.Drawing.Point(0, 0);
             this.tabControl7.Name = "tabControl7";
             this.tabControl7.SelectedIndex = 0;
-            this.tabControl7.Size = new System.Drawing.Size(1065, 498);
+            this.tabControl7.Size = new System.Drawing.Size(985, 424);
             this.tabControl7.TabIndex = 0;
             // 
             // tabPage17
@@ -4885,7 +4879,7 @@
             this.tabPage17.Location = new System.Drawing.Point(4, 35);
             this.tabPage17.Name = "tabPage17";
             this.tabPage17.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage17.Size = new System.Drawing.Size(1057, 459);
+            this.tabPage17.Size = new System.Drawing.Size(977, 385);
             this.tabPage17.TabIndex = 0;
             this.tabPage17.Text = "Bf1";
             this.tabPage17.UseVisualStyleBackColor = true;
@@ -6684,7 +6678,7 @@
             this.tabControl3.Location = new System.Drawing.Point(3, 3);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(1059, 492);
+            this.tabControl3.Size = new System.Drawing.Size(979, 418);
             this.tabControl3.TabIndex = 9;
             // 
             // tabPage9
@@ -6715,7 +6709,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 35);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(1051, 453);
+            this.tabPage9.Size = new System.Drawing.Size(971, 379);
             this.tabPage9.TabIndex = 0;
             this.tabPage9.Text = "Hdt1";
             this.tabPage9.UseVisualStyleBackColor = true;

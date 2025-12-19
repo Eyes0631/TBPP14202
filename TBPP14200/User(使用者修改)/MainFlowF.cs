@@ -1,4 +1,7 @@
-﻿using System;
+﻿/////////////////////////////////////////////////////////////////////////////////
+///TBPP14202 有預留BowlFeed，但因時程問題，軟體目前未實作 (後須如果有改機軟體需檢查)
+/////////////////////////////////////////////////////////////////////////////////
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,6 +38,10 @@ namespace TBPP14200
         private BaseModuleInterface mKSM;
         private BaseModuleInterface mBFM;
         private BaseModuleInterface mCSM;
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private BaseModuleInterface mRTR;
+        private BaseModuleInterface mLTR;
+        private BaseModuleInterface mHDT_TR;
 
        
         #endregion
@@ -52,6 +59,10 @@ namespace TBPP14200
         public const string ModuleName_KSM = "KSM";
         public const string ModuleName_BFM = "BFM";
         public const string ModuleName_CSM = "CSM";
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        public const string ModuleName_LTR = "LTR";
+        public const string ModuleName_RTR = "RTR";
+        public const string ModuleName_HDT_TR = "HDT_TR";
 
         #endregion
 
@@ -59,6 +70,8 @@ namespace TBPP14200
 
         private TRAY_INFO BoardInfo = new TRAY_INFO();  //Board info
         private TRAY_INFO KitInfo = new TRAY_INFO();    //Kit Shuttle Info
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private TRAY_INFO TrayInfo = new TRAY_INFO();   //Tray info
 
         #endregion
 
@@ -81,6 +94,10 @@ namespace TBPP14200
         private MyTimer TM_Delay_KSM = null;
         private MyTimer TM_Delay_BFM = null;
         private MyTimer TM_Delay_CSM = null;
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private MyTimer TM_Delay_HDT_TR = null;
+        private MyTimer TM_Delay_RTR = null;
+        private MyTimer TM_Delay_LTR = null;
 
         private MyTimer TM_Homing = null;
 
@@ -98,6 +115,9 @@ namespace TBPP14200
         private KitShuttleID HDT_BIB_B_KitShuttleID = KitShuttleID.NONE;
         private BIBStageID HDT_BIB_BIBStageID = BIBStageID.NONE;
         private KitShuttleID HDT_BIB_Booking_KitShuttleID = KitShuttleID.NONE;
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private TrayID _WorkTray = TrayID.NONE;
+       
 
         //private TRMStation WorkStation = TRMStation.NONE;
         private CassetteID WorkID = CassetteID.NONE;
@@ -107,8 +127,13 @@ namespace TBPP14200
         //private PnPCalculator HDT_BIB_B_PnP = null;
         private HEAD_INFO HDT_BIB_A_INFO;
         private HEAD_INFO HDT_BIB_B_INFO;
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private HEAD_INFO HDT_TR_INFO;
+
         private PnPInfo HDT_BIB_A_PnPInfo = null;
         private PnPInfo HDT_BIB_B_PnPInfo = null;
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private PnPInfo HDT_TR_PnPInfo = null;
 
         BookingInfo HDT_BIB_A_BookingInfo = null;
         BookingInfo HDT_BIB_B_BookingInfo = null;
@@ -144,6 +169,11 @@ namespace TBPP14200
         private TrayDataEx TDEx_PassBox = null;
         private TrayDataEx TDEx_FailBox = null;
 
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private TrayDataEx TDEx_LeftTray = null;
+        private TrayDataEx TDEx_RightTray = null;
+        private TrayDataEx TDEx_HDT_TR = null;
+
         //Board 預約系統
         private BoardBookingSystem Board_BKS = null;
 
@@ -152,6 +182,9 @@ namespace TBPP14200
 
         private BoardHeadPnPNavigator HDT_BF_A_PnP = null;
         private BoardHeadPnPNavigator HDT_BF_B_PnP = null;
+
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private PnPCalculator HDT_TR_PnP = null;
 
         //HDT BIB Flag
         private JActionFlag Flag_HDT_BIB_A_PnP;
@@ -173,6 +206,9 @@ namespace TBPP14200
         //private JActionFlag Flag_Booking;
         private JActionFlag Flag_Booking_A;
         private JActionFlag Flag_Booking_B;
+
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private JActionFlag Flag_HDT_TR_PnP;
 
         //Kit Shuttle Control
         private KitShuttleStateControl LeftKitStateControl;
@@ -208,6 +244,9 @@ namespace TBPP14200
         private JActionFlag Flag_RightKitShuttle_LotEnd;
         private JActionFlag Flag_TopBowlFeeder_LotEnd;
         private JActionFlag Flag_BottomBowlFeeder_LotEnd;
+        //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+        private JActionFlag Flag_VTray_LotEnd;
+        private JActionFlag Flag_HDT_TR_LotEnd;
 
         //MainFlow Lot End Task
         private JActionTask Task_MainFLotEnd;
@@ -250,6 +289,10 @@ namespace TBPP14200
             mKSM = (BaseModuleInterface)FormSet.mMSS.GetModule(ModuleName_KSM);
             mBFM = (BaseModuleInterface)FormSet.mMSS.GetModule(ModuleName_BFM);
             mCSM = (BaseModuleInterface)FormSet.mMSS.GetModule(ModuleName_CSM);
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            mRTR = (BaseModuleInterface)FormSet.mMSS.GetModule(ModuleName_RTR);
+            mLTR = (BaseModuleInterface)FormSet.mMSS.GetModule(ModuleName_LTR);
+            mHDT_TR = (BaseModuleInterface)FormSet.mMSS.GetModule(ModuleName_HDT_TR);
 
             DialogFormThread = new Thread(ShowDialogFormProcess);
             StopDialogFormThread = false;
@@ -272,6 +315,13 @@ namespace TBPP14200
             TM_Delay_TRM.AutoReset = true;
             TM_Homing = new MyTimer();
             TM_Homing.AutoReset = true;
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            TM_Delay_HDT_TR = new MyTimer();
+            TM_Delay_HDT_TR.AutoReset = true;
+            TM_Delay_RTR = new MyTimer();
+            TM_Delay_RTR.AutoReset = true;
+            TM_Delay_LTR = new MyTimer();
+            TM_Delay_LTR.AutoReset = true;
 
             TM_Delay_ModuleLotEnd = new MyTimer();
             TM_Delay_ModuleLotEnd.AutoReset = true;
@@ -288,9 +338,13 @@ namespace TBPP14200
             HDT_BIB_B_PnP = new BoardHeadPnPNavigator();
             HDT_BF_A_PnP = new BoardHeadPnPNavigator();
             HDT_BF_B_PnP = new BoardHeadPnPNavigator();
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            HDT_TR_PnP = new PnPCalculator();
 
             HDT_BIB_A_PnPInfo = new PnPInfo();
             HDT_BIB_B_PnPInfo = new PnPInfo();
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            HDT_TR_PnPInfo = new PnPInfo();
 
             //Kit Shuttle Control
             LeftKitStateControl = new KitShuttleStateControl();
@@ -304,6 +358,8 @@ namespace TBPP14200
             Flag_HDT_BIB_B_Vision_InAdvance = new JActionFlag();
             Flag_HDT_BIB_B_Action = new JActionFlag();
             Flag_CHM_Action = new JActionFlag();
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            Flag_HDT_TR_PnP = new JActionFlag();
             //Flag_Booking = new JActionFlag();
             Flag_Booking_A = new JActionFlag();
             Flag_Booking_B = new JActionFlag();
@@ -317,6 +373,9 @@ namespace TBPP14200
             Flag_BottomHDT_LotEnd = new JActionFlag();
             Flag_TRM_LotEnd = new JActionFlag();
             Flag_CHM_LotEnd = new JActionFlag();
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            Flag_VTray_LotEnd = new JActionFlag();
+            Flag_HDT_TR_LotEnd = new JActionFlag();
 
             Task_MainFLotEnd = new JActionTask();
             
@@ -509,6 +568,48 @@ namespace TBPP14200
                     //}
                 }
                 #endregion
+                #region Tray Head Protection
+                IsSafety = (bool)SYSPara.CallProc(ModuleName_HDT_TR, "IsAxisZSafety");
+                if (!IsSafety.Equals(true))
+                {
+                    //板手臂不在安全高度，啟動其它模組安全防護
+                    HDTLocation HDTLocation = (HDTLocation)SYSPara.CallProc(ModuleName_HDT, "GetHDTLocation");
+                    {
+                        switch (HDTLocation)
+                        {
+                            case CommonObj.HDTLocation.LEFTKIT:
+                                {
+                                    //TODO:啟用LeftKitShuttle 安全防護機制
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleA);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.RIGHTKIT:
+                                {
+                                    //TODO:啟用RightKitShuttle 安全防護機制
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleB);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.MIDDLEKIT:
+                                {
+                                    //TODO:啟用KitShuttle 安全防護機制
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleA);
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleB);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.LEFTTRAY:
+                                {
+                                    SYSPara.CallProc(ModuleName_LTR, "Protection_LTR", KitShuttleOwner.HDT_TR);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.RIGHTTRAY:
+                                {
+                                    SYSPara.CallProc(ModuleName_RTR, "Protection_RTR", KitShuttleOwner.HDT_TR);
+                                }
+                                break;
+                        }
+                    }
+                }
+                #endregion Tray Head Protection
                 #region Transerfer 是否在安全可旋轉點位
                 IsSafety = (bool)SYSPara.CallProc(ModuleName_TRM, "IsTRMSafety");
                 SYSPara.CallProc(ModuleName_CHM, "Protection_CHM", IsSafety);
@@ -671,6 +772,48 @@ namespace TBPP14200
                     //}
                 }
                 #endregion
+                #region Tray Head Protection
+                IsSafety = (bool)SYSPara.CallProc(ModuleName_HDT_TR, "IsAxisZSafety");
+                if (!IsSafety.Equals(true))
+                {
+                    //板手臂不在安全高度，啟動其它模組安全防護
+                    HDTLocation HDTLocation = (HDTLocation)SYSPara.CallProc(ModuleName_HDT, "GetHDTLocation");
+                    {
+                        switch (HDTLocation)
+                        {
+                            case CommonObj.HDTLocation.LEFTKIT:
+                                {
+                                    //TODO:啟用LeftKitShuttle 安全防護機制
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleA);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.RIGHTKIT:
+                                {
+                                    //TODO:啟用RightKitShuttle 安全防護機制
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleB);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.MIDDLEKIT:
+                                {
+                                    //TODO:啟用KitShuttle 安全防護機制
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleA);
+                                    SYSPara.CallProc(ModuleName_KSM, "Protection_KSM", KitShuttleOwner.HDT_BIB_B, KitShuttleID.TransferShuttleB);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.LEFTTRAY:
+                                {
+                                    SYSPara.CallProc(ModuleName_LTR, "Protection_LTR", KitShuttleOwner.HDT_TR);
+                                }
+                                break;
+                            case CommonObj.HDTLocation.RIGHTTRAY:
+                                {
+                                    SYSPara.CallProc(ModuleName_RTR, "Protection_RTR", KitShuttleOwner.HDT_TR);
+                                }
+                                break;
+                        }
+                    }
+                }
+                #endregion Tray Head Protection
                 #region Transerfer 是否在安全可旋轉點位
                 IsSafety = (bool)SYSPara.CallProc(ModuleName_TRM, "IsTRMSafety");
                 SYSPara.CallProc(ModuleName_CHM, "Protection_CHM", IsSafety);
@@ -740,14 +883,17 @@ namespace TBPP14200
                 SYSPara.ErrorStop = false;
                 SYSPara.Alarm.ClearAll();
 
-                SYSPara.CallProc(ModuleName_TRM, "DataReset");
-                SYSPara.CallProc(ModuleName_CHM, "DataReset");
-                SYSPara.CallProc(ModuleName_BSM, "DataReset");
-                SYSPara.CallProc(ModuleName_HDT, "DataReset");
-                SYSPara.CallProc(ModuleName_KSM, "DataReset");
-                SYSPara.CallProc(ModuleName_BFM, "DataReset");
-                SYSPara.CallProc(ModuleName_MAA, "DataReset");
-                SYSPara.CallProc(ModuleName_CSM, "DataReset");
+                //SYSPara.CallProc(ModuleName_TRM, "DataReset");
+                //SYSPara.CallProc(ModuleName_CHM, "DataReset");
+                //SYSPara.CallProc(ModuleName_BSM, "DataReset");
+                //SYSPara.CallProc(ModuleName_HDT, "DataReset");
+                //SYSPara.CallProc(ModuleName_KSM, "DataReset");
+                //SYSPara.CallProc(ModuleName_BFM, "DataReset");
+                //SYSPara.CallProc(ModuleName_MAA, "DataReset");
+                //SYSPara.CallProc(ModuleName_CSM, "DataReset");
+                //SYSPara.CallProc(ModuleName_RTR, "DataReset");
+                //SYSPara.CallProc(ModuleName_LTR, "DataReset");
+                //SYSPara.CallProc(ModuleName_HDT_TR, "DataReset");
 
                 SYSPara.MusicOn = true;
                 SYSPara.SysRun = true;
@@ -828,8 +974,11 @@ namespace TBPP14200
             FC_BoardHeadBPnP.TaskReset();
             FC_ShuttleA.TaskReset();
             FC_ShuttleB.TaskReset();
-            FC_BowFeederA.TaskReset();
-            FC_BowFeederB.TaskReset();
+            if (mBFM.GetUseModule())
+            {
+                FC_BowFeederA.TaskReset();
+                FC_BowFeederB.TaskReset();
+            }
         }
 
         //運轉
@@ -846,8 +995,11 @@ namespace TBPP14200
             FC_BoardHeadBPnP.MainRun();
             FC_ShuttleA.MainRun();
             FC_ShuttleB.MainRun();
-            FC_BowFeederA.MainRun();
-            FC_BowFeederB.MainRun();
+            if (mBFM.GetUseModule())
+            {
+                FC_BowFeederA.MainRun();
+                FC_BowFeederB.MainRun();
+            }
             ////是否進行結批流程
             //if (SYSPara.Lotend)
             //{
@@ -876,6 +1028,8 @@ namespace TBPP14200
                 SYSPara.LotendOk = Flag_TRM_LotEnd.IsDone() && Flag_CHM_LotEnd.IsDone() && Flag_LeftBSM_LotEnd.IsDone() && Flag_RightBSM_LotEnd.IsDone() &&
                 Flag_TopHDT_LotEnd.IsDone() && Flag_BottomHDT_LotEnd.IsDone() && Flag_LeftKitShuttle_LotEnd.IsDone() && Flag_RightKitShuttle_LotEnd.IsDone() &&
                 Flag_TopBowlFeeder_LotEnd.IsDone() && Flag_BottomBowlFeeder_LotEnd.IsDone();
+                //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+                SYSPara.LotendOk = SYSPara.LotendOk && Flag_HDT_TR_LotEnd.IsDone() && Flag_VTray_LotEnd.IsDone();
             }
 
             if (SYSPara.LotendOk)
@@ -1026,6 +1180,9 @@ namespace TBPP14200
             SYSPara.CallProc(ModuleName_BFM, "DataReset");
             SYSPara.CallProc(ModuleName_MAA, "DataReset");
             SYSPara.CallProc(ModuleName_CSM, "DataReset");
+            SYSPara.CallProc(ModuleName_LTR, "DataReset");
+            SYSPara.CallProc(ModuleName_RTR, "DataReset");
+            SYSPara.CallProc(ModuleName_HDT_TR, "DataReset");
 
             LoadMachineData();
             LoadPackageData();
@@ -1067,6 +1224,19 @@ namespace TBPP14200
             TDEx_PassBox = new TrayDataEx(td_PassBox);
             TDEx_FailBox = new TrayDataEx(td_FailBox);
 
+            TDEx_LeftTray = new TrayDataEx(td_LeftTray);
+            TDEx_RightTray = new TrayDataEx(td_RightTray);
+            TDEx_HDT_TR = new TrayDataEx(td_HDT_TR);
+
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            TDEx_LeftTray.SetInfo(1, 1, 1, 1, TrayInfo.XN, TrayInfo.YN, TrayInfo.XP, TrayInfo.YP, TrayInfo.XO, TrayInfo.YO, 0, 0);
+            TDEx_LeftTray.ResetBin(GlobalDefine.EmptyBin, 1, false);
+            TDEx_RightTray.SetInfo(1, 1, 1, 1, TrayInfo.XN, TrayInfo.YN, TrayInfo.XP, TrayInfo.YP, TrayInfo.XO, TrayInfo.YO, 0, 0);
+            TDEx_RightTray.ResetBin(GlobalDefine.EmptyBin, 1, false);
+
+            TDEx_HDT_TR.SetInfo(1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 0, 0);
+            TDEx_HDT_TR.ResetBin(GlobalDefine.EmptyBin, 1, false);
+
             TDEx_Right_Board.SetInfo(1, 1, 1, 1, BoardInfo.XN, BoardInfo.YN, BoardInfo.XP, BoardInfo.YP, BoardInfo.XO, BoardInfo.YO, 0, 0);
             TDEx_Right_Board.ResetBin(GlobalDefine.EmptyBin, 1, false);
             TDEx_Left_Board.SetInfo(1, 1, 1, 1, BoardInfo.XN, BoardInfo.YN, BoardInfo.XP, BoardInfo.YP, BoardInfo.XO, BoardInfo.YO, 0, 0);
@@ -1080,10 +1250,14 @@ namespace TBPP14200
             TDEx_Load.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
             TDEx_Load.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
-            TDEx_HDT_BIB_A.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //TDEx_HDT_BIB_A.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            TDEx_HDT_BIB_A.SetInfo(1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 0);
             TDEx_HDT_BIB_A.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
-            TDEx_HDT_BIB_B.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //TDEx_HDT_BIB_B.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            TDEx_HDT_BIB_B.SetInfo(1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 0);
             TDEx_HDT_BIB_B.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
             TDEx_Unload.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
@@ -1133,6 +1307,9 @@ namespace TBPP14200
             Flag_TopHDT_LotEnd.Reset();
             Flag_TRM_LotEnd.Reset();
             Flag_CHM_LotEnd.Reset();
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            Flag_VTray_LotEnd.Reset();
+            Flag_HDT_TR_LotEnd.Reset();
             
             Flag_HDT_BIB_A_PnP.Reset();
             Flag_HDT_BIB_B_PnP.Reset();
@@ -1144,6 +1321,9 @@ namespace TBPP14200
             Flag_HDT_BIB_A_Vision_InAdvance.Reset();
             Flag_HDT_BIB_B_Vision.Reset();
             Flag_HDT_BIB_B_Vision_InAdvance.Reset();
+
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            Flag_HDT_TR_PnP.Reset();
 
             Flag_CHM_Action.Reset();
             //Flag_Booking.Reset();
@@ -1170,6 +1350,10 @@ namespace TBPP14200
             bool bUseHDT = mHDT.GetUseModule();
             bool bUseKSM = mKSM.GetUseModule();
             bool bUseBFM = mBFM.GetUseModule();
+            //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+            bool bUseHDT_TR = mHDT_TR.GetUseModule();
+            bool bUseLeftTray = mLTR.GetUseModule();
+            bool bUseRightTray = mRTR.GetUseModule();
             //TODO:need add log for use list
             string SystemEquipmentID = SYSPara.OReadValue("EquipmentID").ToString();
             int SystemMachineRate = SYSPara.OReadValue("機台速率").ToInt();
@@ -1208,6 +1392,9 @@ namespace TBPP14200
                 Flag_RightKitShuttle_LotEnd.Reset();
                 Flag_TopBowlFeeder_LotEnd.Reset();
                 Flag_BottomBowlFeeder_LotEnd.Reset();
+                //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
+                Flag_HDT_TR_LotEnd.Reset();
+                Flag_VTray_LotEnd.Reset();
             }
             else
             {
@@ -1231,14 +1418,16 @@ namespace TBPP14200
             HDT_BF_A_INFO.Num_Y = 1;
             HDT_BF_B_INFO = HDT_BF_A_INFO;
 
-            HDT_BIB_A_INFO.Max_Pitch_X = 1;
-            HDT_BIB_A_INFO.Min_Pitch_X = 1;
-            HDT_BIB_A_INFO.Max_Pitch_Y = 1;
-            HDT_BIB_A_INFO.Min_Pitch_Y = 1;
-            HDT_BIB_A_INFO.HasY = false;
-            HDT_BIB_A_INFO.HasX = false;
-            HDT_BIB_A_INFO.Num_X = 1;
-            HDT_BIB_A_INFO.Num_Y = 1;
+            //HDT_BIB_A_INFO.Max_Pitch_X = 1;
+            //HDT_BIB_A_INFO.Min_Pitch_X = 1;
+            //HDT_BIB_A_INFO.Max_Pitch_Y = 1;
+            //HDT_BIB_A_INFO.Min_Pitch_Y = 1;
+            //HDT_BIB_A_INFO.HasY = false;
+            //HDT_BIB_A_INFO.HasX = false;
+            //HDT_BIB_A_INFO.Num_X = 1;
+            //HDT_BIB_A_INFO.Num_Y = 1;
+            //HDT_BIB_B_INFO = HDT_BIB_A_INFO;
+            HDT_BIB_A_INFO = (HEAD_INFO)SYSPara.CallProc(ModuleName_HDT, "GetHeadInfo");
             HDT_BIB_B_INFO = HDT_BIB_A_INFO;
         }
 
@@ -1283,6 +1472,19 @@ namespace TBPP14200
             KitInfo.Height = SYSPara.PReadValue("KitTable", "Kit_Thickness").ToInt();
             KitInfo.Depth = SYSPara.PReadValue("KitTable", "Kit_Depth").ToInt();
             KitInfo.DeviceHeight = SYSPara.PReadValue("DeviceTable", "Device_Thickness").ToInt();
+
+            TrayInfo.XN = SYSPara.PReadValue("TrayTable", "JEDECTray_XN").ToInt();
+            TrayInfo.YN = SYSPara.PReadValue("TrayTable", "JEDECTray_YN").ToInt();
+            TrayInfo.XP = SYSPara.PReadValue("TrayTable", "JEDECTray_XPitch").ToInt();
+            TrayInfo.YP = SYSPara.PReadValue("TrayTable", "JEDECTray_YPitch").ToInt();
+            TrayInfo.XO = SYSPara.PReadValue("TrayTable", "JEDECTray_XShift").ToInt();
+            TrayInfo.YO = SYSPara.PReadValue("TrayTable", "JEDECTray_YShift").ToInt();
+            TrayInfo.Length = SYSPara.PReadValue("TrayTable", "JEDECTray_Length").ToInt();
+            TrayInfo.Width = SYSPara.PReadValue("TrayTable", "JEDECTray_Width").ToInt();
+            TrayInfo.Depth = SYSPara.PReadValue("TrayTable", "JEDECTray_Depth").ToInt();
+            TrayInfo.Height = SYSPara.PReadValue("TrayTable", "JEDECTray_Height").ToInt();
+            TrayInfo.Notch = SYSPara.PReadValue("TrayTable", "JEDECTray_Notch").ToInt();
+            TrayInfo.TrayThickness = SYSPara.PReadValue("TrayTable", "JEDECTray_Thickness").ToInt();
         }
 
         private void GetControls(Control ctr)
@@ -1418,6 +1620,7 @@ namespace TBPP14200
             SYSPara.CallProc(ModuleName_CHM, "SetCanRunHome");
             SYSPara.CallProc(ModuleName_BFM, "SetCanRunHome");
             SYSPara.CallProc(ModuleName_HDT, "SetCanRunHome");
+            SYSPara.CallProc(ModuleName_HDT_TR, "SetCanRunHome");
 
             return FlowChart.FCRESULT.NEXT;
         }
@@ -1428,11 +1631,13 @@ namespace TBPP14200
             ThreeValued T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "IsAxisZHomeOK", BowlFeederID.BF_A);
             ThreeValued T3 = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "IsAxisZHomeOK", BowlFeederID.BF_B);
             ThreeValued T4 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "IsAxisZHomeOK");
+            ThreeValued T5 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT_TR, "IsAxisZHomeOK");
 
             if (T1.Equals(ThreeValued.TRUE) &&
-                T2.Equals(ThreeValued.TRUE) &&
+                T2.Equals(ThreeValued.TRUE)&&
                 T3.Equals(ThreeValued.TRUE) &&
-                T4.Equals(ThreeValued.TRUE))
+                T4.Equals(ThreeValued.TRUE) &&
+                T5.Equals(ThreeValued.TRUE))
             {
                 SYSPara.CallProc(ModuleName_TRM, "SetCanRunHome");
                 return FlowChart.FCRESULT.NEXT;
@@ -1458,6 +1663,8 @@ namespace TBPP14200
         {
             SYSPara.CallProc(ModuleName_KSM, "SetCanRunHome");
             SYSPara.CallProc(ModuleName_BSM, "SetCanRunHome");
+            SYSPara.CallProc(ModuleName_RTR, "SetCanRunHome");
+            SYSPara.CallProc(ModuleName_LTR, "SetCanRunHome");
 
             return FlowChart.FCRESULT.NEXT;
         }
@@ -1470,8 +1677,11 @@ namespace TBPP14200
             bool b4 = (!mTRM.GetUseModule() || mTRM.mHomeOk);
             bool b5 = (!mHDT.GetUseModule() || mHDT.mHomeOk);
             bool b6 = (!mKSM.GetUseModule() || mKSM.mHomeOk);
+            bool b7 = (!mHDT_TR.GetUseModule() || mHDT_TR.mHomeOk);
+            bool b8 = (!mLTR.GetUseModule() || mLTR.mHomeOk);
+            bool b9 = (!mRTR.GetUseModule() || mRTR.mHomeOk);
 
-            if (b1 && b2 && b3 && b4 && b5 && b6)
+            if (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9)
             {
                 return FlowChart.FCRESULT.NEXT;
             }

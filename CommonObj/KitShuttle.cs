@@ -30,6 +30,8 @@ namespace CommonObj
         HDT_BF_A,
         //Bowl Feeder B
         HDT_BF_B,
+        //Tray Head
+        HDT_TR,
     }
 
     /// <summary>

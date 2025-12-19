@@ -122,8 +122,10 @@ namespace TBPP14200
         public int DeviceWidth;
         public int DeviceLength;
         public int LID_Height;      //Lid 厚度
-
         public int LID_Dir;         //開蓋方向
+
+        public int TrayThickness;
+        public int Notch;
     }
 
     public class LOT_INFO
