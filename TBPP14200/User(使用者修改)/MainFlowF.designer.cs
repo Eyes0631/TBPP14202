@@ -415,6 +415,12 @@
             this.tabPage19 = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage20 = new System.Windows.Forms.TabPage();
+            this.flowChart346 = new ProVLib.FlowChart();
+            this.flowChart347 = new ProVLib.FlowChart();
+            this.flowChart348 = new ProVLib.FlowChart();
+            this.flowChart349 = new ProVLib.FlowChart();
+            this.flowChart350 = new ProVLib.FlowChart();
+            this.FC_RightTray_Run = new ProVLib.FlowChart();
             this.flowChart345 = new ProVLib.FlowChart();
             this.flowChart341 = new ProVLib.FlowChart();
             this.flowChart342 = new ProVLib.FlowChart();
@@ -424,6 +430,16 @@
             this.tabPage21 = new System.Windows.Forms.TabPage();
             this.flowChart340 = new ProVLib.FlowChart();
             this.tabPage22 = new System.Windows.Forms.TabPage();
+            this.tabPage23 = new System.Windows.Forms.TabPage();
+            this.flowChart358 = new ProVLib.FlowChart();
+            this.flowChart351 = new ProVLib.FlowChart();
+            this.flowChart352 = new ProVLib.FlowChart();
+            this.flowChart353 = new ProVLib.FlowChart();
+            this.flowChart354 = new ProVLib.FlowChart();
+            this.flowChart355 = new ProVLib.FlowChart();
+            this.flowChart356 = new ProVLib.FlowChart();
+            this.flowChart357 = new ProVLib.FlowChart();
+            this.FC_Auto_ScanAction = new ProVLib.FlowChart();
             this.OptionDS = new KCSDK.DataManagement(this.components);
             this.td_Load = new ProVLib.TrayData(this.components);
             this.td_Unload = new ProVLib.TrayData(this.components);
@@ -444,12 +460,6 @@
             this.td_LeftTray = new ProVLib.TrayData(this.components);
             this.td_HDT_TR = new ProVLib.TrayData(this.components);
             this.td_RightTray = new ProVLib.TrayData(this.components);
-            this.flowChart346 = new ProVLib.FlowChart();
-            this.flowChart347 = new ProVLib.FlowChart();
-            this.flowChart348 = new ProVLib.FlowChart();
-            this.flowChart349 = new ProVLib.FlowChart();
-            this.flowChart350 = new ProVLib.FlowChart();
-            this.FC_RightTray_Run = new ProVLib.FlowChart();
             this.TabFlow.SuspendLayout();
             this.tpHome.SuspendLayout();
             this.tpAuto.SuspendLayout();
@@ -491,6 +501,7 @@
             this.tabControl3.SuspendLayout();
             this.tabPage20.SuspendLayout();
             this.tabPage21.SuspendLayout();
+            this.tabPage23.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabFlow
@@ -504,6 +515,7 @@
             this.TabFlow.Controls.Add(this.tabPage9);
             this.TabFlow.Controls.Add(this.tabPage12);
             this.TabFlow.Controls.Add(this.tabPage19);
+            this.TabFlow.Controls.Add(this.tabPage23);
             this.TabFlow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabFlow.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.TabFlow.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -1605,7 +1617,7 @@
             this.flowChart30.ErrID = 0;
             this.flowChart30.InAlarm = false;
             this.flowChart30.IsFlowHead = false;
-            this.flowChart30.Location = new System.Drawing.Point(747, 215);
+            this.flowChart30.Location = new System.Drawing.Point(747, 291);
             this.flowChart30.LockUI = false;
             this.flowChart30.Message = null;
             this.flowChart30.MsgID = 0;
@@ -1635,7 +1647,7 @@
             this.flowChart171.ErrID = 0;
             this.flowChart171.InAlarm = false;
             this.flowChart171.IsFlowHead = false;
-            this.flowChart171.Location = new System.Drawing.Point(747, 253);
+            this.flowChart171.Location = new System.Drawing.Point(747, 329);
             this.flowChart171.LockUI = false;
             this.flowChart171.Message = null;
             this.flowChart171.MsgID = 0;
@@ -1665,7 +1677,7 @@
             this.flowChart29.ErrID = 0;
             this.flowChart29.InAlarm = false;
             this.flowChart29.IsFlowHead = false;
-            this.flowChart29.Location = new System.Drawing.Point(747, 291);
+            this.flowChart29.Location = new System.Drawing.Point(747, 367);
             this.flowChart29.LockUI = false;
             this.flowChart29.Message = null;
             this.flowChart29.MsgID = 0;
@@ -1695,7 +1707,7 @@
             this.flowChart172.ErrID = 0;
             this.flowChart172.InAlarm = false;
             this.flowChart172.IsFlowHead = false;
-            this.flowChart172.Location = new System.Drawing.Point(747, 329);
+            this.flowChart172.Location = new System.Drawing.Point(747, 405);
             this.flowChart172.LockUI = false;
             this.flowChart172.Message = null;
             this.flowChart172.MsgID = 0;
@@ -1725,7 +1737,7 @@
             this.flowChart28.ErrID = 0;
             this.flowChart28.InAlarm = false;
             this.flowChart28.IsFlowHead = false;
-            this.flowChart28.Location = new System.Drawing.Point(747, 367);
+            this.flowChart28.Location = new System.Drawing.Point(747, 443);
             this.flowChart28.LockUI = false;
             this.flowChart28.Message = null;
             this.flowChart28.MsgID = 0;
@@ -1755,7 +1767,7 @@
             this.flowChart173.ErrID = 0;
             this.flowChart173.InAlarm = false;
             this.flowChart173.IsFlowHead = false;
-            this.flowChart173.Location = new System.Drawing.Point(747, 405);
+            this.flowChart173.Location = new System.Drawing.Point(747, 481);
             this.flowChart173.LockUI = false;
             this.flowChart173.Message = null;
             this.flowChart173.MsgID = 0;
@@ -1785,7 +1797,7 @@
             this.flowChart27.ErrID = 0;
             this.flowChart27.InAlarm = false;
             this.flowChart27.IsFlowHead = false;
-            this.flowChart27.Location = new System.Drawing.Point(747, 445);
+            this.flowChart27.Location = new System.Drawing.Point(747, 521);
             this.flowChart27.LockUI = false;
             this.flowChart27.Message = null;
             this.flowChart27.MsgID = 0;
@@ -1815,7 +1827,7 @@
             this.flowChart26.ErrID = 0;
             this.flowChart26.InAlarm = false;
             this.flowChart26.IsFlowHead = false;
-            this.flowChart26.Location = new System.Drawing.Point(747, 483);
+            this.flowChart26.Location = new System.Drawing.Point(747, 559);
             this.flowChart26.LockUI = false;
             this.flowChart26.Message = null;
             this.flowChart26.MsgID = 0;
@@ -1845,7 +1857,7 @@
             this.flowChart174.ErrID = 0;
             this.flowChart174.InAlarm = false;
             this.flowChart174.IsFlowHead = false;
-            this.flowChart174.Location = new System.Drawing.Point(747, 523);
+            this.flowChart174.Location = new System.Drawing.Point(747, 599);
             this.flowChart174.LockUI = false;
             this.flowChart174.Message = null;
             this.flowChart174.MsgID = 0;
@@ -1875,7 +1887,7 @@
             this.flowChart25.ErrID = 0;
             this.flowChart25.InAlarm = false;
             this.flowChart25.IsFlowHead = false;
-            this.flowChart25.Location = new System.Drawing.Point(521, 523);
+            this.flowChart25.Location = new System.Drawing.Point(521, 599);
             this.flowChart25.LockUI = false;
             this.flowChart25.Message = null;
             this.flowChart25.MsgID = 0;
@@ -1905,7 +1917,7 @@
             this.flowChart175.ErrID = 0;
             this.flowChart175.InAlarm = false;
             this.flowChart175.IsFlowHead = false;
-            this.flowChart175.Location = new System.Drawing.Point(521, 483);
+            this.flowChart175.Location = new System.Drawing.Point(521, 559);
             this.flowChart175.LockUI = false;
             this.flowChart175.Message = null;
             this.flowChart175.MsgID = 0;
@@ -3689,10 +3701,10 @@
             this.tabPage4.Controls.Add(this.flowChart66);
             this.tabPage4.Controls.Add(this.flowChart67);
             this.tabPage4.Controls.Add(this.FC_BoardStageB);
-            this.tabPage4.Location = new System.Drawing.Point(4, 35);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(960, 599);
+            this.tabPage4.Size = new System.Drawing.Size(960, 612);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Stage B";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -4131,10 +4143,10 @@
             this.tabPage7.Controls.Add(this.flowChart71);
             this.tabPage7.Controls.Add(this.flowChart70);
             this.tabPage7.Controls.Add(this.FC_Booking);
-            this.tabPage7.Location = new System.Drawing.Point(4, 35);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(960, 599);
+            this.tabPage7.Size = new System.Drawing.Size(960, 612);
             this.tabPage7.TabIndex = 2;
             this.tabPage7.Text = "Board Booking";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -11810,6 +11822,180 @@
             this.tabPage20.Text = "Tray";
             this.tabPage20.UseVisualStyleBackColor = true;
             // 
+            // flowChart346
+            // 
+            this.flowChart346.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart346.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart346.CASE1 = null;
+            this.flowChart346.CASE2 = null;
+            this.flowChart346.CASE3 = null;
+            this.flowChart346.CASE4 = null;
+            this.flowChart346.ContinueRun = false;
+            this.flowChart346.EndFC = null;
+            this.flowChart346.ErrID = 0;
+            this.flowChart346.InAlarm = false;
+            this.flowChart346.IsFlowHead = false;
+            this.flowChart346.Location = new System.Drawing.Point(466, 68);
+            this.flowChart346.LockUI = false;
+            this.flowChart346.Message = null;
+            this.flowChart346.MsgID = 0;
+            this.flowChart346.Name = "flowChart346";
+            this.flowChart346.NEXT = this.flowChart347;
+            this.flowChart346.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart346.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart346.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart346.OverTimeSpec = 100;
+            this.flowChart346.Running = false;
+            this.flowChart346.Size = new System.Drawing.Size(57, 30);
+            this.flowChart346.SlowRunCycle = -1;
+            this.flowChart346.StartFC = null;
+            this.flowChart346.Text = "Next";
+            // 
+            // flowChart347
+            // 
+            this.flowChart347.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart347.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart347.CASE1 = null;
+            this.flowChart347.CASE2 = null;
+            this.flowChart347.CASE3 = null;
+            this.flowChart347.CASE4 = null;
+            this.flowChart347.ContinueRun = false;
+            this.flowChart347.EndFC = null;
+            this.flowChart347.ErrID = 0;
+            this.flowChart347.InAlarm = false;
+            this.flowChart347.IsFlowHead = false;
+            this.flowChart347.Location = new System.Drawing.Point(560, 68);
+            this.flowChart347.LockUI = false;
+            this.flowChart347.Message = null;
+            this.flowChart347.MsgID = 0;
+            this.flowChart347.Name = "flowChart347";
+            this.flowChart347.NEXT = this.flowChart348;
+            this.flowChart347.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart347.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart347.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart347.OverTimeSpec = 100;
+            this.flowChart347.Running = false;
+            this.flowChart347.Size = new System.Drawing.Size(200, 30);
+            this.flowChart347.SlowRunCycle = -1;
+            this.flowChart347.StartFC = null;
+            this.flowChart347.Text = "Is Shuttle Need ToDo";
+            // 
+            // flowChart348
+            // 
+            this.flowChart348.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart348.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart348.CASE1 = null;
+            this.flowChart348.CASE2 = null;
+            this.flowChart348.CASE3 = null;
+            this.flowChart348.CASE4 = null;
+            this.flowChart348.ContinueRun = false;
+            this.flowChart348.EndFC = null;
+            this.flowChart348.ErrID = 0;
+            this.flowChart348.InAlarm = false;
+            this.flowChart348.IsFlowHead = false;
+            this.flowChart348.Location = new System.Drawing.Point(560, 120);
+            this.flowChart348.LockUI = false;
+            this.flowChart348.Message = null;
+            this.flowChart348.MsgID = 0;
+            this.flowChart348.Name = "flowChart348";
+            this.flowChart348.NEXT = this.flowChart349;
+            this.flowChart348.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart348.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart348.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart348.OverTimeSpec = 100;
+            this.flowChart348.Running = false;
+            this.flowChart348.Size = new System.Drawing.Size(200, 30);
+            this.flowChart348.SlowRunCycle = -1;
+            this.flowChart348.StartFC = null;
+            this.flowChart348.Text = "Shuttle Move";
+            // 
+            // flowChart349
+            // 
+            this.flowChart349.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart349.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart349.CASE1 = null;
+            this.flowChart349.CASE2 = null;
+            this.flowChart349.CASE3 = null;
+            this.flowChart349.CASE4 = null;
+            this.flowChart349.ContinueRun = false;
+            this.flowChart349.EndFC = null;
+            this.flowChart349.ErrID = 0;
+            this.flowChart349.InAlarm = false;
+            this.flowChart349.IsFlowHead = false;
+            this.flowChart349.Location = new System.Drawing.Point(560, 172);
+            this.flowChart349.LockUI = false;
+            this.flowChart349.Message = null;
+            this.flowChart349.MsgID = 0;
+            this.flowChart349.Name = "flowChart349";
+            this.flowChart349.NEXT = this.flowChart350;
+            this.flowChart349.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart349.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart349.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart349.OverTimeSpec = 100;
+            this.flowChart349.Running = false;
+            this.flowChart349.Size = new System.Drawing.Size(200, 30);
+            this.flowChart349.SlowRunCycle = -1;
+            this.flowChart349.StartFC = null;
+            this.flowChart349.Text = "Is Move Done";
+            // 
+            // flowChart350
+            // 
+            this.flowChart350.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart350.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart350.CASE1 = null;
+            this.flowChart350.CASE2 = null;
+            this.flowChart350.CASE3 = null;
+            this.flowChart350.CASE4 = null;
+            this.flowChart350.ContinueRun = false;
+            this.flowChart350.EndFC = null;
+            this.flowChart350.ErrID = 0;
+            this.flowChart350.InAlarm = false;
+            this.flowChart350.IsFlowHead = false;
+            this.flowChart350.Location = new System.Drawing.Point(466, 172);
+            this.flowChart350.LockUI = false;
+            this.flowChart350.Message = null;
+            this.flowChart350.MsgID = 0;
+            this.flowChart350.Name = "flowChart350";
+            this.flowChart350.NEXT = this.flowChart346;
+            this.flowChart350.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart350.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart350.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart350.OverTimeSpec = 100;
+            this.flowChart350.Running = false;
+            this.flowChart350.Size = new System.Drawing.Size(57, 30);
+            this.flowChart350.SlowRunCycle = -1;
+            this.flowChart350.StartFC = null;
+            this.flowChart350.Text = "Next";
+            // 
+            // FC_RightTray_Run
+            // 
+            this.FC_RightTray_Run.BackColor = System.Drawing.Color.RoyalBlue;
+            this.FC_RightTray_Run.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.FC_RightTray_Run.CASE1 = null;
+            this.FC_RightTray_Run.CASE2 = null;
+            this.FC_RightTray_Run.CASE3 = null;
+            this.FC_RightTray_Run.CASE4 = null;
+            this.FC_RightTray_Run.ContinueRun = false;
+            this.FC_RightTray_Run.EndFC = null;
+            this.FC_RightTray_Run.ErrID = 0;
+            this.FC_RightTray_Run.InAlarm = false;
+            this.FC_RightTray_Run.IsFlowHead = false;
+            this.FC_RightTray_Run.Location = new System.Drawing.Point(560, 16);
+            this.FC_RightTray_Run.LockUI = false;
+            this.FC_RightTray_Run.Message = null;
+            this.FC_RightTray_Run.MsgID = 0;
+            this.FC_RightTray_Run.Name = "FC_RightTray_Run";
+            this.FC_RightTray_Run.NEXT = this.flowChart347;
+            this.FC_RightTray_Run.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.FC_RightTray_Run.OrgLocation = new System.Drawing.Point(0, 0);
+            this.FC_RightTray_Run.OrgSize = new System.Drawing.Size(0, 0);
+            this.FC_RightTray_Run.OverTimeSpec = 100;
+            this.FC_RightTray_Run.Running = false;
+            this.FC_RightTray_Run.Size = new System.Drawing.Size(200, 30);
+            this.FC_RightTray_Run.SlowRunCycle = -1;
+            this.FC_RightTray_Run.StartFC = null;
+            this.FC_RightTray_Run.Text = "Right Shuttle Start";
+            // 
             // flowChart345
             // 
             this.flowChart345.BackColor = System.Drawing.Color.RoyalBlue;
@@ -11987,10 +12173,10 @@
             // tabPage21
             // 
             this.tabPage21.Controls.Add(this.flowChart340);
-            this.tabPage21.Location = new System.Drawing.Point(4, 35);
+            this.tabPage21.Location = new System.Drawing.Point(4, 22);
             this.tabPage21.Name = "tabPage21";
             this.tabPage21.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage21.Size = new System.Drawing.Size(960, 599);
+            this.tabPage21.Size = new System.Drawing.Size(960, 612);
             this.tabPage21.TabIndex = 1;
             this.tabPage21.Text = "Head";
             this.tabPage21.UseVisualStyleBackColor = true;
@@ -12033,6 +12219,295 @@
             this.tabPage22.TabIndex = 2;
             this.tabPage22.Text = "PnP";
             this.tabPage22.UseVisualStyleBackColor = true;
+            // 
+            // tabPage23
+            // 
+            this.tabPage23.Controls.Add(this.flowChart358);
+            this.tabPage23.Controls.Add(this.flowChart357);
+            this.tabPage23.Controls.Add(this.flowChart356);
+            this.tabPage23.Controls.Add(this.flowChart355);
+            this.tabPage23.Controls.Add(this.flowChart354);
+            this.tabPage23.Controls.Add(this.flowChart353);
+            this.tabPage23.Controls.Add(this.flowChart352);
+            this.tabPage23.Controls.Add(this.flowChart351);
+            this.tabPage23.Controls.Add(this.FC_Auto_ScanAction);
+            this.tabPage23.Location = new System.Drawing.Point(4, 44);
+            this.tabPage23.Name = "tabPage23";
+            this.tabPage23.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage23.Size = new System.Drawing.Size(974, 644);
+            this.tabPage23.TabIndex = 9;
+            this.tabPage23.Text = "Scan Action";
+            this.tabPage23.UseVisualStyleBackColor = true;
+            // 
+            // flowChart358
+            // 
+            this.flowChart358.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart358.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart358.CASE1 = null;
+            this.flowChart358.CASE2 = null;
+            this.flowChart358.CASE3 = null;
+            this.flowChart358.CASE4 = null;
+            this.flowChart358.ContinueRun = false;
+            this.flowChart358.EndFC = null;
+            this.flowChart358.ErrID = 0;
+            this.flowChart358.InAlarm = false;
+            this.flowChart358.IsFlowHead = false;
+            this.flowChart358.Location = new System.Drawing.Point(563, 51);
+            this.flowChart358.LockUI = false;
+            this.flowChart358.Message = null;
+            this.flowChart358.MsgID = 0;
+            this.flowChart358.Name = "flowChart358";
+            this.flowChart358.NEXT = this.flowChart351;
+            this.flowChart358.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart358.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart358.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart358.OverTimeSpec = 100;
+            this.flowChart358.Running = false;
+            this.flowChart358.Size = new System.Drawing.Size(50, 30);
+            this.flowChart358.SlowRunCycle = -1;
+            this.flowChart358.StartFC = null;
+            this.flowChart358.Text = "Next";
+            this.flowChart358.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart358_Run);
+            // 
+            // flowChart351
+            // 
+            this.flowChart351.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart351.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart351.CASE1 = null;
+            this.flowChart351.CASE2 = null;
+            this.flowChart351.CASE3 = null;
+            this.flowChart351.CASE4 = null;
+            this.flowChart351.ContinueRun = false;
+            this.flowChart351.EndFC = null;
+            this.flowChart351.ErrID = 0;
+            this.flowChart351.InAlarm = false;
+            this.flowChart351.IsFlowHead = false;
+            this.flowChart351.Location = new System.Drawing.Point(338, 51);
+            this.flowChart351.LockUI = false;
+            this.flowChart351.Message = null;
+            this.flowChart351.MsgID = 0;
+            this.flowChart351.Name = "flowChart351";
+            this.flowChart351.NEXT = this.flowChart352;
+            this.flowChart351.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart351.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart351.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart351.OverTimeSpec = 100;
+            this.flowChart351.Running = false;
+            this.flowChart351.Size = new System.Drawing.Size(200, 30);
+            this.flowChart351.SlowRunCycle = -1;
+            this.flowChart351.StartFC = null;
+            this.flowChart351.Text = "Is Need ToDo";
+            this.flowChart351.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart351_Run);
+            // 
+            // flowChart352
+            // 
+            this.flowChart352.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart352.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart352.CASE1 = null;
+            this.flowChart352.CASE2 = null;
+            this.flowChart352.CASE3 = null;
+            this.flowChart352.CASE4 = null;
+            this.flowChart352.ContinueRun = false;
+            this.flowChart352.EndFC = null;
+            this.flowChart352.ErrID = 0;
+            this.flowChart352.InAlarm = false;
+            this.flowChart352.IsFlowHead = false;
+            this.flowChart352.Location = new System.Drawing.Point(338, 95);
+            this.flowChart352.LockUI = false;
+            this.flowChart352.Message = null;
+            this.flowChart352.MsgID = 0;
+            this.flowChart352.Name = "flowChart352";
+            this.flowChart352.NEXT = this.flowChart353;
+            this.flowChart352.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart352.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart352.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart352.OverTimeSpec = 100;
+            this.flowChart352.Running = false;
+            this.flowChart352.Size = new System.Drawing.Size(200, 30);
+            this.flowChart352.SlowRunCycle = -1;
+            this.flowChart352.StartFC = null;
+            this.flowChart352.Text = "Wait Manual Done";
+            this.flowChart352.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart352_Run);
+            // 
+            // flowChart353
+            // 
+            this.flowChart353.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart353.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart353.CASE1 = null;
+            this.flowChart353.CASE2 = null;
+            this.flowChart353.CASE3 = null;
+            this.flowChart353.CASE4 = null;
+            this.flowChart353.ContinueRun = false;
+            this.flowChart353.EndFC = null;
+            this.flowChart353.ErrID = 0;
+            this.flowChart353.InAlarm = false;
+            this.flowChart353.IsFlowHead = false;
+            this.flowChart353.Location = new System.Drawing.Point(338, 139);
+            this.flowChart353.LockUI = false;
+            this.flowChart353.Message = null;
+            this.flowChart353.MsgID = 0;
+            this.flowChart353.Name = "flowChart353";
+            this.flowChart353.NEXT = this.flowChart354;
+            this.flowChart353.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart353.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart353.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart353.OverTimeSpec = 100;
+            this.flowChart353.Running = false;
+            this.flowChart353.Size = new System.Drawing.Size(200, 30);
+            this.flowChart353.SlowRunCycle = -1;
+            this.flowChart353.StartFC = null;
+            this.flowChart353.Text = "Scan Load A DoIt";
+            this.flowChart353.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart353_Run);
+            // 
+            // flowChart354
+            // 
+            this.flowChart354.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart354.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart354.CASE1 = null;
+            this.flowChart354.CASE2 = null;
+            this.flowChart354.CASE3 = null;
+            this.flowChart354.CASE4 = null;
+            this.flowChart354.ContinueRun = false;
+            this.flowChart354.EndFC = null;
+            this.flowChart354.ErrID = 0;
+            this.flowChart354.InAlarm = false;
+            this.flowChart354.IsFlowHead = false;
+            this.flowChart354.Location = new System.Drawing.Point(338, 183);
+            this.flowChart354.LockUI = false;
+            this.flowChart354.Message = null;
+            this.flowChart354.MsgID = 0;
+            this.flowChart354.Name = "flowChart354";
+            this.flowChart354.NEXT = this.flowChart355;
+            this.flowChart354.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart354.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart354.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart354.OverTimeSpec = 100;
+            this.flowChart354.Running = false;
+            this.flowChart354.Size = new System.Drawing.Size(200, 30);
+            this.flowChart354.SlowRunCycle = -1;
+            this.flowChart354.StartFC = null;
+            this.flowChart354.Text = "Load A Scan IsDone?";
+            this.flowChart354.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart354_Run);
+            // 
+            // flowChart355
+            // 
+            this.flowChart355.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart355.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart355.CASE1 = null;
+            this.flowChart355.CASE2 = null;
+            this.flowChart355.CASE3 = null;
+            this.flowChart355.CASE4 = null;
+            this.flowChart355.ContinueRun = false;
+            this.flowChart355.EndFC = null;
+            this.flowChart355.ErrID = 0;
+            this.flowChart355.InAlarm = false;
+            this.flowChart355.IsFlowHead = false;
+            this.flowChart355.Location = new System.Drawing.Point(338, 227);
+            this.flowChart355.LockUI = false;
+            this.flowChart355.Message = null;
+            this.flowChart355.MsgID = 0;
+            this.flowChart355.Name = "flowChart355";
+            this.flowChart355.NEXT = this.flowChart356;
+            this.flowChart355.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart355.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart355.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart355.OverTimeSpec = 100;
+            this.flowChart355.Running = false;
+            this.flowChart355.Size = new System.Drawing.Size(200, 30);
+            this.flowChart355.SlowRunCycle = -1;
+            this.flowChart355.StartFC = null;
+            this.flowChart355.Text = "Scan Load B DoIt";
+            this.flowChart355.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart355_Run);
+            // 
+            // flowChart356
+            // 
+            this.flowChart356.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart356.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart356.CASE1 = null;
+            this.flowChart356.CASE2 = null;
+            this.flowChart356.CASE3 = null;
+            this.flowChart356.CASE4 = null;
+            this.flowChart356.ContinueRun = false;
+            this.flowChart356.EndFC = null;
+            this.flowChart356.ErrID = 0;
+            this.flowChart356.InAlarm = false;
+            this.flowChart356.IsFlowHead = false;
+            this.flowChart356.Location = new System.Drawing.Point(338, 271);
+            this.flowChart356.LockUI = false;
+            this.flowChart356.Message = null;
+            this.flowChart356.MsgID = 0;
+            this.flowChart356.Name = "flowChart356";
+            this.flowChart356.NEXT = this.flowChart357;
+            this.flowChart356.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart356.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart356.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart356.OverTimeSpec = 100;
+            this.flowChart356.Running = false;
+            this.flowChart356.Size = new System.Drawing.Size(200, 30);
+            this.flowChart356.SlowRunCycle = -1;
+            this.flowChart356.StartFC = null;
+            this.flowChart356.Text = "Load B Scan IsDone?";
+            this.flowChart356.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart356_Run);
+            // 
+            // flowChart357
+            // 
+            this.flowChart357.BackColor = System.Drawing.Color.RoyalBlue;
+            this.flowChart357.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.flowChart357.CASE1 = null;
+            this.flowChart357.CASE2 = null;
+            this.flowChart357.CASE3 = null;
+            this.flowChart357.CASE4 = null;
+            this.flowChart357.ContinueRun = false;
+            this.flowChart357.EndFC = null;
+            this.flowChart357.ErrID = 0;
+            this.flowChart357.InAlarm = false;
+            this.flowChart357.IsFlowHead = false;
+            this.flowChart357.Location = new System.Drawing.Point(563, 271);
+            this.flowChart357.LockUI = false;
+            this.flowChart357.Message = null;
+            this.flowChart357.MsgID = 0;
+            this.flowChart357.Name = "flowChart357";
+            this.flowChart357.NEXT = this.flowChart358;
+            this.flowChart357.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.flowChart357.OrgLocation = new System.Drawing.Point(0, 0);
+            this.flowChart357.OrgSize = new System.Drawing.Size(0, 0);
+            this.flowChart357.OverTimeSpec = 100;
+            this.flowChart357.Running = false;
+            this.flowChart357.Size = new System.Drawing.Size(50, 30);
+            this.flowChart357.SlowRunCycle = -1;
+            this.flowChart357.StartFC = null;
+            this.flowChart357.Text = "Done";
+            this.flowChart357.Run += new ProVLib.FlowChart.RunEventHandler(this.flowChart357_Run);
+            // 
+            // FC_Auto_ScanAction
+            // 
+            this.FC_Auto_ScanAction.BackColor = System.Drawing.Color.RoyalBlue;
+            this.FC_Auto_ScanAction.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
+            this.FC_Auto_ScanAction.CASE1 = null;
+            this.FC_Auto_ScanAction.CASE2 = null;
+            this.FC_Auto_ScanAction.CASE3 = null;
+            this.FC_Auto_ScanAction.CASE4 = null;
+            this.FC_Auto_ScanAction.ContinueRun = false;
+            this.FC_Auto_ScanAction.EndFC = null;
+            this.FC_Auto_ScanAction.ErrID = 0;
+            this.FC_Auto_ScanAction.InAlarm = false;
+            this.FC_Auto_ScanAction.IsFlowHead = false;
+            this.FC_Auto_ScanAction.Location = new System.Drawing.Point(338, 7);
+            this.FC_Auto_ScanAction.LockUI = false;
+            this.FC_Auto_ScanAction.Message = null;
+            this.FC_Auto_ScanAction.MsgID = 0;
+            this.FC_Auto_ScanAction.Name = "FC_Auto_ScanAction";
+            this.FC_Auto_ScanAction.NEXT = this.flowChart351;
+            this.FC_Auto_ScanAction.ObjType = ProVLib.EObjType.VOID_TYPE;
+            this.FC_Auto_ScanAction.OrgLocation = new System.Drawing.Point(0, 0);
+            this.FC_Auto_ScanAction.OrgSize = new System.Drawing.Size(0, 0);
+            this.FC_Auto_ScanAction.OverTimeSpec = 100;
+            this.FC_Auto_ScanAction.Running = false;
+            this.FC_Auto_ScanAction.Size = new System.Drawing.Size(200, 30);
+            this.FC_Auto_ScanAction.SlowRunCycle = -1;
+            this.FC_Auto_ScanAction.StartFC = null;
+            this.FC_Auto_ScanAction.Text = "Start Scan Action";
+            this.FC_Auto_ScanAction.Run += new ProVLib.FlowChart.RunEventHandler(this.FC_Auto_ScanAction_Run);
             // 
             // OptionDS
             // 
@@ -12628,180 +13103,6 @@
             this.td_RightTray.ZeroPosX = 0;
             this.td_RightTray.ZeroPosY = 0;
             // 
-            // flowChart346
-            // 
-            this.flowChart346.BackColor = System.Drawing.Color.RoyalBlue;
-            this.flowChart346.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
-            this.flowChart346.CASE1 = null;
-            this.flowChart346.CASE2 = null;
-            this.flowChart346.CASE3 = null;
-            this.flowChart346.CASE4 = null;
-            this.flowChart346.ContinueRun = false;
-            this.flowChart346.EndFC = null;
-            this.flowChart346.ErrID = 0;
-            this.flowChart346.InAlarm = false;
-            this.flowChart346.IsFlowHead = false;
-            this.flowChart346.Location = new System.Drawing.Point(466, 68);
-            this.flowChart346.LockUI = false;
-            this.flowChart346.Message = null;
-            this.flowChart346.MsgID = 0;
-            this.flowChart346.Name = "flowChart346";
-            this.flowChart346.NEXT = this.flowChart347;
-            this.flowChart346.ObjType = ProVLib.EObjType.VOID_TYPE;
-            this.flowChart346.OrgLocation = new System.Drawing.Point(0, 0);
-            this.flowChart346.OrgSize = new System.Drawing.Size(0, 0);
-            this.flowChart346.OverTimeSpec = 100;
-            this.flowChart346.Running = false;
-            this.flowChart346.Size = new System.Drawing.Size(57, 30);
-            this.flowChart346.SlowRunCycle = -1;
-            this.flowChart346.StartFC = null;
-            this.flowChart346.Text = "Next";
-            // 
-            // flowChart347
-            // 
-            this.flowChart347.BackColor = System.Drawing.Color.RoyalBlue;
-            this.flowChart347.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
-            this.flowChart347.CASE1 = null;
-            this.flowChart347.CASE2 = null;
-            this.flowChart347.CASE3 = null;
-            this.flowChart347.CASE4 = null;
-            this.flowChart347.ContinueRun = false;
-            this.flowChart347.EndFC = null;
-            this.flowChart347.ErrID = 0;
-            this.flowChart347.InAlarm = false;
-            this.flowChart347.IsFlowHead = false;
-            this.flowChart347.Location = new System.Drawing.Point(560, 68);
-            this.flowChart347.LockUI = false;
-            this.flowChart347.Message = null;
-            this.flowChart347.MsgID = 0;
-            this.flowChart347.Name = "flowChart347";
-            this.flowChart347.NEXT = this.flowChart348;
-            this.flowChart347.ObjType = ProVLib.EObjType.VOID_TYPE;
-            this.flowChart347.OrgLocation = new System.Drawing.Point(0, 0);
-            this.flowChart347.OrgSize = new System.Drawing.Size(0, 0);
-            this.flowChart347.OverTimeSpec = 100;
-            this.flowChart347.Running = false;
-            this.flowChart347.Size = new System.Drawing.Size(200, 30);
-            this.flowChart347.SlowRunCycle = -1;
-            this.flowChart347.StartFC = null;
-            this.flowChart347.Text = "Is Shuttle Need ToDo";
-            // 
-            // flowChart348
-            // 
-            this.flowChart348.BackColor = System.Drawing.Color.RoyalBlue;
-            this.flowChart348.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
-            this.flowChart348.CASE1 = null;
-            this.flowChart348.CASE2 = null;
-            this.flowChart348.CASE3 = null;
-            this.flowChart348.CASE4 = null;
-            this.flowChart348.ContinueRun = false;
-            this.flowChart348.EndFC = null;
-            this.flowChart348.ErrID = 0;
-            this.flowChart348.InAlarm = false;
-            this.flowChart348.IsFlowHead = false;
-            this.flowChart348.Location = new System.Drawing.Point(560, 120);
-            this.flowChart348.LockUI = false;
-            this.flowChart348.Message = null;
-            this.flowChart348.MsgID = 0;
-            this.flowChart348.Name = "flowChart348";
-            this.flowChart348.NEXT = this.flowChart349;
-            this.flowChart348.ObjType = ProVLib.EObjType.VOID_TYPE;
-            this.flowChart348.OrgLocation = new System.Drawing.Point(0, 0);
-            this.flowChart348.OrgSize = new System.Drawing.Size(0, 0);
-            this.flowChart348.OverTimeSpec = 100;
-            this.flowChart348.Running = false;
-            this.flowChart348.Size = new System.Drawing.Size(200, 30);
-            this.flowChart348.SlowRunCycle = -1;
-            this.flowChart348.StartFC = null;
-            this.flowChart348.Text = "Shuttle Move";
-            // 
-            // flowChart349
-            // 
-            this.flowChart349.BackColor = System.Drawing.Color.RoyalBlue;
-            this.flowChart349.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
-            this.flowChart349.CASE1 = null;
-            this.flowChart349.CASE2 = null;
-            this.flowChart349.CASE3 = null;
-            this.flowChart349.CASE4 = null;
-            this.flowChart349.ContinueRun = false;
-            this.flowChart349.EndFC = null;
-            this.flowChart349.ErrID = 0;
-            this.flowChart349.InAlarm = false;
-            this.flowChart349.IsFlowHead = false;
-            this.flowChart349.Location = new System.Drawing.Point(560, 172);
-            this.flowChart349.LockUI = false;
-            this.flowChart349.Message = null;
-            this.flowChart349.MsgID = 0;
-            this.flowChart349.Name = "flowChart349";
-            this.flowChart349.NEXT = this.flowChart350;
-            this.flowChart349.ObjType = ProVLib.EObjType.VOID_TYPE;
-            this.flowChart349.OrgLocation = new System.Drawing.Point(0, 0);
-            this.flowChart349.OrgSize = new System.Drawing.Size(0, 0);
-            this.flowChart349.OverTimeSpec = 100;
-            this.flowChart349.Running = false;
-            this.flowChart349.Size = new System.Drawing.Size(200, 30);
-            this.flowChart349.SlowRunCycle = -1;
-            this.flowChart349.StartFC = null;
-            this.flowChart349.Text = "Is Move Done";
-            // 
-            // flowChart350
-            // 
-            this.flowChart350.BackColor = System.Drawing.Color.RoyalBlue;
-            this.flowChart350.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
-            this.flowChart350.CASE1 = null;
-            this.flowChart350.CASE2 = null;
-            this.flowChart350.CASE3 = null;
-            this.flowChart350.CASE4 = null;
-            this.flowChart350.ContinueRun = false;
-            this.flowChart350.EndFC = null;
-            this.flowChart350.ErrID = 0;
-            this.flowChart350.InAlarm = false;
-            this.flowChart350.IsFlowHead = false;
-            this.flowChart350.Location = new System.Drawing.Point(466, 172);
-            this.flowChart350.LockUI = false;
-            this.flowChart350.Message = null;
-            this.flowChart350.MsgID = 0;
-            this.flowChart350.Name = "flowChart350";
-            this.flowChart350.NEXT = this.flowChart346;
-            this.flowChart350.ObjType = ProVLib.EObjType.VOID_TYPE;
-            this.flowChart350.OrgLocation = new System.Drawing.Point(0, 0);
-            this.flowChart350.OrgSize = new System.Drawing.Size(0, 0);
-            this.flowChart350.OverTimeSpec = 100;
-            this.flowChart350.Running = false;
-            this.flowChart350.Size = new System.Drawing.Size(57, 30);
-            this.flowChart350.SlowRunCycle = -1;
-            this.flowChart350.StartFC = null;
-            this.flowChart350.Text = "Next";
-            // 
-            // FC_RightTray_Run
-            // 
-            this.FC_RightTray_Run.BackColor = System.Drawing.Color.RoyalBlue;
-            this.FC_RightTray_Run.CaptionFont = new System.Drawing.Font("微軟正黑體", 10F);
-            this.FC_RightTray_Run.CASE1 = null;
-            this.FC_RightTray_Run.CASE2 = null;
-            this.FC_RightTray_Run.CASE3 = null;
-            this.FC_RightTray_Run.CASE4 = null;
-            this.FC_RightTray_Run.ContinueRun = false;
-            this.FC_RightTray_Run.EndFC = null;
-            this.FC_RightTray_Run.ErrID = 0;
-            this.FC_RightTray_Run.InAlarm = false;
-            this.FC_RightTray_Run.IsFlowHead = false;
-            this.FC_RightTray_Run.Location = new System.Drawing.Point(560, 16);
-            this.FC_RightTray_Run.LockUI = false;
-            this.FC_RightTray_Run.Message = null;
-            this.FC_RightTray_Run.MsgID = 0;
-            this.FC_RightTray_Run.Name = "FC_RightTray_Run";
-            this.FC_RightTray_Run.NEXT = this.flowChart347;
-            this.FC_RightTray_Run.ObjType = ProVLib.EObjType.VOID_TYPE;
-            this.FC_RightTray_Run.OrgLocation = new System.Drawing.Point(0, 0);
-            this.FC_RightTray_Run.OrgSize = new System.Drawing.Size(0, 0);
-            this.FC_RightTray_Run.OverTimeSpec = 100;
-            this.FC_RightTray_Run.Running = false;
-            this.FC_RightTray_Run.Size = new System.Drawing.Size(200, 30);
-            this.FC_RightTray_Run.SlowRunCycle = -1;
-            this.FC_RightTray_Run.StartFC = null;
-            this.FC_RightTray_Run.Text = "Right Shuttle Start";
-            // 
             // MainFlowF
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -12852,6 +13153,7 @@
             this.tabControl3.ResumeLayout(false);
             this.tabPage20.ResumeLayout(false);
             this.tabPage21.ResumeLayout(false);
+            this.tabPage23.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -13279,6 +13581,16 @@
         private ProVLib.FlowChart flowChart349;
         private ProVLib.FlowChart flowChart350;
         private ProVLib.FlowChart FC_RightTray_Run;
+        private System.Windows.Forms.TabPage tabPage23;
+        private ProVLib.FlowChart flowChart358;
+        private ProVLib.FlowChart flowChart351;
+        private ProVLib.FlowChart flowChart352;
+        private ProVLib.FlowChart flowChart353;
+        private ProVLib.FlowChart flowChart354;
+        private ProVLib.FlowChart flowChart355;
+        private ProVLib.FlowChart flowChart356;
+        private ProVLib.FlowChart flowChart357;
+        private ProVLib.FlowChart FC_Auto_ScanAction;
 
     }
 }

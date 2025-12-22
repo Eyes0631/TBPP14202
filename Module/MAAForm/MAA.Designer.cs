@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MAA));
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.SafeDoor8 = new ProVLib.InBit();
@@ -70,8 +71,8 @@
             this.EMGA3 = new ProVLib.InBit();
             this.EMGA2 = new ProVLib.InBit();
             this.EMGA1 = new ProVLib.InBit();
-            this.reSafeDoorSW = new KCSDK.DCheckBox();
-            this.dCheckBox1 = new KCSDK.DCheckBox();
+            this.reSafeDoorSW = new KCSDK.DCheckBox(this.components);
+            this.dCheckBox1 = new KCSDK.DCheckBox(this.components);
             this.tabMain.SuspendLayout();
             this.tpControl.SuspendLayout();
             this.tpSetting.SuspendLayout();
@@ -112,30 +113,16 @@
             this.tpControl.Controls.Add(this.groupBox1);
             this.tpControl.Size = new System.Drawing.Size(1036, 583);
             // 
-            // tpPosition
-            // 
-            this.tpPosition.Size = new System.Drawing.Size(1036, 583);
-            // 
             // tpSetting
             // 
             this.tpSetting.Controls.Add(this.dCheckBox1);
             this.tpSetting.Controls.Add(this.reSafeDoorSW);
-            this.tpSetting.Size = new System.Drawing.Size(1036, 583);
             this.tpSetting.Controls.SetChildIndex(this.reSafeDoorSW, 0);
             this.tpSetting.Controls.SetChildIndex(this.dCheckBox1, 0);
-            // 
-            // tpFlow
-            // 
-            this.tpFlow.Size = new System.Drawing.Size(1036, 583);
             // 
             // tpSuperSetting
             // 
             this.tpSuperSetting.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tpSuperSetting.Size = new System.Drawing.Size(1036, 583);
-            // 
-            // TabFlow
-            // 
-            this.TabFlow.Size = new System.Drawing.Size(1032, 579);
             // 
             // tpHome
             // 
@@ -408,7 +395,7 @@
             this.groupBox4.Controls.Add(this.AirSensor);
             this.groupBox4.Location = new System.Drawing.Point(237, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(217, 351);
+            this.groupBox4.Size = new System.Drawing.Size(217, 413);
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "其他";

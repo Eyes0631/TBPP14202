@@ -69,10 +69,10 @@
             // dFieldEdit35
             // 
             this.dFieldEdit35.AutoFocus = false;
-            this.dFieldEdit35.Caption = "Cassette Top Num";
+            this.dFieldEdit35.Caption = "Cassette Num";
             this.dFieldEdit35.CaptionColor = System.Drawing.Color.Black;
             this.dFieldEdit35.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit35.DataName = "Cassette_TopNum";
+            this.dFieldEdit35.DataName = "Cassette_Num";
             this.dFieldEdit35.DataSource = this.PreloadPackageDS;
             this.dFieldEdit35.DefaultValue = "0";
             this.dFieldEdit35.EditColor = System.Drawing.Color.Black;

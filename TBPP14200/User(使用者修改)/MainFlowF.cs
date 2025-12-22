@@ -1,5 +1,7 @@
 ﻿/////////////////////////////////////////////////////////////////////////////////
 ///TBPP14202 有預留BowlFeed，但因時程問題，軟體目前未實作 (後須如果有改機軟體需檢查)
+///Note:
+///1.因為舌板只有單Arm所以一次只能一板
 /////////////////////////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -66,6 +68,21 @@ namespace TBPP14200
 
         #endregion
 
+        #region enum
+        public enum AlarmCode
+        {
+            Err_CassetteHasBoard = 801,     
+            Err_AddNewJobFail = 902,
+            Err_SuppleDevie = 1010,         //W1010
+            Err_ClamShellHasBoard = 1011,   //E1011,    開關蓋站有板,    Clamshell has board
+            Err_ClamShellHasNoBoard = 1012, //E1012,    開關蓋站無板,    Clamshell has no board
+            Err_StageA_HasBoard = 1013,     //E1013,    板台車A有板,     BoardStage A has board
+            Err_StageA_HasNoBoard = 1014,   //E1014,    板台車A無板,     BoardStage A has no board
+            Err_StageB_HasBoard = 1015,     //E1015,    板台車B有板,     BoardStage B has board
+            Err_StageB_HasNoBoard= 1016,    //E1016,    板台車B無板,     BoardStage B has no board
+        }
+
+        #endregion
         #region 產品基本資料相關結構變數
 
         private TRAY_INFO BoardInfo = new TRAY_INFO();  //Board info
@@ -209,6 +226,9 @@ namespace TBPP14200
 
         //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
         private JActionFlag Flag_HDT_TR_PnP;
+        private JActionFlag Flag_Load_ScanAction;
+        private JActionFlag Flag_Load_WorkAction;
+        private JActionFlag Flag_SuppleDeviceAction;
 
         //Kit Shuttle Control
         private KitShuttleStateControl LeftKitStateControl;
@@ -256,7 +276,12 @@ namespace TBPP14200
         public bool HDTB_NozzleStateIsFail;
 
         //Board Info
-        
+        //CassetteInfo LeftCassette;
+        //CassetteInfo RightCassette;
+        List<BoardInfo> AllSlots = new List<BoardInfo>();
+        BoardInfo WorkingBoard;
+        BoardInfo StageA_Board;
+        BoardInfo StageB_Board;
         #endregion
 
         #region 其它表單參數
@@ -360,6 +385,9 @@ namespace TBPP14200
             Flag_CHM_Action = new JActionFlag();
             //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
             Flag_HDT_TR_PnP = new JActionFlag();
+            Flag_Load_ScanAction = new JActionFlag();
+            Flag_Load_WorkAction = new JActionFlag();
+            Flag_SuppleDeviceAction = new JActionFlag();
             //Flag_Booking = new JActionFlag();
             Flag_Booking_A = new JActionFlag();
             Flag_Booking_B = new JActionFlag();
@@ -378,6 +406,12 @@ namespace TBPP14200
             Flag_HDT_TR_LotEnd = new JActionFlag();
 
             Task_MainFLotEnd = new JActionTask();
+
+            //LeftCassette = new CassetteInfo(CassetteID.LEFT);
+            //RightCassette = new CassetteInfo(CassetteID.RIGHT);
+            WorkingBoard = new CommonObj.BoardInfo();
+            StageA_Board = new CommonObj.BoardInfo();
+            StageB_Board = new CommonObj.BoardInfo();
             
             //baord info
             SYSPara.CurrentBoard = new BoardBinInfo();
@@ -820,38 +854,49 @@ namespace TBPP14200
                 #endregion
 
                 Flag_SuppleDeviceSafe = (bool)SYSPara.CallProc(ModuleName_MAA, "SuppleDeviceSensor");
+                if (Flag_SuppleDeviceAction.IsDoIt() && Flag_SuppleDeviceSafe)
+                {
+                    Flag_SuppleDeviceAction.Doing();
+                }
+                if (Flag_SuppleDeviceAction.IsDoing() && Flag_SuppleDeviceSafe == false)
+                {
+                    Flag_SuppleDeviceAction.Done();
+                }
+
+                SYSPara.CallProc(ModuleName_MAA, "SetLoadPortWork", Flag_Load_WorkAction.IsDoing());
 
                 #region LOAD/UNLOAD DataView
-                if (SYSPara.RunMode.Equals(RunModeDT.AUTO))
-                {
-                    ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_CSM, "CheckHaveBoard", CassetteID.LEFT);
-                    ThreeValued T2 = (ThreeValued)SYSPara.CallProc(ModuleName_CSM, "CheckHaveBoard", CassetteID.RIGHT);
-                    byte by1 = (byte)BinDefine.Empty;
-                    byte by2 = (byte)BinDefine.Empty;
-                    if (T1.Equals(ThreeValued.TRUE)) by1 = (byte)BinDefine.Bin1;
-                    if (T2.Equals(ThreeValued.TRUE)) by2 = (byte)BinDefine.Bin1;
-                    for (uint i = 0; i < td_Unload.XN; i++)
-                    {
-                        for (uint j = 0; j < td_Unload.YN; j++)
-                        {
-                            byte bin = 0;
-                            byte state = 0;
-                            td_Unload.CellGet(0, 0, (int)i, (int)j, ref bin, ref state);
-                            td_Unload.CellSet(0, 0, (int)i, (int)j, by1, state);
-                        }
-                    }
+                //v2.0.0.1 改Rack取消此段落
+                //if (SYSPara.RunMode.Equals(RunModeDT.AUTO))
+                //{
+                //    ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_CSM, "CheckHaveBoard", CassetteID.LEFT);
+                //    ThreeValued T2 = (ThreeValued)SYSPara.CallProc(ModuleName_CSM, "CheckHaveBoard", CassetteID.RIGHT);
+                //    byte by1 = (byte)BinDefine.Empty;
+                //    byte by2 = (byte)BinDefine.Empty;
+                //    if (T1.Equals(ThreeValued.TRUE)) by1 = (byte)BinDefine.Bin1;
+                //    if (T2.Equals(ThreeValued.TRUE)) by2 = (byte)BinDefine.Bin1;
+                //    for (uint i = 0; i < td_Unload.XN; i++)
+                //    {
+                //        for (uint j = 0; j < td_Unload.YN; j++)
+                //        {
+                //            byte bin = 0;
+                //            byte state = 0;
+                //            td_Unload.CellGet(0, 0, (int)i, (int)j, ref bin, ref state);
+                //            td_Unload.CellSet(0, 0, (int)i, (int)j, by1, state);
+                //        }
+                //    }
                     
-                    for (uint i = 0; i < td_Load.XN; i++)
-                    {
-                        for (uint j = 0; j < td_Load.YN; j++)
-                        {
-                            byte bin = 0;
-                            byte state = 0;
-                            td_Load.CellGet(0, 0, (int)i, (int)j, ref bin, ref state);
-                            td_Load.CellSet(0, 0, (int)i, (int)j, by2, state);
-                        }
-                    }
-                }
+                //    for (uint i = 0; i < td_Load.XN; i++)
+                //    {
+                //        for (uint j = 0; j < td_Load.YN; j++)
+                //        {
+                //            byte bin = 0;
+                //            byte state = 0;
+                //            td_Load.CellGet(0, 0, (int)i, (int)j, ref bin, ref state);
+                //            td_Load.CellSet(0, 0, (int)i, (int)j, by2, state);
+                //        }
+                //    }
+                //}
                 #endregion
             }
             #endregion
@@ -1247,7 +1292,9 @@ namespace TBPP14200
             TDEx_Right_KitShuttle.SetInfo(1, 1, 1, 1, KitInfo.XN, KitInfo.YN, KitInfo.XP, KitInfo.YP, KitInfo.XO, KitInfo.YO, 0, 0);
             TDEx_Right_KitShuttle.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
-            TDEx_Load.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //TDEx_Load.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //v2.0.0.1 20251222 改成RACK
+            TDEx_Load.SetInfo(1, 1, 1, 1, 1, SYSPara.PReadValue("CassetteTable", "Cassette_Num").ToInt(), 1, 1, 1, 1, 0, 0);
             TDEx_Load.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
             //TDEx_HDT_BIB_A.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
@@ -1260,7 +1307,9 @@ namespace TBPP14200
             TDEx_HDT_BIB_B.SetInfo(1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 0);
             TDEx_HDT_BIB_B.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
-            TDEx_Unload.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //TDEx_Unload.SetInfo(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+            //v2.0.0.1 20251222 改成RACK
+            TDEx_Unload.SetInfo(1, 1, 1, 1, 1, SYSPara.PReadValue("CassetteTable", "Cassette_Num").ToInt(), 1, 1, 1, 1, 0, 0);
             TDEx_Unload.ResetBin(GlobalDefine.EmptyBin, 1, false);
 
             TDEx_CHM.SetInfo(1, 1, 1, 1, BoardInfo.XN, BoardInfo.YN, BoardInfo.XP, BoardInfo.YP, BoardInfo.XO, BoardInfo.YO, 0, 0);
@@ -1324,6 +1373,15 @@ namespace TBPP14200
 
             //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
             Flag_HDT_TR_PnP.Reset();
+            Flag_Load_ScanAction.Reset();
+            Flag_Load_WorkAction.Reset();
+            Flag_SuppleDeviceAction.Reset();
+
+            //LeftCassette.Reset();
+            //RightCassette.Reset();
+            WorkingBoard.Reset();
+            StageA_Board.Reset();
+            StageB_Board.Reset();
 
             Flag_CHM_Action.Reset();
             //Flag_Booking.Reset();
@@ -1601,6 +1659,138 @@ namespace TBPP14200
             }
             return bRet;
         }
+
+        private void InitRackSlots()
+        {
+            AllSlots.Clear();
+            for (int i = 0; i < SYSPara.PReadValue("Cassette_Num").ToInt(); i++) AllSlots.Add(new BoardInfo(CassetteID.LEFT, i));
+            for (int i = 0; i < SYSPara.PReadValue("Cassette_Num").ToInt(); i++) AllSlots.Add(new BoardInfo(CassetteID.RIGHT, i));
+        }
+
+        private BoardInfo GetFirstToDoBoard(CassetteID cid)
+        {
+            foreach (BoardInfo board in AllSlots)
+            {
+                if (board.CID == cid && board.State.IsDoIt())
+                {
+                    return board;
+                }
+            }
+            return null;
+        }
+
+        private void SetSlotState(CassetteID id, int slot, int state)
+        {
+ 
+        }
+
+        private void SetBoardWorkDone(BoardInfo workingboard)
+        {
+            CassetteID homeID = workingboard.CID;
+            int homeSlot = workingboard.Slot;
+
+            foreach (var b in AllSlots)
+            {
+                if (b.CID == homeID && b.Slot == homeSlot)
+                {
+                    b.BID = workingboard.BID;
+                    b.BeforeMap = workingboard.BeforeMap;
+                    b.AfterMap = workingboard.AfterMap;
+                    b.NowStation = workingboard.CID == CassetteID.LEFT ? TRMStation.LOAD_A : TRMStation.LOAD_B;
+                    b.State.Done();
+                    break;
+                }
+            }
+        }
+
+        private int GetDoItCount(CassetteID cid)
+        {
+            int count = 0;
+            foreach (BoardInfo board in AllSlots)
+            {
+                if (board.CID == cid && board.State.IsDoIt())
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// 封裝更新邏輯
+        /// </summary>
+        private void UpdateStationData(List<string> mapList, TrayDataEx tray, CassetteID cid)
+        {
+            //TrayData update
+            for (int i = 0; i < mapList.Count; i++)
+            {
+                byte binValue = (mapList[i] == "1") ? (byte)BinDefine.Bin1 : (byte)BinDefine.Empty;
+                tray.SetBin(0, 0, 0, i, binValue);
+
+                UpdateSlotsState(cid, i, BoardState.ToDo);
+            }
+        }
+
+        private void UpdateSlotsState(CassetteID cid, int slot, BoardState newState)
+        {
+            foreach (BoardInfo board in AllSlots)
+            {
+                if (board.CID == cid && board.Slot == slot)
+                {
+                    switch (newState)
+                    {
+                        case BoardState.ToDo: board.State.DoIt(); break;
+                        case BoardState.Processing: board.State.Doing(); break;
+                        case BoardState.Finished: board.State.Done(); break;
+                        case BoardState.Idle: board.State.Reset(); break;
+                    }
+                    return;
+                }
+            }
+        }
+
+        private void SetMappingData(string sMap, TRMStation station)
+        {
+            if (string.IsNullOrEmpty(sMap)) return;
+
+            List<string> list = sMap.TrimEnd(',').Split(',').ToList();
+            switch (station)
+            {
+                case TRMStation.LOAD_A:
+                    UpdateStationData(list, TDEx_Load, CassetteID.LEFT);
+                    break;
+                case TRMStation.LOAD_B:
+                    UpdateStationData(list, TDEx_Unload, CassetteID.RIGHT);
+                    break;
+                default:
+                    //非Rack TrayData不動作
+                    break;
+            }
+        }
+
+        private BoardInfo TryGetNextBoard(out CassetteID selectedID)
+        {
+            CassetteID[] priorityList = { CassetteID.LEFT, CassetteID.RIGHT };
+
+            foreach (CassetteID cid in priorityList)
+            {
+                if (GetDoItCount(cid) > 0)
+                {
+                    selectedID = cid;
+                    BoardInfo board = GetFirstToDoBoard(cid);
+
+                    if (board != null)
+                    {
+                        UpdateSlotsState(board.CID, board.Slot, BoardState.Processing);
+                        return board;
+                    }
+                }
+            }
+
+            // 若都沒貨
+            selectedID = CassetteID.NONE;
+            return null;
+        }
         #endregion
 
         #region Flow
@@ -1725,6 +1915,17 @@ namespace TBPP14200
                 return FlowChart.FCRESULT.CASE1;
             }
 
+            //v2.0.0.1 先判斷是否需要Scan Rack
+            if (Flag_Load_ScanAction.IsDone() == false)
+            {
+                if (Flag_Load_ScanAction.IsDoing() == false)
+                {
+                    Flag_Load_ScanAction.DoIt();
+                }
+                return FlowChart.FCRESULT.IDLE;
+            }
+            
+
             //判斷是否有Stage需要取板
             BIBStageID Stage = BIBStageID.NONE;
             Stage = (BIBStageID)SYSPara.CallProc(ModuleName_BSM, "IsBIBStageReady", BIBStageSate.IDLE);
@@ -1762,6 +1963,16 @@ namespace TBPP14200
                 return FlowChart.FCRESULT.CASE1;
             }
 
+            //v2.0.0.1 先判斷是否需要Scan Rack
+            if (Flag_Load_ScanAction.IsDone() == false)
+            {
+                if (Flag_Load_ScanAction.IsDoing() == false)
+                {
+                    Flag_Load_ScanAction.DoIt();
+                }
+                return FlowChart.FCRESULT.IDLE;
+            }
+
             //判斷是否有Stage需要退板
             BIBStageID Stage = BIBStageID.NONE;
             Stage = (BIBStageID)SYSPara.CallProc(ModuleName_BSM, "IsBIBStageReady", BIBStageSate.TRANSFER);
@@ -1783,8 +1994,26 @@ namespace TBPP14200
         private FlowChart.FCRESULT flowChart8_Run()
         {
             //TRM_至LOAD 取板
-            
-            WorkID = (CassetteID)SYSPara.CallProc(ModuleName_CSM, "GetActionCassette", true);
+            if (GetDoItCount(CassetteID.LEFT) > 0)
+            {
+                WorkID = CassetteID.LEFT;
+                WorkingBoard = GetFirstToDoBoard(CassetteID.LEFT);
+                UpdateSlotsState(WorkingBoard.CID, WorkingBoard.Slot, BoardState.Processing);
+                WorkingBoard.NowStation = TRMStation.LOAD_A;
+            }
+            else if (GetDoItCount(CassetteID.RIGHT) > 0)
+            {
+                WorkID = CassetteID.RIGHT;
+                WorkingBoard = GetFirstToDoBoard(CassetteID.RIGHT);
+                UpdateSlotsState(WorkingBoard.CID, WorkingBoard.Slot, BoardState.Processing);
+                WorkingBoard.NowStation = TRMStation.LOAD_B;
+            }
+            else
+            {
+                WorkID = CassetteID.NONE;
+            }
+            //工作區改Rack不再使用Sensor判斷改用Cassette State
+            //WorkID = (CassetteID)SYSPara.CallProc(ModuleName_CSM, "GetActionCassette", true);
             TRMStation WorkStation = TRMStation.NONE;
             if (WorkID.Equals(CassetteID.NONE))
             {
@@ -1801,9 +2030,10 @@ namespace TBPP14200
             else WorkStation = TRMStation.LOAD_B;
 
             //ThreeValued T = (ThreeValued) SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.LOAD_B, ACTIONMODE.MOVE);
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkStation, ACTIONMODE.MOVE);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkStation, ACTIONMODE.MOVE, 0);
             if (T.Equals(ThreeValued.TRUE))
             {
+                WorkingBoard.State.Doing();
                 SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.TRANSFER, (BIBStageID)TRM_WorkStage);
                 return FlowChart.FCRESULT.NEXT;
             }
@@ -1840,7 +2070,8 @@ namespace TBPP14200
             //TRM_取板
             if (Flag_SuppleDeviceSafe) return FlowChart.FCRESULT.IDLE;
 
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.LOAD_B, ACTIONMODE.GET);
+            //ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.LOAD_B, ACTIONMODE.GET);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkingBoard.NowStation, ACTIONMODE.GET);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -1854,9 +2085,18 @@ namespace TBPP14200
             if (T.Equals(ThreeValued.TRUE))
             {
                 //Change Data 
-                if (WorkID.Equals(CassetteID.RIGHT)) TDEx_Load.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
-                else if (WorkID.Equals(CassetteID.LEFT)) TDEx_Unload.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
+                TrayDataEx sourceTray = (WorkingBoard.NowStation == TRMStation.LOAD_A) ? TDEx_Load : TDEx_Unload;
+
+                if (WorkingBoard.NowStation == TRMStation.LOAD_A || WorkingBoard.NowStation == TRMStation.LOAD_B)
+                {
+                    sourceTray.SetBin(0, 0, 0, WorkingBoard.Slot, (byte)BinDefine.Empty);
+                }
                 TDEx_TRM.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
+                WorkingBoard.NowStation = TRMStation.SELF;
+                
+                //if (WorkID.Equals(CassetteID.RIGHT)) TDEx_Load.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
+                //else if (WorkID.Equals(CassetteID.LEFT)) TDEx_Unload.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
+                //TDEx_TRM.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
@@ -1963,8 +2203,9 @@ namespace TBPP14200
             }
 
             strMap = strMap.Replace(';', ',').Trim();
-            int count = strMap.LastIndexOf(',');
-            strMap = strMap.Substring(0, count);
+            //int count = strMap.LastIndexOf(',');
+            //strMap = strMap.Substring(0, count);
+            strMap = strMap.TrimEnd(',');
             //string[] aMap = strMap.Split(',').ToArray();
             //strMap = "";
             //for (int y = 0; y < BoardInfo.YN; y++)
@@ -1979,6 +2220,9 @@ namespace TBPP14200
             {
                 strMap = strMap.Replace("1", "0").Trim();
             }
+            //v2.0.0.1
+            WorkingBoard.BeforeMap = strMap;
+
             SYSPara.CurrentBoard.SetBoardInfo(SYSPara.CurrentBIBID, "", strMap);
             switch (TRM_WorkStage)
             {
@@ -2019,16 +2263,12 @@ namespace TBPP14200
                     }
                     break;
             }
-            return FlowChart.FCRESULT.NEXT;
-            //if (TRM_WorkStage.Equals(BIBStageID.BIBStageA)) SYSPara.StageA_BIBID = SYSPara.CurrentBIBID;
-            //else if (TRM_WorkStage.Equals(BIBStageID.BIBStageB)) SYSPara.StageB_BIBID = SYSPara.CurrentBIBID;
-
-            //return FlowChart.FCRESULT.NEXT;
+            return FlowChart.FCRESULT.IDLE;
         }
 
         private FlowChart.FCRESULT flowChart16_Run()
         {
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE, 0);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2051,15 +2291,15 @@ namespace TBPP14200
             bool  b1 = (bool)SYSPara.CallProc(ModuleName_CHM, "CheckHaveBoard", false);
             if (b1.Equals(true))
             {
-                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.PUT);
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.PUT, 0);
                 if (T.Equals(ThreeValued.TRUE))
                 {
                     return FlowChart.FCRESULT.NEXT;
                 }
             }
             else
-            { 
-                //SetAlarm CHM Have Board
+            {
+                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_ClamShellHasBoard);
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -2069,6 +2309,8 @@ namespace TBPP14200
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
             if (T.Equals(ThreeValued.TRUE))
             {
+                //v2.0.0.1 change data
+                WorkingBoard.NowStation = TRMStation.STAGE_CH;
                 //if (WorkID.Equals(CassetteID.RIGHT)) TDEx_Load.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
                 //else if (WorkID.Equals(CassetteID.LEFT)) TDEx_Unload.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
                 TDEx_TRM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
@@ -2080,8 +2322,7 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart18_Run()
         {
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.WAITING, ACTIONMODE.MOVE);
-            
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.WAITING, ACTIONMODE.MOVE, 0);
             if (T1.Equals(ThreeValued.TRUE))
             {
                 Flag_CHM_Action.Reset();
@@ -2114,10 +2355,11 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart20_Run()
         {
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE);
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE, 0);
             //ThreeValued T2 = (ThreeValued)SYSPara.CallProc(ModuleName_CHM, "SetActionCommand_CHM", ACTIONMODE.UNLOCK);
-            ThreeValued T2 = ThreeValued.TRUE;
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            //ThreeValued T2 = ThreeValued.TRUE;
+            //if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            if (T1.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
             }
@@ -2127,8 +2369,9 @@ namespace TBPP14200
         private FlowChart.FCRESULT flowChart165_Run()
         {
             ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
-            ThreeValued T2 = (ThreeValued)SYSPara.CallProc(ModuleName_CHM, "GetActionResult_CHM");
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            //ThreeValued T2 = (ThreeValued)SYSPara.CallProc(ModuleName_CHM, "GetActionResult_CHM");
+            //if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            if (T1.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
             }
@@ -2140,15 +2383,15 @@ namespace TBPP14200
             bool b1 = (bool)SYSPara.CallProc(ModuleName_CHM, "CheckHaveBoard", true);
             if (b1)
             {
-                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.GET);
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.GET, 0);
                 if (T.Equals(ThreeValued.TRUE))
                 {
                     return FlowChart.FCRESULT.NEXT;
                 }
             }
             else
-            { 
-                //SetAlarm CHM Have No Board
+            {
+                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_ClamShellHasNoBoard);
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -2158,6 +2401,7 @@ namespace TBPP14200
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
             if (T.Equals(ThreeValued.TRUE))
             {
+                WorkingBoard.NowStation = TRMStation.SELF;
                 TDEx_CHM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
                 TDEx_TRM.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
                 return FlowChart.FCRESULT.NEXT;
@@ -2171,7 +2415,7 @@ namespace TBPP14200
             if (TRM_WorkStage == BIBStageID.BIBStageA) station = TRMStation.STAGE_A;
             else if (TRM_WorkStage == BIBStageID.BIBStageB) station = TRMStation.STAGE_B;
 
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.MOVE);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.MOVE, 0);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2198,7 +2442,7 @@ namespace TBPP14200
             bool b1 = (bool)SYSPara.CallProc(ModuleName_BSM, "CheckHaveBoard", TRM_WorkStage, false);
             if (b1)
             {
-                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.PUT);
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.PUT, 0);
                 if (T.Equals(ThreeValued.TRUE))
                 {
                     return FlowChart.FCRESULT.NEXT;
@@ -2206,7 +2450,11 @@ namespace TBPP14200
             }
             else
             { 
-                //SetAlarm BSM Have Board Cant put bib
+                int _ErrCode = TRM_WorkStage == BIBStageID.BIBStageA ? (int)AlarmCode.Err_StageA_HasBoard : (int)AlarmCode.Err_StageB_HasBoard;
+                if (TRM_WorkStage == BIBStageID.BIBStageA || TRM_WorkStage == BIBStageID.BIBStageB)
+                {
+                    SYSPara.ShowAlarm("E", _ErrCode);
+                }
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -2216,14 +2464,6 @@ namespace TBPP14200
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
             if (T.Equals(ThreeValued.TRUE))
             {
-                //if (TRM_WorkStage.Equals(BIBStageID.BIBStageA))
-                //{
-                //    TDEx_Left_Board.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
-                //}
-                //else if (TRM_WorkStage.Equals(BIBStageID.BIBStageB))
-                //{
-                //    TDEx_Right_Board.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
-                //}
                 TDEx_TRM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
                 return FlowChart.FCRESULT.NEXT;
             }
@@ -2236,7 +2476,7 @@ namespace TBPP14200
             if (TRM_WorkStage == BIBStageID.BIBStageA) station = TRMStation.STAGE_A;
             else if (TRM_WorkStage == BIBStageID.BIBStageB) station = TRMStation.STAGE_B;
 
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.MOVE);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.MOVE, 0);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2263,7 +2503,7 @@ namespace TBPP14200
             bool b1 = (bool)SYSPara.CallProc(ModuleName_BSM, "CheckHaveBoard", TRM_WorkStage, true);
             if (b1)
             {
-                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.GET);
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", (TRMStation)station, ACTIONMODE.GET, 0);
                 if (T.Equals(ThreeValued.TRUE))
                 {
                     return FlowChart.FCRESULT.NEXT;
@@ -2271,7 +2511,8 @@ namespace TBPP14200
             }
             else
             { 
-                //SetAlarm BSM not have board that trm cant get
+                int _ErrCode = TRM_WorkStage == BIBStageID.BIBStageA ? (int)AlarmCode.Err_StageA_HasNoBoard : (int)AlarmCode.Err_StageB_HasNoBoard;
+                SYSPara.ShowAlarm("E", _ErrCode);
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -2288,12 +2529,17 @@ namespace TBPP14200
                     {
                         SYSPara.StageA_BIBID = "";
                         TDEx_Left_Board.ResetBin(GlobalDefine.EmptyBin);
+                        WorkingBoard = StageA_Board.Clone();
+                        StageA_Board.Reset();
                     }
                     else if (TRM_WorkStage.Equals(BIBStageID.BIBStageB))
                     {
                         SYSPara.StageB_BIBID = "";
-                        TDEx_Right_Board.ResetBin(GlobalDefine.EmptyBin); 
+                        TDEx_Right_Board.ResetBin(GlobalDefine.EmptyBin);
+                        WorkingBoard = StageB_Board.Clone();
+                        StageB_Board.Reset();
                     }
+                    WorkingBoard.NowStation = TRMStation.SELF;
                     TDEx_TRM.ResetBin(GlobalDefine.PassBin);
                     
                     return FlowChart.FCRESULT.NEXT;
@@ -2304,7 +2550,7 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart30_Run()
         {
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE, 0);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2327,15 +2573,15 @@ namespace TBPP14200
             bool b1 = (bool)SYSPara.CallProc(ModuleName_CHM, "CheckHaveBoard", false);
             if (b1)
             {
-                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.PUT);
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.PUT, 0);
                 if (T.Equals(ThreeValued.TRUE))
                 {
                     return FlowChart.FCRESULT.NEXT;
                 }
             }
             else
-            { 
-                //CHM have board that trm cant put board
+            {
+                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_ClamShellHasBoard);
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -2345,6 +2591,7 @@ namespace TBPP14200
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
             if (T.Equals(ThreeValued.TRUE))
             {
+                WorkingBoard.NowStation = TRMStation.STAGE_CH;
                 TDEx_TRM.ResetBin(GlobalDefine.EmptyBin);
                 TDEx_CHM.ResetBin(GlobalDefine.PassBin);
                 return FlowChart.FCRESULT.NEXT;
@@ -2354,7 +2601,7 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart28_Run()
         {
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.WAITING, ACTIONMODE.MOVE);
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.WAITING, ACTIONMODE.MOVE, 0);
             if (T1.Equals(ThreeValued.TRUE))
             {
                 Flag_CHM_Action.Reset();
@@ -2386,7 +2633,7 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart26_Run()
         {
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE);
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.MOVE, 0);
             if (T1.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2409,15 +2656,15 @@ namespace TBPP14200
             bool b1 = (bool)SYSPara.CallProc(ModuleName_CHM, "CheckHaveBoard", true);
             if (b1)
             {
-                ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.GET);
+                ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.STAGE_CH, ACTIONMODE.GET, 0);
                 if (T1.Equals(ThreeValued.TRUE))
                 {
                     return FlowChart.FCRESULT.NEXT;
                 }
             }
             else
-            { 
-                //setalarm chm have no board that trm can get board
+            {
+                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_ClamShellHasNoBoard);
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -2427,6 +2674,7 @@ namespace TBPP14200
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
             if (T.Equals(ThreeValued.TRUE))
             {
+                WorkingBoard.NowStation = TRMStation.SELF;
                 TDEx_CHM.ResetBin(GlobalDefine.EmptyBin);
                 TDEx_TRM.ResetBin(GlobalDefine.PassBin);
                 return FlowChart.FCRESULT.NEXT;
@@ -2436,18 +2684,21 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart24_Run()
         {
-            WorkID = (CassetteID)SYSPara.CallProc(ModuleName_CSM, "GetActionCassette", false);
+            WorkID = WorkingBoard.CID;
+            //WorkID = (CassetteID)SYSPara.CallProc(ModuleName_CSM, "GetActionCassette", false);
             TRMStation WorkStation = TRMStation.NONE;
             if (WorkID.Equals(CassetteID.NONE))
             {
-                SYSPara.ShowAlarm("E", 801, "UNLOAD");
+                //SYSPara.ShowAlarm("E", 801, "UNLOAD");
+                //SYSPara.ShowAlarm("E", (int)AlarmCode.Err_CassetteHasBoard, "UNLOAD");
+                //不應該出現這個狀況，退板有板由Module Alarm
                 return FlowChart.FCRESULT.IDLE;
             }
             else if (WorkID.Equals(CassetteID.LEFT)) WorkStation = TRMStation.LOAD_A;
             else WorkStation = TRMStation.LOAD_B;
 
             //ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.LOAD_A, ACTIONMODE.MOVE);
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkStation, ACTIONMODE.MOVE);
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkStation, ACTIONMODE.MOVE, 0);
             if (T1.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2467,29 +2718,31 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart32_Run()
         {
-            
+            //v2.0.0.1 有無板由TRM取放板的時候自己判斷
+            return FlowChart.FCRESULT.NEXT;
             //ThreeValued T = (ThreeValued)SYSPara.CallProc("ModuleName_Rack", "RackCheckHaveBIB", "RackID.UNLOAD");
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_CSM, "CheckHaveBoard", WorkID);
-            if (T.Equals(ThreeValued.FALSE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            else if (T.Equals(ThreeValued.TRUE))
-            {
-                //TODO:Need Alarm
-            }
-            return FlowChart.FCRESULT.IDLE;
+            //ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_CSM, "CheckHaveBoard", WorkID);
+            //if (T.Equals(ThreeValued.FALSE))
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            //else if (T.Equals(ThreeValued.TRUE))
+            //{
+            //    //TODO:Need Alarm
+            //}
+            //return FlowChart.FCRESULT.IDLE;
         }
 
         private FlowChart.FCRESULT flowChart33_Run()
         {
             if (Flag_SuppleDeviceSafe) return FlowChart.FCRESULT.IDLE;
-            WorkID = (CassetteID)SYSPara.CallProc(ModuleName_CSM, "GetActionCassette", false);
+            //WorkID = (CassetteID)SYSPara.CallProc(ModuleName_CSM, "GetActionCassette", false);
+            WorkID = WorkingBoard.CID;
             TRMStation WorkStation = TRMStation.NONE;
             if (WorkID.Equals(CassetteID.NONE)) return FlowChart.FCRESULT.IDLE;
             else if (WorkID.Equals(CassetteID.LEFT)) WorkStation = TRMStation.LOAD_A;
             else WorkStation = TRMStation.LOAD_B;
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkStation, ACTIONMODE.PUT);
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", WorkStation, ACTIONMODE.PUT, 0);
             if (T1.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -2502,9 +2755,19 @@ namespace TBPP14200
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
             if (T.Equals(ThreeValued.TRUE))
             {
+                //TODO:v2.0.0.1
                 TDEx_TRM.ResetBin(GlobalDefine.EmptyBin);
-                if (WorkID.Equals(CassetteID.LEFT)) TDEx_Unload.ResetBin(GlobalDefine.PassBin);
-                else if (WorkID.Equals(CassetteID.RIGHT)) TDEx_Load.ResetBin(GlobalDefine.PassBin);
+                if (WorkingBoard.CID == CassetteID.LEFT)
+                {
+                    TDEx_Load.SetBin(0, 0, 0, WorkingBoard.Slot, (byte)BinDefine.Tested);
+                }
+                else if (WorkingBoard.CID == CassetteID.RIGHT)
+                {
+                    TDEx_Unload.SetBin(0, 0, 0, WorkingBoard.Slot, (byte)BinDefine.Tested);
+                }
+                //TDEx_TRM.ResetBin(GlobalDefine.EmptyBin);
+                //if (WorkID.Equals(CassetteID.LEFT)) TDEx_Unload.ResetBin(GlobalDefine.PassBin);
+                //else if (WorkID.Equals(CassetteID.RIGHT)) TDEx_Load.ResetBin(GlobalDefine.PassBin);
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
@@ -2534,14 +2797,25 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart116_Run()
         {
-            if (TRM_WorkStage == BIBStageID.BIBStageA)
-                SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.TRANSFER, (BIBStageID)BIBStageID.BIBStageA);
-            else if (TRM_WorkStage == BIBStageID.BIBStageB)
-                SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.TRANSFER, (BIBStageID)BIBStageID.BIBStageB);
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetBoardStageState", (BIBStageID)TRM_WorkStage, BIBStageSate.READY);
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.TRANSFER, (BIBStageID)BIBStageID.BIBStageA);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.TRANSFER, (BIBStageID)BIBStageID.BIBStageB);
+            SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", BIBStageModuleOwner.TRANSFER, TRM_WorkStage);
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetBoardStageState", TRM_WorkStage, BIBStageSate.READY);
             if (T.Equals(ThreeValued.TRUE))
             {
+                if (TRM_WorkStage == BIBStageID.BIBStageA)
+                {
+                    StageA_Board = WorkingBoard.Clone();
+                    StageA_Board.NowStation = TRMStation.STAGE_A;
+                }
+                else if (TRM_WorkStage == BIBStageID.BIBStageB)
+                {
+                    StageB_Board = WorkingBoard.Clone();
+                    StageB_Board.NowStation = TRMStation.STAGE_B;
+                }
+                WorkingBoard.Reset();
                 TRM_WorkStage = BIBStageID.NONE;
                 SYSPara.CallProc(ModuleName_TRM, "SetTransferState", TRMState.IDLE);
                 return FlowChart.FCRESULT.NEXT;
@@ -2551,7 +2825,8 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart120_Run()
         {
-            
+            SetBoardWorkDone(WorkingBoard);
+            WorkingBoard.Reset();
             TRM_WorkStage = BIBStageID.NONE;
             SYSPara.CallProc(ModuleName_TRM, "SetTransferState", TRMState.IDLE);
             
@@ -6608,6 +6883,7 @@ namespace TBPP14200
             {
                 SYSPara.CurrentBIBID = (string)SYSPara.CallProc(ModuleName_TRM, "GetBarcodeValue");
                 BoardSeq++;
+                WorkingBoard.BID = SYSPara.CurrentBIBID;
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
@@ -7771,7 +8047,8 @@ namespace TBPP14200
             }
             if (TM_Homing.On(5000))
             {
-                SYSPara.ShowAlarm("E", 902);
+                //SYSPara.ShowAlarm("E", 902);
+                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_AddNewJobFail);
                 TM_Homing.Restart();
             }
             return FlowChart.FCRESULT.IDLE;
@@ -8088,13 +8365,15 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart335_Run()
         {
-            ThreeValued T = ThreeValued.UNKNOWN;
-            BasePosInfo Pos = new BasePosInfo();
+            //ThreeValued T = ThreeValued.UNKNOWN;
+            //BasePosInfo Pos = new BasePosInfo();
 
-            if (TRM_WorkStage == BIBStageID.BIBStageA)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageA, ACTIONMODE.LOCK, Pos);
-            else if (TRM_WorkStage == BIBStageID.BIBStageB)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageB, ACTIONMODE.LOCK, Pos);
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageA, ACTIONMODE.LOCK, Pos);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageB, ACTIONMODE.LOCK, Pos);
+            BasePosInfo Pos = new BasePosInfo();
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, TRM_WorkStage, ACTIONMODE.LOCK, Pos);
 
             if (T.Equals(ThreeValued.TRUE))
             {
@@ -8105,12 +8384,14 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart337_Run()
         {
-            ThreeValued T = ThreeValued.UNKNOWN;
+            //ThreeValued T = ThreeValued.UNKNOWN;
 
-            if (TRM_WorkStage == BIBStageID.BIBStageA)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-            else if (TRM_WorkStage == BIBStageID.BIBStageB)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", TRM_WorkStage);
 
             if (T.Equals(ThreeValued.TRUE))
             {
@@ -8121,13 +8402,15 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart339_Run()
         {
-            ThreeValued T = ThreeValued.UNKNOWN;
-            BasePosInfo Pos = new BasePosInfo();
+            //ThreeValued T = ThreeValued.UNKNOWN;
+            //BasePosInfo Pos = new BasePosInfo();
 
-            if (TRM_WorkStage == BIBStageID.BIBStageA)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageA, ACTIONMODE.UNLOCK, Pos);
-            else if (TRM_WorkStage == BIBStageID.BIBStageB)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageB, ACTIONMODE.UNLOCK, Pos);
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageA, ACTIONMODE.UNLOCK, Pos);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageB, ACTIONMODE.UNLOCK, Pos);
+            BasePosInfo Pos = new BasePosInfo();
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, TRM_WorkStage, ACTIONMODE.UNLOCK, Pos);
 
             if (T.Equals(ThreeValued.TRUE))
             {
@@ -8138,12 +8421,14 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart338_Run()
         {
-            ThreeValued T = ThreeValued.UNKNOWN;
+            //ThreeValued T = ThreeValued.UNKNOWN;
 
-            if (TRM_WorkStage == BIBStageID.BIBStageA)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-            else if (TRM_WorkStage == BIBStageID.BIBStageB)
-                T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", TRM_WorkStage);
 
             if (T.Equals(ThreeValued.TRUE))
             {
@@ -8151,5 +8436,88 @@ namespace TBPP14200
             }
             return FlowChart.FCRESULT.IDLE;
         }
+        #region Scan Action
+        private FlowChart.FCRESULT FC_Auto_ScanAction_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart351_Run()
+        {
+            if (Flag_Load_ScanAction.IsDoIt())
+            {
+                Flag_Load_ScanAction.Doing();
+                Flag_Load_WorkAction.Done();
+                Flag_SuppleDeviceAction.DoIt();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart352_Run()
+        {
+            if (Flag_SuppleDeviceAction.IsDone())
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            SYSPara.ShowAlarm("W", (int)AlarmCode.Err_SuppleDevie);
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart353_Run()
+        {
+            ThreeValued tRet = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.LOAD_A, ACTIONMODE.SCAN);
+            if (tRet.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart354_Run()
+        {
+            ThreeValued tRet = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
+            if (tRet.Equals(ThreeValued.TRUE))
+            {
+                string sMap = (string)SYSPara.CallProc(ModuleName_TRM, "GetMappingResult", TRMStation.LOAD_A);
+                SetMappingData(sMap, TRMStation.LOAD_A);
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart355_Run()
+        {
+            ThreeValued tRet = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.LOAD_B, ACTIONMODE.SCAN);
+            if (tRet.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart356_Run()
+        {
+            ThreeValued tRet = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
+            if (tRet.Equals(ThreeValued.TRUE))
+            {
+                string sMap = (string)SYSPara.CallProc(ModuleName_TRM, "GetMappingResult", TRMStation.LOAD_B);
+                SetMappingData(sMap, TRMStation.LOAD_B);
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart357_Run()
+        {
+            Flag_Load_ScanAction.Done();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart358_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+        #endregion ScanAction
     }
 }

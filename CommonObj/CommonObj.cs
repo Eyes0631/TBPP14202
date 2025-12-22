@@ -43,6 +43,14 @@ namespace CommonObj
     #endregion
 
     #region enum
+    public enum BoardState
+    {
+        ToDo = 0,    // 待處理 (DoIt)
+        Processing = 1, // 處理中 (Doing)
+        Finished = 2,  // 已完成 (Done)
+        Idle = 3       // 重置/無效 (Reset)
+    }
+
     public enum TrayID
     { 
         NONE = -1,
@@ -248,6 +256,7 @@ namespace CommonObj
         READBOARCODE = 16,          //Read Barcode Station
         STAGE_CH = 32,                   //Clamsheel Stage
         WAITING = 64,                     //Waiting Station
+        SELF = 128,                 
         DIRECT_TOP = (STAGE_A | STAGE_B),
         DIRECT_DOWN = (LOAD_A | LOAD_B | READBOARCODE),
         DORECT_RIGHT = (STAGE_CH | WAITING),
@@ -311,28 +320,34 @@ namespace CommonObj
     //v2.0.0.1 add 
     public class BoardInfo
     {
-        public string BID { get; set; }
+        public CassetteID CID { get; set; }
         public int Slot { get; set; }
+        public string BID { get; set; }
         public string BeforeMap { get; set; }
         public string AfterMap { get; set; }
         public TRMStation NowStation { get; set; }
-        public JActionFlag State {get; set; }
+        public JActionFlag State { get; set; }
 
         public BoardInfo()
         {
-            //建構
-            this.BID = string.Empty;
-            this.Slot = -1;
-            this.BeforeMap = string.Empty;
-            this.AfterMap = string.Empty;
-            this.NowStation = TRMStation.NONE;
+            this.CID = CassetteID.NONE;
             this.State = new JActionFlag();
+        }
+
+        public BoardInfo(CassetteID cid, int slot)
+        {
+            this.CID = cid;
+            this.Slot = slot;
+            this.State = new JActionFlag();
+            this.State.Reset();
+            this.BID = string.Empty;
         }
 
         public void Reset()
         {
-            this.BID = string.Empty;
+            this.CID = CassetteID.NONE;
             this.Slot = -1;
+            this.BID = string.Empty;
             this.BeforeMap = string.Empty;
             this.AfterMap = string.Empty;
             this.NowStation = TRMStation.NONE;
@@ -341,13 +356,14 @@ namespace CommonObj
 
         public BoardInfo Clone()
         {
-            BoardInfo info = new BoardInfo();
-            info.BID = this.BID;
+            BoardInfo info = new BoardInfo(this.CID, this.Slot);
+            info.CID = this.CID;
             info.Slot = this.Slot;
+            info.BID = this.BID;
             info.BeforeMap = this.BeforeMap;
             info.AfterMap = this.AfterMap;
             info.NowStation = this.NowStation;
-            info.State = new JActionFlag();
+            // 狀態同步
             if (this.State.IsDoIt()) info.State.DoIt();
             else if (this.State.IsDoing()) info.State.Doing();
             else if (this.State.IsDone()) info.State.Done();
@@ -355,39 +371,144 @@ namespace CommonObj
             return info;
         }
     }
+    //public class BoardInfo
+    //{
+    //    public CassetteID CID { get; set; }
+    //    public int Slot { get; set; }
+    //    public string BID { get; set; }
+    //    public string BeforeMap { get; set; }
+    //    public string AfterMap { get; set; }
+    //    public TRMStation NowStation { get; set; }
+    //    public JActionFlag State {get; set; }
 
-    public class CassetteInfo
-    {
-        public CassetteID ID { get; set; }
-        public JActionFlag State { get; set; }
-        public List<BoardInfo> BIBlist;
+    //    public BoardInfo()
+    //    {
+    //        //建構
+    //        this.CID = CassetteID.NONE;
+    //        this.Slot = -1;
+    //        this.BID = string.Empty;
+    //        this.BeforeMap = string.Empty;
+    //        this.AfterMap = string.Empty;
+    //        this.NowStation = TRMStation.NONE;
+    //        this.State = new JActionFlag();
+    //    }
 
-        public CassetteInfo(CassetteID id)
-        {
-            this.ID = id;
-            this.State = new JActionFlag();
-            BIBlist = new List<BoardInfo>();
+    //    public void Reset()
+    //    {
+    //        this.CID = CassetteID.NONE;
+    //        this.Slot = -1;
+    //        this.BID = string.Empty;
+    //        this.BeforeMap = string.Empty;
+    //        this.AfterMap = string.Empty;
+    //        this.NowStation = TRMStation.NONE;
+    //        this.State.Reset();
+    //    }
 
-            for (int i = 0; i < 25; i++)    //先假設最大值為25
-            {
-                BIBlist.Add(new BoardInfo() { Slot = i });
-            }
-        }
+    //    public BoardInfo Clone()
+    //    {
+    //        BoardInfo info = new BoardInfo();
+    //        info.CID = this.CID;
+    //        info.Slot = this.Slot;
+    //        info.BID = this.BID;
+    //        info.BeforeMap = this.BeforeMap;
+    //        info.AfterMap = this.AfterMap;
+    //        info.NowStation = this.NowStation;
+    //        info.State = new JActionFlag();
+    //        if (this.State.IsDoIt()) info.State.DoIt();
+    //        else if (this.State.IsDoing()) info.State.Doing();
+    //        else if (this.State.IsDone()) info.State.Done();
 
-        public void Reset()
-        {
-            this.State.Reset();
-            BIBlist.Clear();
-        }
+    //        return info;
+    //    }
+    //}
+    ////取消不用容器改用平躺
+    //public class CassetteInfo
+    //{
+    //    public CassetteID ID { get; set; }
+    //    public JActionFlag State { get; set; }
+    //    public List<BoardInfo> BIBlist;
 
-        public void SetBoardInfo(BoardInfo info, int slot)
-        {
-            if (info == null) return;
-            if (slot < 0 || slot >= BIBlist.Count) return;
-            BIBlist[slot] = info.Clone();
-            BIBlist[slot].Slot = slot;
-        }
-    }
+    //    public CassetteInfo(CassetteID id)
+    //    {
+    //        this.ID = id;
+    //        this.State = new JActionFlag();
+    //        BIBlist = new List<BoardInfo>();
+
+    //        for (int i = 0; i < 25; i++)    //先假設最大值為25
+    //        {
+    //            BIBlist.Add(new BoardInfo() { Slot = i });
+    //        }
+    //    }
+
+    //    public void Reset()
+    //    {
+    //        this.State.Reset();
+    //        foreach (var board in BIBlist)
+    //        {
+    //            board.Reset();
+    //        }
+    //    }
+
+    //    public void SetBoardInfo(BoardInfo info, int slot)
+    //    {
+    //        if (info == null) return;
+    //        if (slot < 0 || slot >= BIBlist.Count) return;
+    //        BIBlist[slot] = info.Clone();
+    //        BIBlist[slot].Slot = slot;
+    //    }
+
+    //    public int GetNextDoItSlot()
+    //    {
+    //        var target = BIBlist.FirstOrDefault(b => b.State.IsDoIt());
+    //        return target != null ? target.Slot : -1;
+    //    }
+
+    //    public int GetDoItCount()
+    //    {
+    //        return BIBlist.Count(b => b.State.IsDoIt());
+    //    }
+
+    //    public bool HasWork
+    //    {
+    //        get
+    //        {
+    //            return GetDoItCount() > 0;
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// 取得 BIBlist 中 Slot 最小（最前面）且狀態為 DoIt 的 BoardInfo
+    //    /// </summary>
+    //    /// <returns>找到的 BoardInfo 物件；若無則回傳 null</returns>
+    //    public BoardInfo GetFirstTodoBoard()
+    //    {
+    //        for (int i = 0; i < BIBlist.Count; i++)
+    //        {
+    //            if (BIBlist[i].State.IsDoIt())
+    //            {
+    //                return BIBlist[i];
+    //            }
+    //        }
+    //        return null; 
+    //    }
+
+    //    /// <summary>
+    //    /// 更新 BIBlist 中指定 Slot 的 State
+    //    /// </summary>
+    //    public void UpdateBoardState(int slot, int updateType)
+    //    {
+    //        if (slot < 0 || slot >= BIBlist.Count) return;
+
+    //        BoardInfo target = BIBlist[slot];
+    //        switch (updateType)
+    //        {
+    //            case 0: target.State.DoIt(); break;
+    //            case 1: target.State.Doing(); break;
+    //            case 2: target.State.Done(); break;
+    //            case 3: target.State.Reset(); break;
+    //        }
+    //    }
+    //}
 
     public class BoardMapInfo
     {

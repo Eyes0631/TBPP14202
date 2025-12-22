@@ -74,6 +74,7 @@ namespace MAA
         bool bStartIsSet = false;
         bool bSuppDevice = false;
         bool bSuppIsSet = false;
+        bool bLoadPortWorking = false;
         public override int ScanIO()
         {
             OB_StartButton.Value = SysRun;
@@ -93,20 +94,23 @@ namespace MAA
             //    }
             //}
 
-            if (IB_SuppDevice.Value)
-                bSuppIsSet = true;
-            if (!IB_SuppDevice.Value && bSuppIsSet)
+            if (bLoadPortWorking == false)
             {
-                bSuppIsSet = false;
-
-                if (bSuppDevice)
-                    result |= 0x04;
-
-                bSuppDevice = !bSuppDevice;
-
-                if (bSuppDevice)
+                if (IB_SuppDevice.Value)
+                    bSuppIsSet = true;
+                if (!IB_SuppDevice.Value && bSuppIsSet)
                 {
-                    ShowAlarm("I", 4);
+                    bSuppIsSet = false;
+
+                    if (bSuppDevice)
+                        result |= 0x04;
+
+                    bSuppDevice = !bSuppDevice;
+
+                    if (bSuppDevice)
+                    {
+                        ShowAlarm("I", 4);
+                    }
                 }
             }
 
@@ -233,7 +237,7 @@ namespace MAA
             if (!IsAutoMode)
                 return true;
 
-            if (bSuppDevice)
+            if (bSuppDevice && bLoadPortWorking == false)
                 return true;
 
             bool err = true;
@@ -310,6 +314,11 @@ namespace MAA
         public bool SuppleDeviceSensor()
         {
             return bSuppDevice;
+        }
+
+        public void SetLoadPortWork(bool bVal)
+        {
+            bLoadPortWorking = bVal;
         }
 
         public void DataReset()
