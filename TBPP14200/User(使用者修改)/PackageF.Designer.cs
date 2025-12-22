@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PackageF));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tTray = new KCSDK.TFieldCB();
             this.dFieldEdit13 = new KCSDK.DFieldEdit();
             this.dFieldEdit15 = new KCSDK.DFieldEdit();
             this.dFieldEdit12 = new KCSDK.DFieldEdit();
@@ -138,6 +139,8 @@
             this.dFieldEdit86 = new KCSDK.DFieldEdit();
             this.label11 = new System.Windows.Forms.Label();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.dFieldEdit21 = new KCSDK.DFieldEdit();
+            this.dFieldEdit17 = new KCSDK.DFieldEdit();
             this.dFieldEdit49 = new KCSDK.DFieldEdit();
             this.dFieldEdit45 = new KCSDK.DFieldEdit();
             this.dFieldEdit46 = new KCSDK.DFieldEdit();
@@ -152,8 +155,6 @@
             this.dFieldEdit47 = new KCSDK.DFieldEdit();
             this.dFieldEdit38 = new KCSDK.DFieldEdit();
             this.dFieldEdit29 = new KCSDK.DFieldEdit();
-            this.dFieldEdit17 = new KCSDK.DFieldEdit();
-            this.dFieldEdit21 = new KCSDK.DFieldEdit();
             ((System.ComponentModel.ISupportInitialize)(this.PackageContainer)).BeginInit();
             this.PackageContainer.Panel1.SuspendLayout();
             this.PackageContainer.Panel2.SuspendLayout();
@@ -250,6 +251,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.tTray);
             this.tabPage1.Controls.Add(this.dFieldEdit13);
             this.tabPage1.Controls.Add(this.dFieldEdit15);
             this.tabPage1.Controls.Add(this.dFieldEdit12);
@@ -269,6 +271,28 @@
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // tTray
+            // 
+            this.tTray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(221)))));
+            this.tTray.Caption = "Tray";
+            this.tTray.CaptionColor = System.Drawing.Color.Black;
+            this.tTray.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            this.tTray.CaptionWidth = 200;
+            this.tTray.DataName = "TrayTable";
+            this.tTray.DataSource = this.PreloadPackageDS;
+            this.tTray.EditForm = null;
+            this.tTray.Enable = true;
+            this.tTray.FieldValue = "";
+            this.tTray.FolderPath = "";
+            this.tTray.HasEdit = true;
+            this.tTray.Location = new System.Drawing.Point(35, 153);
+            this.tTray.Name = "tTray";
+            this.tTray.NoChangeInAuto = false;
+            this.tTray.Size = new System.Drawing.Size(501, 34);
+            this.tTray.TabIndex = 109;
+            this.tTray.ValueColor = System.Drawing.Color.Black;
+            this.tTray.ValueFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            // 
             // dFieldEdit13
             // 
             this.dFieldEdit13.AutoFocus = false;
@@ -284,7 +308,7 @@
             this.dFieldEdit13.FieldValue = "";
             this.dFieldEdit13.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.dFieldEdit13.IsModified = false;
-            this.dFieldEdit13.Location = new System.Drawing.Point(35, 385);
+            this.dFieldEdit13.Location = new System.Drawing.Point(35, 450);
             this.dFieldEdit13.Margin = new System.Windows.Forms.Padding(0);
             this.dFieldEdit13.MaxValue = 9999999D;
             this.dFieldEdit13.MinValue = -9999999D;
@@ -314,7 +338,7 @@
             this.dFieldEdit15.FieldValue = "";
             this.dFieldEdit15.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.dFieldEdit15.IsModified = false;
-            this.dFieldEdit15.Location = new System.Drawing.Point(35, 356);
+            this.dFieldEdit15.Location = new System.Drawing.Point(35, 421);
             this.dFieldEdit15.Margin = new System.Windows.Forms.Padding(0);
             this.dFieldEdit15.MaxValue = 9999999D;
             this.dFieldEdit15.MinValue = -9999999D;
@@ -344,7 +368,7 @@
             this.dFieldEdit12.FieldValue = "";
             this.dFieldEdit12.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.dFieldEdit12.IsModified = false;
-            this.dFieldEdit12.Location = new System.Drawing.Point(35, 315);
+            this.dFieldEdit12.Location = new System.Drawing.Point(35, 380);
             this.dFieldEdit12.Margin = new System.Windows.Forms.Padding(0);
             this.dFieldEdit12.MaxValue = 9999999D;
             this.dFieldEdit12.MinValue = -9999999D;
@@ -374,7 +398,7 @@
             this.dFieldEdit42.FieldValue = "";
             this.dFieldEdit42.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.dFieldEdit42.IsModified = false;
-            this.dFieldEdit42.Location = new System.Drawing.Point(35, 286);
+            this.dFieldEdit42.Location = new System.Drawing.Point(35, 351);
             this.dFieldEdit42.Margin = new System.Windows.Forms.Padding(0);
             this.dFieldEdit42.MaxValue = 9999999D;
             this.dFieldEdit42.MinValue = -9999999D;
@@ -403,7 +427,7 @@
             this.tDevice.FieldValue = "";
             this.tDevice.FolderPath = "";
             this.tDevice.HasEdit = true;
-            this.tDevice.Location = new System.Drawing.Point(35, 83);
+            this.tDevice.Location = new System.Drawing.Point(35, 82);
             this.tDevice.Name = "tDevice";
             this.tDevice.NoChangeInAuto = false;
             this.tDevice.Size = new System.Drawing.Size(501, 34);
@@ -418,14 +442,14 @@
             this.tCassette.CaptionColor = System.Drawing.Color.Black;
             this.tCassette.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.tCassette.CaptionWidth = 200;
-            this.tCassette.DataName = "Cassette";
-            this.tCassette.DataSource = null;
+            this.tCassette.DataName = "CassetteTable";
+            this.tCassette.DataSource = this.PreloadPackageDS;
             this.tCassette.EditForm = null;
             this.tCassette.Enable = true;
             this.tCassette.FieldValue = "";
             this.tCassette.FolderPath = "";
             this.tCassette.HasEdit = true;
-            this.tCassette.Location = new System.Drawing.Point(35, 119);
+            this.tCassette.Location = new System.Drawing.Point(35, 118);
             this.tCassette.Name = "tCassette";
             this.tCassette.NoChangeInAuto = false;
             this.tCassette.Size = new System.Drawing.Size(501, 33);
@@ -448,7 +472,7 @@
             this.tTransferKit.FieldValue = "";
             this.tTransferKit.FolderPath = "";
             this.tTransferKit.HasEdit = true;
-            this.tTransferKit.Location = new System.Drawing.Point(35, 47);
+            this.tTransferKit.Location = new System.Drawing.Point(35, 46);
             this.tTransferKit.Name = "tTransferKit";
             this.tTransferKit.NoChangeInAuto = false;
             this.tTransferKit.Size = new System.Drawing.Size(501, 34);
@@ -490,7 +514,7 @@
             this.dComboBox1.Items.AddRange(new object[] {
             "Offline",
             "Saunders"});
-            this.dComboBox1.Location = new System.Drawing.Point(241, 223);
+            this.dComboBox1.Location = new System.Drawing.Point(241, 288);
             this.dComboBox1.ModifiedColor = System.Drawing.Color.Aqua;
             this.dComboBox1.Name = "dComboBox1";
             this.dComboBox1.NoChangeInAuto = false;
@@ -502,7 +526,7 @@
             this.lb_LinkMode.BackColor = System.Drawing.Color.Silver;
             this.lb_LinkMode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lb_LinkMode.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lb_LinkMode.Location = new System.Drawing.Point(35, 222);
+            this.lb_LinkMode.Location = new System.Drawing.Point(35, 287);
             this.lb_LinkMode.Name = "lb_LinkMode";
             this.lb_LinkMode.Size = new System.Drawing.Size(200, 32);
             this.lb_LinkMode.TabIndex = 4;
@@ -525,7 +549,7 @@
             this.dFieldEdit1.FieldValue = "";
             this.dFieldEdit1.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.dFieldEdit1.IsModified = false;
-            this.dFieldEdit1.Location = new System.Drawing.Point(35, 175);
+            this.dFieldEdit1.Location = new System.Drawing.Point(35, 240);
             this.dFieldEdit1.Margin = new System.Windows.Forms.Padding(0);
             this.dFieldEdit1.MaxValue = 9999999D;
             this.dFieldEdit1.MinValue = -9999999D;
@@ -547,7 +571,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(948, 650);
+            this.tabPage2.Size = new System.Drawing.Size(765, 468);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Nozzle Delay Time";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1939,7 +1963,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(948, 650);
+            this.tabPage4.Size = new System.Drawing.Size(765, 468);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "BowlFeeder PnP Offset";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1953,7 +1977,7 @@
             this.groupBox16.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox16.Location = new System.Drawing.Point(3, 210);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(942, 207);
+            this.groupBox16.Size = new System.Drawing.Size(759, 207);
             this.groupBox16.TabIndex = 20;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Bottom";
@@ -2245,7 +2269,7 @@
             this.groupBox15.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox15.Location = new System.Drawing.Point(3, 3);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(942, 207);
+            this.groupBox15.Size = new System.Drawing.Size(759, 207);
             this.groupBox15.TabIndex = 19;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Top";
@@ -2890,10 +2914,70 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 29);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(948, 650);
+            this.tabPage6.Size = new System.Drawing.Size(765, 468);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "ClamsSheel Offset";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // dFieldEdit21
+            // 
+            this.dFieldEdit21.AutoFocus = false;
+            this.dFieldEdit21.Caption = "Close DT";
+            this.dFieldEdit21.CaptionColor = System.Drawing.Color.Black;
+            this.dFieldEdit21.CaptionFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.dFieldEdit21.DataName = "DT_CHM_CLOSE";
+            this.dFieldEdit21.DataSource = this.PreloadPackageDS;
+            this.dFieldEdit21.DefaultValue = null;
+            this.dFieldEdit21.EditColor = System.Drawing.Color.Black;
+            this.dFieldEdit21.EditFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.dFieldEdit21.EditWidth = 100;
+            this.dFieldEdit21.FieldValue = "";
+            this.dFieldEdit21.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.dFieldEdit21.IsModified = false;
+            this.dFieldEdit21.Location = new System.Drawing.Point(478, 244);
+            this.dFieldEdit21.Margin = new System.Windows.Forms.Padding(0);
+            this.dFieldEdit21.MaxValue = 10000D;
+            this.dFieldEdit21.MinValue = 0D;
+            this.dFieldEdit21.ModifiedColor = System.Drawing.Color.Aqua;
+            this.dFieldEdit21.Name = "dFieldEdit21";
+            this.dFieldEdit21.NoChangeInAuto = false;
+            this.dFieldEdit21.Size = new System.Drawing.Size(300, 29);
+            this.dFieldEdit21.StepValue = 0D;
+            this.dFieldEdit21.TabIndex = 24;
+            this.dFieldEdit21.Unit = "ms";
+            this.dFieldEdit21.UnitFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.dFieldEdit21.UnitWidth = 40;
+            this.dFieldEdit21.ValueType = KCSDK.ValueDataType.Int;
+            // 
+            // dFieldEdit17
+            // 
+            this.dFieldEdit17.AutoFocus = false;
+            this.dFieldEdit17.Caption = "Open DT";
+            this.dFieldEdit17.CaptionColor = System.Drawing.Color.Black;
+            this.dFieldEdit17.CaptionFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.dFieldEdit17.DataName = "DT_CHM_OPEN";
+            this.dFieldEdit17.DataSource = this.PreloadPackageDS;
+            this.dFieldEdit17.DefaultValue = null;
+            this.dFieldEdit17.EditColor = System.Drawing.Color.Black;
+            this.dFieldEdit17.EditFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.dFieldEdit17.EditWidth = 100;
+            this.dFieldEdit17.FieldValue = "";
+            this.dFieldEdit17.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.dFieldEdit17.IsModified = false;
+            this.dFieldEdit17.Location = new System.Drawing.Point(478, 99);
+            this.dFieldEdit17.Margin = new System.Windows.Forms.Padding(0);
+            this.dFieldEdit17.MaxValue = 10000D;
+            this.dFieldEdit17.MinValue = 0D;
+            this.dFieldEdit17.ModifiedColor = System.Drawing.Color.Aqua;
+            this.dFieldEdit17.Name = "dFieldEdit17";
+            this.dFieldEdit17.NoChangeInAuto = false;
+            this.dFieldEdit17.Size = new System.Drawing.Size(300, 29);
+            this.dFieldEdit17.StepValue = 0D;
+            this.dFieldEdit17.TabIndex = 23;
+            this.dFieldEdit17.Unit = "ms";
+            this.dFieldEdit17.UnitFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.dFieldEdit17.UnitWidth = 40;
+            this.dFieldEdit17.ValueType = KCSDK.ValueDataType.Int;
             // 
             // dFieldEdit49
             // 
@@ -3279,66 +3363,6 @@
             this.dFieldEdit29.UnitWidth = 40;
             this.dFieldEdit29.ValueType = KCSDK.ValueDataType.Int;
             // 
-            // dFieldEdit17
-            // 
-            this.dFieldEdit17.AutoFocus = false;
-            this.dFieldEdit17.Caption = "Open DT";
-            this.dFieldEdit17.CaptionColor = System.Drawing.Color.Black;
-            this.dFieldEdit17.CaptionFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit17.DataName = "DT_CHM_OPEN";
-            this.dFieldEdit17.DataSource = this.PreloadPackageDS;
-            this.dFieldEdit17.DefaultValue = null;
-            this.dFieldEdit17.EditColor = System.Drawing.Color.Black;
-            this.dFieldEdit17.EditFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit17.EditWidth = 100;
-            this.dFieldEdit17.FieldValue = "";
-            this.dFieldEdit17.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.dFieldEdit17.IsModified = false;
-            this.dFieldEdit17.Location = new System.Drawing.Point(478, 99);
-            this.dFieldEdit17.Margin = new System.Windows.Forms.Padding(0);
-            this.dFieldEdit17.MaxValue = 10000D;
-            this.dFieldEdit17.MinValue = 0D;
-            this.dFieldEdit17.ModifiedColor = System.Drawing.Color.Aqua;
-            this.dFieldEdit17.Name = "dFieldEdit17";
-            this.dFieldEdit17.NoChangeInAuto = false;
-            this.dFieldEdit17.Size = new System.Drawing.Size(300, 29);
-            this.dFieldEdit17.StepValue = 0D;
-            this.dFieldEdit17.TabIndex = 23;
-            this.dFieldEdit17.Unit = "ms";
-            this.dFieldEdit17.UnitFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit17.UnitWidth = 40;
-            this.dFieldEdit17.ValueType = KCSDK.ValueDataType.Int;
-            // 
-            // dFieldEdit21
-            // 
-            this.dFieldEdit21.AutoFocus = false;
-            this.dFieldEdit21.Caption = "Close DT";
-            this.dFieldEdit21.CaptionColor = System.Drawing.Color.Black;
-            this.dFieldEdit21.CaptionFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit21.DataName = "DT_CHM_CLOSE";
-            this.dFieldEdit21.DataSource = this.PreloadPackageDS;
-            this.dFieldEdit21.DefaultValue = null;
-            this.dFieldEdit21.EditColor = System.Drawing.Color.Black;
-            this.dFieldEdit21.EditFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit21.EditWidth = 100;
-            this.dFieldEdit21.FieldValue = "";
-            this.dFieldEdit21.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.dFieldEdit21.IsModified = false;
-            this.dFieldEdit21.Location = new System.Drawing.Point(478, 244);
-            this.dFieldEdit21.Margin = new System.Windows.Forms.Padding(0);
-            this.dFieldEdit21.MaxValue = 10000D;
-            this.dFieldEdit21.MinValue = 0D;
-            this.dFieldEdit21.ModifiedColor = System.Drawing.Color.Aqua;
-            this.dFieldEdit21.Name = "dFieldEdit21";
-            this.dFieldEdit21.NoChangeInAuto = false;
-            this.dFieldEdit21.Size = new System.Drawing.Size(300, 29);
-            this.dFieldEdit21.StepValue = 0D;
-            this.dFieldEdit21.TabIndex = 24;
-            this.dFieldEdit21.Unit = "ms";
-            this.dFieldEdit21.UnitFont = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.dFieldEdit21.UnitWidth = 40;
-            this.dFieldEdit21.ValueType = KCSDK.ValueDataType.Int;
-            // 
             // PackageF
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 27F);
@@ -3517,6 +3541,7 @@
         private KCSDK.DFieldEdit dFieldEdit12;
         private KCSDK.DFieldEdit dFieldEdit21;
         private KCSDK.DFieldEdit dFieldEdit17;
+        private KCSDK.TFieldCB tTray;
 
 
 

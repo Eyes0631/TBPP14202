@@ -124,6 +124,12 @@
   <data name="Left Board" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Image\Left Board.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="JEDEC_TRAY_SIDE_VIEW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JEDEC_TRAY_SIDE_VIEW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BowlFeeder PnP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Image\BowlFeeder PnP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="btnStart_tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnStart_tw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,6 +141,9 @@
   </data>
   <data name="btnPause_tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnPause_tw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="JEDEC_TRAY_TOP_VIEW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JEDEC_TRAY_TOP_VIEW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btnStart_en" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnStart_en.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,8 +175,8 @@
   <data name="Right Kit Shuttle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Image\Right Kit Shuttle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BowlFeeder PnP" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Image\BowlFeeder PnP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="top view" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\top view.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Transfer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Image\Transfer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -192,6 +201,9 @@
   </data>
   <data name="LoadUnload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Image\LoadUnload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="JEDEC_TRAY_TOP_VIEW2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JEDEC_TRAY_TOP_VIEW2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btnReset_tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnReset_tw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,13 +232,16 @@
   <data name="btnLang_tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnLang_tw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="JEDEC_TRAY_TOP_VIEW1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JEDEC_TRAY_TOP_VIEW1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="btnHome_tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnHome_tw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btnPause_en" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btnPause_en.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="top view" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\top view.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="JEDEC_TRAY_SIDE_VIEW1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JEDEC_TRAY_SIDE_VIEW1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

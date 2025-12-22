@@ -323,6 +323,56 @@ namespace TBPP14200.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap JEDEC_TRAY_SIDE_VIEW {
+            get {
+                object obj = ResourceManager.GetObject("JEDEC_TRAY_SIDE_VIEW", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap JEDEC_TRAY_SIDE_VIEW1 {
+            get {
+                object obj = ResourceManager.GetObject("JEDEC_TRAY_SIDE_VIEW1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap JEDEC_TRAY_TOP_VIEW {
+            get {
+                object obj = ResourceManager.GetObject("JEDEC_TRAY_TOP_VIEW", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap JEDEC_TRAY_TOP_VIEW1 {
+            get {
+                object obj = ResourceManager.GetObject("JEDEC_TRAY_TOP_VIEW1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap JEDEC_TRAY_TOP_VIEW2 {
+            get {
+                object obj = ResourceManager.GetObject("JEDEC_TRAY_TOP_VIEW2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap Left_Board {
             get {
                 object obj = ResourceManager.GetObject("Left Board", resourceCulture);

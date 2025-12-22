@@ -320,6 +320,12 @@
     <Compile Include="User%28使用者修改%29\BoardTable.Designer.cs">
       <DependentUpon>BoardTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="User%28使用者修改%29\CassetteTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\CassetteTable.Designer.cs">
+      <DependentUpon>CassetteTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="User%28使用者修改%29\DeviceTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -399,6 +405,12 @@
     </Compile>
     <Compile Include="Kernal\StateThread.cs" />
     <Compile Include="Snippet\VisionObj.cs" />
+    <Compile Include="User%28使用者修改%29\TrayTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="User%28使用者修改%29\TrayTable.Designer.cs">
+      <DependentUpon>TrayTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="User%28使用者修改%29\結批流程\LotEndForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -504,6 +516,9 @@
     <EmbeddedResource Include="User%28使用者修改%29\BoardTable.resx">
       <DependentUpon>BoardTable.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\CassetteTable.resx">
+      <DependentUpon>CassetteTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="User%28使用者修改%29\DeviceTable.resx">
       <DependentUpon>DeviceTable.cs</DependentUpon>
     </EmbeddedResource>
@@ -551,6 +566,9 @@
     </Compile>
     <EmbeddedResource Include="FormSet\UserLogin.resx">
       <DependentUpon>UserLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User%28使用者修改%29\TrayTable.resx">
+      <DependentUpon>TrayTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User%28使用者修改%29\結批流程\LotEndForm.resx">
       <DependentUpon>LotEndForm.cs</DependentUpon>
@@ -622,6 +640,11 @@
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\JEDEC_TRAY_SIDE_VIEW1.png" />
+    <None Include="Resources\JEDEC_TRAY_TOP_VIEW2.png" />
+    <None Include="Resources\JEDEC_TRAY_TOP_VIEW1.png" />
+    <None Include="Resources\JEDEC_TRAY_TOP_VIEW.png" />
+    <None Include="Resources\JEDEC_TRAY_SIDE_VIEW.png" />
     <None Include="Resources\top view.JPG" />
     <None Include="Image\Bowl Feeder.png" />
     <None Include="Image\BowlFeeder PnP.png" />
@@ -678,7 +701,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="0" Reactor_Commands="" Reactor_Project="D:\ProVDLL\KCSDK\Package.nrproj" Reactor_Configuration="ALL" Reactor_Output="D:\ProVDLL\KCSDK.dll" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="D:\ProVDLL\KCSDK.dll" Reactor_Configuration="ALL" Reactor_Project="D:\ProVDLL\KCSDK\Package.nrproj" Reactor_Commands="" Reactor_Enabled="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1181,7 +1181,7 @@ namespace CommonObj
         ThreeValued SetTransferState(TRMState sate);
 
         //ThreeValued SetActionCommand_TRM(TRMStation station, ACTIONMODE mode, BasePosInfo Pos);
-        ThreeValued SetActionCommand_TRM(TRMStation station, ACTIONMODE mode);
+        ThreeValued SetActionCommand_TRM(TRMStation station, ACTIONMODE mode, int slot);
 
         ThreeValued GetActionResult_TRM();
     }

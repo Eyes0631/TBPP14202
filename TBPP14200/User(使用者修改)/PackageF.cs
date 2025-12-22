@@ -44,6 +44,8 @@ namespace TBPP14200
             tBoard.HasEdit = true;
             tDevice.HasEdit = true;
             tTransferKit.HasEdit = true;
+            tTray.HasEdit = true;
+            tCassette.HasEdit = true;
             
             if (SYSPara.IsAutoMode)
             {
@@ -51,6 +53,8 @@ namespace TBPP14200
                 FormSet.mBoardTable.FileName = SYSPara.PReadValue("BoardTable").ToString();
                 FormSet.mDeviceTable.FileName = SYSPara.PReadValue("DeviceTable").ToString();
                 FormSet.mKitTable.FileName = SYSPara.PReadValue("KitTable").ToString();
+                FormSet.mCassetteTable.FileName = SYSPara.PReadValue("CassetteTable").ToString();
+                FormSet.mTrayTable.FileName = SYSPara.PReadValue("TrayTable").ToString();
             }
             else
             {
@@ -95,6 +99,30 @@ namespace TBPP14200
                         FormSet.mKitTable.SetFileName(subpkg4, "", true); //對應子項目顯示明顯標記
                         //FormSet.mDeviceParamTable.FileName = SYSPara.PReadValue("DeviceParamTable").ToString(); //指向對應項目
                     }
+
+                    string subpkg5 = SYSPara.PReadValue("CasstteTable").ToString();
+                    if (string.IsNullOrEmpty(subpkg5))
+                    {
+                        FormSet.mCassetteTable.FileName_Auto = "";
+                        FormSet.mCassetteTable.FolderName_Auto = "";
+                        FormSet.mCassetteTable.AutoEnd();
+                    }
+                    else
+                    {
+                        FormSet.mCassetteTable.SetFileName(subpkg5, "", true); //對應子項目顯示明顯標記
+                    }
+
+                    string subpkg6 = SYSPara.PReadValue("TrayTable").ToString();
+                    if (string.IsNullOrEmpty(subpkg6))
+                    {
+                        FormSet.mTrayTable.FileName_Auto = "";
+                        FormSet.mTrayTable.FolderName_Auto = "";
+                        FormSet.mTrayTable.AutoEnd();
+                    }
+                    else
+                    {
+                        FormSet.mTrayTable.SetFileName(subpkg6, "", true); //對應子項目顯示明顯標記
+                    }
                 }
             }
         }
@@ -134,6 +162,23 @@ namespace TBPP14200
                 FormSet.mDeviceTable.SetFileName(SYSPara.PReadValue("DeviceTable").ToString(), "", true);
             }
 
+            tTray.EditForm = FormSet.mTrayTable;
+            tTray.FolderPath = FormSet.mTrayTable.FolderPath;
+            tTray.HasEdit = true;
+            FormSet.mTrayTable.Tag = this;
+            if (SYSPara.IsAutoMode)
+            {
+                FormSet.mTrayTable.SetFileName(SYSPara.PReadValue("TrayTable").ToString(), "", true);
+            }
+
+            tCassette.EditForm = FormSet.mCassetteTable;
+            tCassette.FolderPath = FormSet.mCassetteTable.FolderPath;
+            tCassette.HasEdit = true;
+            FormSet.mCassetteTable.Tag = this;
+            if (SYSPara.IsAutoMode)
+            {
+                FormSet.mCassetteTable.SetFileName(SYSPara.PReadValue("CassetteTable").ToString(), "", true);
+            }
             #endregion
         }
 

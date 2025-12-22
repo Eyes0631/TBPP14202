@@ -1225,6 +1225,8 @@ public class BoardBinInfo//用於主畫面顯示
         public static BoardTable mBoardTable;
         public static DeviceTable mDeviceTable;
         public static KitTable mKitTable;
+        public static TrayTable mTrayTable;
+        public static CassetteTable mCassetteTable;
         //public static ToolF mToolF;
 
         #endregion

@@ -509,6 +509,8 @@ namespace TBPP14200
             FormSet.mDeviceTable = new DeviceTable();
             FormSet.mBoardTable = new BoardTable();
             FormSet.mKitTable = new KitTable();
+            FormSet.mTrayTable = new TrayTable();
+            FormSet.mCassetteTable = new CassetteTable();
 
             #endregion
 
@@ -638,6 +640,8 @@ namespace TBPP14200
             SYSPara.Lang.AddControl(FormSet.mKitTable);
             SYSPara.Lang.AddControl(FormSet.mDeviceTable);
             SYSPara.Lang.AddControl(FormSet.mBoardTable);
+            SYSPara.Lang.AddControl(FormSet.mTrayTable);
+            SYSPara.Lang.AddControl(FormSet.mCassetteTable);
 
             #endregion
 

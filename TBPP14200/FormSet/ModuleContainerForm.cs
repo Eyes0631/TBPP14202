@@ -190,6 +190,8 @@ namespace TBPP14200
             ((BaseModuleInterface)obj).InitialSubPackage(FormSet.mKitTable);
             ((BaseModuleInterface)obj).InitialSubPackage(FormSet.mBoardTable);
             ((BaseModuleInterface)obj).InitialSubPackage(FormSet.mDeviceTable);
+            ((BaseModuleInterface)obj).InitialSubPackage(FormSet.mCassetteTable);
+            ((BaseModuleInterface)obj).InitialSubPackage(FormSet.mTrayTable);
             #endregion
         }
 
