@@ -34,19 +34,22 @@ namespace CommonObj
         /// <returns></returns>
         private bool IsNextState(VehicleState state)
         {
-            if ((this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_EMPTY)))
-                return true;
             if ((this.State.Equals(VehicleState.NONE) && (state.Equals(VehicleState.TESTED_EMPTY) || state.Equals(VehicleState.UNTESTED_EMPTY))) ||
-                //(this.State.Equals(VehicleState.TESTED_EMPTY) && state.Equals(VehicleState.TESTED_EMPTY_CHECKED)) ||
-                //(this.State.Equals(VehicleState.TESTED_EMPTY_CHECKED) && state.Equals(VehicleState.TESTED_EMPTY_BOOKED)) ||
-                //(this.State.Equals(VehicleState.TESTED_EMPTY_BOOKED) && state.Equals(VehicleState.TESTED_FULL)) ||
+                (this.State.Equals(VehicleState.UNTESTED_EMPTY) && state.Equals(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
+                (this.State.Equals(VehicleState.UNTESTED_EMPTY_CHECKED) && state.Equals(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
+                (this.State.Equals(VehicleState.UNTESTED_EMPTY_BOOKED) && state.Equals(VehicleState.UNTESTED_FULL)) ||
+                (this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_EMPTY)) ||
+                (this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.NONE)) ||
+
+                (this.State.Equals(VehicleState.TESTED_EMPTY) && state.Equals(VehicleState.TESTED_EMPTY_CHECKED)) ||
+                (this.State.Equals(VehicleState.TESTED_EMPTY) && state.Equals(VehicleState.TESTED_EMPTY_BOOKED)) ||
+                (this.State.Equals(VehicleState.TESTED_EMPTY_CHECKED) && state.Equals(VehicleState.TESTED_EMPTY_BOOKED)) ||
+                (this.State.Equals(VehicleState.TESTED_EMPTY_BOOKED) && state.Equals(VehicleState.TESTED_FULL)) ||
+                (this.State.Equals(VehicleState.TESTED_FULL) && state.Equals(VehicleState.TESTED_EMPTY)) ||
+                (this.State.Equals(VehicleState.TESTED_FULL) && state.Equals(VehicleState.NONE))
                 //(this.State.Equals(VehicleState.TESTED_FULL) && state.Equals(VehicleState.TESTED_FULL_IDREADED)) ||
                 //(this.State.Equals(VehicleState.TESTED_FULL_IDREADED) && state.Equals(VehicleState.TESTED_FULL_PASS)) ||
                 //(this.State.Equals(VehicleState.TESTED_FULL_PASS) && (state.Equals(VehicleState.TESTED_EMPTY) || state.Equals(VehicleState.UNTESTED_EMPTY))) ||
-                (this.State.Equals(VehicleState.UNTESTED_EMPTY) && state.Equals(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
-                (this.State.Equals(VehicleState.UNTESTED_EMPTY_CHECKED) && state.Equals(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
-                (this.State.Equals(VehicleState.UNTESTED_EMPTY_BOOKED) && state.Equals(VehicleState.UNTESTED_FULL)) 
-                //(this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_EMPTY)) 
                 //(this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_FULL_IDREADED)) ||
                 //(this.State.Equals(VehicleState.UNTESTED_FULL_IDREADED) && (state.Equals(VehicleState.UNTESTED_EMPTY) || state.Equals(VehicleState.TESTED_EMPTY) || state.Equals(VehicleState.TESTED_FULL_IDREADED) || state.Equals(VehicleState.TESTED_FULL_FAIL))))
                 )
@@ -55,6 +58,29 @@ namespace CommonObj
             }
             return false;
         }
+        //private bool IsNextState(VehicleState state)
+        //{
+        //    if ((this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_EMPTY)))
+        //        return true;
+        //    if ((this.State.Equals(VehicleState.NONE) && (state.Equals(VehicleState.TESTED_EMPTY) || state.Equals(VehicleState.UNTESTED_EMPTY))) ||
+        //        //(this.State.Equals(VehicleState.TESTED_EMPTY) && state.Equals(VehicleState.TESTED_EMPTY_CHECKED)) ||
+        //        //(this.State.Equals(VehicleState.TESTED_EMPTY_CHECKED) && state.Equals(VehicleState.TESTED_EMPTY_BOOKED)) ||
+        //        //(this.State.Equals(VehicleState.TESTED_EMPTY_BOOKED) && state.Equals(VehicleState.TESTED_FULL)) ||
+        //        //(this.State.Equals(VehicleState.TESTED_FULL) && state.Equals(VehicleState.TESTED_FULL_IDREADED)) ||
+        //        //(this.State.Equals(VehicleState.TESTED_FULL_IDREADED) && state.Equals(VehicleState.TESTED_FULL_PASS)) ||
+        //        //(this.State.Equals(VehicleState.TESTED_FULL_PASS) && (state.Equals(VehicleState.TESTED_EMPTY) || state.Equals(VehicleState.UNTESTED_EMPTY))) ||
+        //        (this.State.Equals(VehicleState.UNTESTED_EMPTY) && state.Equals(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
+        //        (this.State.Equals(VehicleState.UNTESTED_EMPTY_CHECKED) && state.Equals(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
+        //        (this.State.Equals(VehicleState.UNTESTED_EMPTY_BOOKED) && state.Equals(VehicleState.UNTESTED_FULL)) 
+        //        //(this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_EMPTY)) 
+        //        //(this.State.Equals(VehicleState.UNTESTED_FULL) && state.Equals(VehicleState.UNTESTED_FULL_IDREADED)) ||
+        //        //(this.State.Equals(VehicleState.UNTESTED_FULL_IDREADED) && (state.Equals(VehicleState.UNTESTED_EMPTY) || state.Equals(VehicleState.TESTED_EMPTY) || state.Equals(VehicleState.TESTED_FULL_IDREADED) || state.Equals(VehicleState.TESTED_FULL_FAIL))))
+        //        )
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         /// <summary>
         /// 狀態重置

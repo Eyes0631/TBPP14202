@@ -2,6 +2,7 @@
 ///TBPP14202 有預留BowlFeed，但因時程問題，軟體目前未實作 (後須如果有改機軟體需檢查)
 ///Note:
 ///1.因為舌板只有單Arm所以一次只能一板
+///2.TODO:TrayHead Unload 放料後要做OEEUpdate
 /////////////////////////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -271,6 +272,10 @@ namespace TBPP14200
         //MainFlow Lot End Task
         private JActionTask Task_MainFLotEnd;
         //JActionTask ExportLotEndTask = new JActionTask();
+
+
+        private bool bLoadToBox_A = false;
+        private bool bLoadToBox_B = false;
 
         public bool HDTA_NozzleStateIsFail;
         public bool HDTB_NozzleStateIsFail;
@@ -1430,6 +1435,8 @@ namespace TBPP14200
 
             Flag_Booking_A_Work = false;
             Flag_Booking_B_Work = false;
+
+            InitRackSlots();
         }
 
         private void MainFlowModuleLotEndControl(bool reset = true)
@@ -1679,11 +1686,6 @@ namespace TBPP14200
             return null;
         }
 
-        private void SetSlotState(CassetteID id, int slot, int state)
-        {
- 
-        }
-
         private void SetBoardWorkDone(BoardInfo workingboard)
         {
             CassetteID homeID = workingboard.CID;
@@ -1791,6 +1793,98 @@ namespace TBPP14200
             selectedID = CassetteID.NONE;
             return null;
         }
+
+        private string GetBoardMap(TrayDataEx TDEx_Temp, bool original = false)
+        {
+            string sMap = string.Empty;
+            string sBlockMap = string.Empty;
+            for (int cx = 0; cx < TDEx_Temp.Cols; ++cx)
+            {
+                for (int cy = 0; cy < TDEx_Temp.Rows; ++cy)
+                {
+                    byte bin = TDEx_Temp.GetBin(0, 0, cx, cy, original);
+                    string binstr = GlobalDefine.BinToStr(bin);
+                    if (string.IsNullOrEmpty(sBlockMap))
+                    {
+                        sBlockMap = string.Format("{0}", binstr);
+                    }
+                    else
+                    {
+                        sBlockMap = string.Format("{0},{1}", sBlockMap, binstr);
+                    }
+                }
+            }
+            sMap += sBlockMap;
+            return sMap;
+        }
+
+        private String GetBoardMap(String BID)
+        {
+            string smap;
+            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            {
+                smap = "0,0,0,0,0,0,0,0," +
+                            "0,0,0,0,0,0,0,0," +
+                            "0,0,0,0,0,0,0,0," +
+                            "0,0,0,0,0,0,0,0," +
+                            "0,0,0,0,0,0,0,0," +
+                            "0,0,0,0,1,0,0,0," +
+                            "0,0,0,0,0,0,0,0," +
+                            "0,0,0,0,0,0,0,1,";
+            }
+            else
+            {
+                smap = "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1," +
+                            "1,1,1,1,1,1,1,1,";
+            }
+            return smap;
+        }
+        
+        private BinDefine GetBinDefine(string bin)
+        {
+            switch (bin)
+            {
+                case "2": { return BinDefine.Bin2; }
+                case "3": { return BinDefine.Bin3; }
+                case "4": { return BinDefine.Bin4; }
+                case "5": { return BinDefine.Bin5; }
+                case "6": { return BinDefine.Bin6; }
+                case "7": { return BinDefine.Bin7; }
+                case "8": { return BinDefine.Bin8; }
+                case "9": { return BinDefine.Bin9; }
+                case "10": { return BinDefine.Bin10; }
+                case "11": { return BinDefine.Bin11; }
+                case "12": { return BinDefine.Bin12; }
+                case "13": { return BinDefine.Bin13; }
+                case "14": { return BinDefine.Bin14; }
+                case "15": { return BinDefine.Bin15; }
+                case "16": { return BinDefine.Bin16; }
+                case "17": { return BinDefine.Bin17; }
+                case "18": { return BinDefine.Bin18; }
+                case "19": { return BinDefine.Bin19; }
+                case "20": { return BinDefine.Bin20; }
+                case "21": { return BinDefine.Bin21; }
+                case "22": { return BinDefine.Bin22; }
+                case "23": { return BinDefine.Bin23; }
+                case "24": { return BinDefine.Bin24; }
+                case "25": { return BinDefine.Bin25; }
+                case "26": { return BinDefine.Bin26; }
+                case "27": { return BinDefine.Bin27; }
+                case "28": { return BinDefine.Bin28; }
+                case "29": { return BinDefine.Bin29; }
+                case "30": { return BinDefine.Bin30; }
+                case "31": { return BinDefine.Bin31; }
+                case "32": { return BinDefine.Bin32; }
+            }
+            return BinDefine.Bin2;
+        }
+
         #endregion
 
         #region Flow
@@ -1801,6 +1895,86 @@ namespace TBPP14200
             if (!SYSPara.ProductionLinkMode.Equals(LinkMode.OFFLINE) && OpenLotHome)
             {
                 GlobalDefine.RunFile(GlobalDefine.BoardDataLinkPath, "");
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart327_Run()
+        {
+            bool OpenLotHome = !string.IsNullOrEmpty(SYSPara.NewLotInfo.LotNumber);
+            if (SYSPara.ProductionLinkMode.Equals(LinkMode.Saunders) && OpenLotHome)
+            {
+                //BoardDataLink 
+                bool b1 = FormSet.mMainFlow.CreatBoardDataLinkerInfo();
+                if (!b1)
+                {
+                    SYSPara.Alarm.Say("w1001");
+                    return FlowChart.FCRESULT.IDLE;
+                }
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart328_Run()
+        {
+            bool OpenLotHome = !string.IsNullOrEmpty(SYSPara.NewLotInfo.LotNumber);
+            if (SYSPara.ProductionLinkMode.Equals(LinkMode.Saunders) && OpenLotHome)
+            {
+                //BoardDataLink 
+
+                int iErrorCode = 0;
+                string sErrorMsg = "";
+
+                CommandReturn CRR = CommandReturn.CR_Waitting;
+                CRR = BDSMC.SetLotData("LotStartSetLotData", lotinfo_sm, 20000);
+                if (!CRR.Equals(CommandReturn.CR_Waitting))
+                {
+                    BDSMC.ReleaseCommandProcess("LotStartSetLotData");
+
+                    if (CRR.Equals(CommandReturn.CR_Error))
+                    {
+                        BDSMC.GetErrorMessage(ref iErrorCode, ref sErrorMsg);
+                        int Alarm = (iErrorCode + 1400);
+                        SYSPara.ShowAlarm("E", (int)Alarm, "DataLink", sErrorMsg);
+                    }
+                    else
+                    {
+                        return FlowChart.FCRESULT.NEXT;
+                    }
+                }
+                return FlowChart.FCRESULT.IDLE;
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart336_Run()
+        {
+            bool OpenLotHome = !string.IsNullOrEmpty(SYSPara.NewLotInfo.LotNumber);
+            if (SYSPara.ProductionLinkMode.Equals(LinkMode.Saunders) && OpenLotHome)
+            {
+                //BoardDataLink 
+
+                int iErrorCode = 0;
+                string sErrorMsg = "";
+
+                CommandReturn CRR = CommandReturn.CR_Waitting;
+                CRR = BDSMC.StartLot("LotStartProcess");
+                if (!CRR.Equals(CommandReturn.CR_Waitting))
+                {
+                    BDSMC.ReleaseCommandProcess("LotStartProcess");
+
+                    if (CRR.Equals(CommandReturn.CR_Error))
+                    {
+                        BDSMC.GetErrorMessage(ref iErrorCode, ref sErrorMsg);
+                        int Alarm = (iErrorCode + 1400);
+                        SYSPara.ShowAlarm("E", (int)Alarm, "DataLink", sErrorMsg);
+                    }
+                    else
+                    {
+                        return FlowChart.FCRESULT.NEXT;
+                    }
+                }
+                return FlowChart.FCRESULT.IDLE;
             }
             return FlowChart.FCRESULT.NEXT;
         }
@@ -1874,6 +2048,66 @@ namespace TBPP14200
             if (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9)
             {
                 return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart323_Run()
+        {
+            string Msg = SYSPara.PReadValue("VisionJobName").ToString() + "," +
+                               BoardInfo.YN.ToString() + "," +
+                               BoardInfo.YN.ToString() + "," +
+                               BoardInfo.YN.ToString() + "," +
+                               BoardInfo.YN.ToString() + "," +
+                /*BoardInfo.YN.ToString() +*/ "1," +
+                /*BoardInfo.XN.ToString() + */"1," +
+                /*BBoardInfo.YP.ToString() + */"1," +
+                /*BBoardInfo.XP.ToString() + */"1," +
+                               BoardInfo.DeviceWidth.ToString() + "," +
+                               BoardInfo.DeviceLength.ToString() + "," +
+                               BoardInfo.DeviceHeight.ToString();
+            SYSPara.CallProc(ModuleName_BFM, "AddNewJob", Msg);
+            TM_Homing.Restart();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart324_Run()
+        {
+            int iRet = (int)SYSPara.CallProc(ModuleName_BFM, "AddNewJobResult");
+            if (iRet.Equals(1))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            else if (iRet.Equals(0))
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+            if (TM_Homing.On(5000))
+            {
+                //SYSPara.ShowAlarm("E", 902);
+                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_AddNewJobFail);
+                TM_Homing.Restart();
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart325_Run()
+        {
+            string Msg = SYSPara.PReadValue("VisionJobName").ToString();
+            SYSPara.CallProc(ModuleName_BFM, "ChangeJob", Msg);
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart326_Run()
+        {
+            int iRet = (int)SYSPara.CallProc(ModuleName_BFM, "ChangeJobResult");
+            if (iRet.Equals(1))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            else if (iRet.Equals(0))
+            {
+                return FlowChart.FCRESULT.CASE1;
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -1991,6 +2225,42 @@ namespace TBPP14200
             return FlowChart.FCRESULT.CASE1;
         }
 
+        private FlowChart.FCRESULT flowChart339_Run()
+        {
+            //ThreeValued T = ThreeValued.UNKNOWN;
+            //BasePosInfo Pos = new BasePosInfo();
+
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageA, ACTIONMODE.UNLOCK, Pos);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageB, ACTIONMODE.UNLOCK, Pos);
+            BasePosInfo Pos = new BasePosInfo();
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, TRM_WorkStage, ACTIONMODE.UNLOCK, Pos);
+
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart338_Run()
+        {
+            //ThreeValued T = ThreeValued.UNKNOWN;
+
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", TRM_WorkStage);
+
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
         private FlowChart.FCRESULT flowChart8_Run()
         {
             //TRM_至LOAD 取板
@@ -2122,6 +2392,30 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
+        private FlowChart.FCRESULT flowChart272_Run()
+        {
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.READBOARCODE, ACTIONMODE.READ);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                SYSPara.CurrentBIBID = "";
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart271_Run()
+        {
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                SYSPara.CurrentBIBID = (string)SYSPara.CallProc(ModuleName_TRM, "GetBarcodeValue");
+                BoardSeq++;
+                WorkingBoard.BID = SYSPara.CurrentBIBID;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+         
         private FlowChart.FCRESULT flowChart15_Run()
         {
             //TODO: Need check barcode reader GlobalDefine.OEE.NewCarrier(BoardID, BoardMap);
@@ -2465,6 +2759,43 @@ namespace TBPP14200
             if (T.Equals(ThreeValued.TRUE))
             {
                 TDEx_TRM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart335_Run()
+        {
+            //ThreeValued T = ThreeValued.UNKNOWN;
+            //BasePosInfo Pos = new BasePosInfo();
+
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageA, ACTIONMODE.LOCK, Pos);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageB, ACTIONMODE.LOCK, Pos);
+            BasePosInfo Pos = new BasePosInfo();
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, TRM_WorkStage, ACTIONMODE.LOCK, Pos);
+
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart337_Run()
+        {
+            //ThreeValued T = ThreeValued.UNKNOWN;
+
+            //if (TRM_WorkStage == BIBStageID.BIBStageA)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
+            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", TRM_WorkStage);
+
+            if (T.Equals(ThreeValued.TRUE))
+            {
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
@@ -3044,58 +3375,6 @@ namespace TBPP14200
             //return FlowChart.FCRESULT.IDLE;
         }
 
-        private string GetBoardMap(TrayDataEx TDEx_Temp, bool original = false)
-        {
-            string sMap = string.Empty;
-            string sBlockMap = string.Empty;
-            for (int cx = 0; cx < TDEx_Temp.Cols; ++cx)
-            {
-                for (int cy = 0; cy < TDEx_Temp.Rows; ++cy)
-                {
-                    byte bin = TDEx_Temp.GetBin(0, 0, cx, cy, original);
-                    string binstr = GlobalDefine.BinToStr(bin);
-                    if (string.IsNullOrEmpty(sBlockMap))
-                    {
-                        sBlockMap = string.Format("{0}", binstr);
-                    }
-                    else
-                    {
-                        sBlockMap = string.Format("{0},{1}", sBlockMap, binstr);
-                    }
-                }
-            }
-            sMap += sBlockMap;
-            return sMap;
-        }
-
-        private String GetBoardMap(String BID)
-        {
-            string smap;
-            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
-            {
-                smap = "0,0,0,0,0,0,0,0," +
-                            "0,0,0,0,0,0,0,0," +
-                            "0,0,0,0,0,0,0,0," +
-                            "0,0,0,0,0,0,0,0," +
-                            "0,0,0,0,0,0,0,0," +
-                            "0,0,0,0,1,0,0,0," +
-                            "0,0,0,0,0,0,0,0," +
-                            "0,0,0,0,0,0,0,1,";
-            }
-            else
-            {
-                smap = "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1," +
-                            "1,1,1,1,1,1,1,1,";
-            }
-            return smap;
-        }
-
         private FlowChart.FCRESULT flowChart52_Run()
         {
             //GetBoardMap(SYSPara.StageA_BIBID);
@@ -3194,6 +3473,7 @@ namespace TBPP14200
 
                 string strMap = GetBoardMap(TDEx_Left_Board);
                 string sBID = SYSPara.StageA_BIBID;
+                StageA_Board.AfterMap = strMap;
                 CommandReturn CRR = CommandReturn.CR_Waitting;
                 if (string.IsNullOrEmpty(strMap))
                 {
@@ -3437,6 +3717,7 @@ namespace TBPP14200
 
                  string strMap = GetBoardMap(TDEx_Right_Board);
                 string sBID = SYSPara.StageB_BIBID;
+                StageB_Board.AfterMap = strMap;
                 CommandReturn CRR = CommandReturn.CR_Waitting;
                 if (string.IsNullOrEmpty(strMap))
                 {
@@ -3570,6 +3851,11 @@ namespace TBPP14200
             return FlowChart.FCRESULT.NEXT;
         }
 
+        private FlowChart.FCRESULT flowChart80_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+
         private FlowChart.FCRESULT flowChart73_Run()
         {
             if (SYSPara.Lotend)
@@ -3663,11 +3949,12 @@ namespace TBPP14200
             {
                 return FlowChart.FCRESULT.NEXT;
             }
-            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
-            return FlowChart.FCRESULT.IDLE;
+            return FlowChart.FCRESULT.NEXT;
+            //if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //{
+            //    return FlowChart.FCRESULT.CASE1;
+            //}
+            //return FlowChart.FCRESULT.IDLE;
         }
 
         private FlowChart.FCRESULT pr_Run()
@@ -3676,12 +3963,13 @@ namespace TBPP14200
             {
                 return FlowChart.FCRESULT.CASE1;
             }
-            //if (Board_BKS.SetKitShuttleBookingInfo(KitShuttleID.TransferShuttleB, VehicleState.UNTESTED_EMPTY, TDEx_Right_KitShuttle)) 
-            if (!Board_BKS.SetStageBookingInfo())
-            {
-                return FlowChart.FCRESULT.IDLE;
-            }
             return FlowChart.FCRESULT.NEXT;
+            //if (Board_BKS.SetKitShuttleBookingInfo(KitShuttleID.TransferShuttleB, VehicleState.UNTESTED_EMPTY, TDEx_Right_KitShuttle)) 
+            //if (!Board_BKS.SetStageBookingInfo())
+            //{
+            //    return FlowChart.FCRESULT.IDLE;
+            //}
+            //return FlowChart.FCRESULT.NEXT;
         }
 
         private FlowChart.FCRESULT flowChart77_Run()
@@ -3768,6 +4056,65 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
+        private FlowChart.FCRESULT flowChart376_Run()
+        {
+            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart378_Run()
+        {
+            if (SYSPara.Lotend)
+            {
+                return FlowChart.FCRESULT.CASE1;
+                //    Board_BKS.CancelBoardBookingList();
+            }
+            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY);
+            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY);
+            if (b1)
+            {
+                // HDT_BIB_A_KitShuttleID = KitShuttleID.TransferShuttleA;
+                HDT_BIB_Booking_KitShuttleID = KitShuttleID.TransferShuttleA;
+                if (Board_BKS.SetKitShuttleBookingInfo(KitShuttleID.TransferShuttleA, VehicleState.TESTED_EMPTY, TDEx_Left_KitShuttle))
+                    return FlowChart.FCRESULT.NEXT;
+            }
+            else if (b2)
+            {
+                //HDT_BIB_A_KitShuttleID = KitShuttleID.TransferShuttleB;
+                HDT_BIB_Booking_KitShuttleID = KitShuttleID.TransferShuttleB;
+                if (Board_BKS.SetKitShuttleBookingInfo(KitShuttleID.TransferShuttleB, VehicleState.TESTED_EMPTY, TDEx_Right_KitShuttle))
+                    return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart377_Run()
+        {
+            bool b1 = false;
+            bool b2 = false;
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "IsTransferShuttleLocked", (KitShuttleID)HDT_BIB_Booking_KitShuttleID);
+            if (T.Equals(ThreeValued.FALSE))
+            {
+                if (HDT_BIB_Booking_KitShuttleID.Equals(KitShuttleID.TransferShuttleA))
+                {
+                    b1 = LeftKitStateControl.StateDone(VehicleState.TESTED_EMPTY);
+                }
+                else if (HDT_BIB_Booking_KitShuttleID.Equals(KitShuttleID.TransferShuttleB))
+                {
+                    b2 = RightKitStateControl.StateDone(VehicleState.TESTED_EMPTY);
+                }
+            }
+
+            if (b1 || b2)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
         private FlowChart.FCRESULT flowChart70_Run()
         {
             if (SYSPara.Lotend)
@@ -3781,7 +4128,9 @@ namespace TBPP14200
         {
             return FlowChart.FCRESULT.IDLE;
         }
-
+        
+        
+        #region Board Head A
         private FlowChart.FCRESULT FC_BoardHeadA_Run()
         {
             return FlowChart.FCRESULT.NEXT;
@@ -3795,6 +4144,21 @@ namespace TBPP14200
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart86_Run()
+        {
+            if (SYSPara.SystemProductionMode.HasFlag(PRODUCTION_MODE.LOAD))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart89_Run()
+        {
+            Flag_HDT_BIB_A_Action.Done();
+            return FlowChart.FCRESULT.NEXT;
         }
 
         private FlowChart.FCRESULT flowChart84_Run()
@@ -3835,67 +4199,12 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart86_Run()
+        private FlowChart.FCRESULT flowChart267_Run()
         {
-            if (SYSPara.SystemProductionMode.HasFlag(PRODUCTION_MODE.LOAD))
+            //if (mHDT.mLotendOk)
             {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.CASE1;
-        }
-
-        private FlowChart.FCRESULT flowChart89_Run()
-        {
-            Flag_HDT_BIB_A_Action.Done();
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart190_Run()
-        {
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart195_Run()
-        {
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart191_Run()
-        {
-            switch (HDT_BIB_BIBStageID)
-            {
-                case BIBStageID.BIBStageA:
-                    {
-                        HDT_BIB_A_PnPInfo = new PnPInfo(TDEx_HDT_BIB_A, PnPStation.BOARD_A, TDEx_Left_Board, GlobalDefine.AllBin, PnPStation.PassBox, TDEx_PassBox, GlobalDefine.EmptyBin, 1, 1, VehicleState.TESTED_EMPTY_BOOKED);
-                    }
-                    break;
-                case BIBStageID.BIBStageB:
-                    {
-                        HDT_BIB_A_PnPInfo = new PnPInfo(TDEx_HDT_BIB_A, PnPStation.BOARD_B, TDEx_Right_Board, GlobalDefine.AllBin, PnPStation.PassBox, TDEx_PassBox, GlobalDefine.EmptyBin, 1, 1, VehicleState.TEST_EMPTY_BOOKED);
-                    }
-                    break;
-                default:
-                    {
-                        //alarm
-                        return FlowChart.FCRESULT.IDLE;
-                    }
-                    break;
-            }
-            
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart192_Run()
-        {
-            Flag_HDT_BIB_A_PnP.DoIt();
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart193_Run()
-        {
-            if (Flag_HDT_BIB_A_PnP.IsDone())
-            {
-                return FlowChart.FCRESULT.NEXT;
+                Flag_BottomHDT_LotEnd.Done();
+                Flag_TopHDT_LotEnd.Done();
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -3945,7 +4254,7 @@ namespace TBPP14200
                         return FlowChart.FCRESULT.IDLE;
                     }
             }
-            
+
             return FlowChart.FCRESULT.NEXT;
         }
 
@@ -3990,6 +4299,108 @@ namespace TBPP14200
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart190_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart195_Run()
+        {
+            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED);
+            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED);
+            if (b1)
+            {
+                HDT_BIB_A_KitShuttleID = KitShuttleID.TransferShuttleA;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            else if (b2)
+            {
+                HDT_BIB_A_KitShuttleID = KitShuttleID.TransferShuttleB;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart191_Run()
+        {
+            TrayDataEx TDEx_Temp = HDT_BIB_A_KitShuttleID == KitShuttleID.TransferShuttleA ? TDEx_Left_KitShuttle : TDEx_Right_KitShuttle;
+
+            if (HDT_BIB_A_KitShuttleID == KitShuttleID.TransferShuttleA || HDT_BIB_A_KitShuttleID == KitShuttleID.TransferShuttleB)
+            {
+                switch (HDT_BIB_BIBStageID)
+                {
+                    case BIBStageID.BIBStageA:
+                        {
+                            HDT_BIB_A_PnPInfo = new PnPInfo(TDEx_HDT_BIB_A, PnPStation.BOARD_A, TDEx_Left_Board, GlobalDefine.AllBin, PnPStation.PassBox, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.TESTED_EMPTY_BOOKED);
+                        }
+                        break;
+                    case BIBStageID.BIBStageB:
+                        {
+                            HDT_BIB_A_PnPInfo = new PnPInfo(TDEx_HDT_BIB_A, PnPStation.BOARD_B, TDEx_Right_Board, GlobalDefine.AllBin, PnPStation.PassBox, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.TEST_EMPTY_BOOKED);
+                        }
+                        break;
+                    default:
+                        {
+                            //alarm
+                            return FlowChart.FCRESULT.IDLE;
+                        }
+                        break;
+                }
+            }
+
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart192_Run()
+        {
+            Flag_HDT_BIB_A_PnP.DoIt();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart193_Run()
+        {
+            if (Flag_HDT_BIB_A_PnP.IsDone())
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart379_Run()
+        {
+            HDT_BIB_A_KitShuttleID = KitShuttleID.NONE;
+            bool b1 = true;
+            switch (HDT_BIB_A_PnPInfo.TargetStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        if (LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED))
+                            b1 = LeftKitStateControl.StateDone(LeftKitStateControl.State);
+
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        if (RightKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED))
+                            b1 = RightKitStateControl.StateDone(RightKitStateControl.State);
+                    }
+                    break;
+            }
+
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        #endregion
+        #region BoardHeadPnP
+        private FlowChart.FCRESULT FC_BoardHeadAPnP_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
         }
 
         private FlowChart.FCRESULT flowChart96_Run()
@@ -4042,7 +4453,23 @@ namespace TBPP14200
                 }
                 return FlowChart.FCRESULT.IDLE;
             }
-            
+
+            return FlowChart.FCRESULT.NEXT;
+        }
+        private FlowChart.FCRESULT flowChart268_Run()
+        {
+            if (Flag_Booking_A_Error || HDTA_NozzleStateIsFail)
+            {
+                Flag_Booking_A_Error = false;
+                HDTA_NozzleStateIsFail = false;
+                return FlowChart.FCRESULT.CASE1;
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart102_Run()
+        {
+            //HDT_BIB_A_BookingInfo = null;
             return FlowChart.FCRESULT.NEXT;
         }
 
@@ -4101,12 +4528,16 @@ namespace TBPP14200
             }
             else
             {
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
                 ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_A, (BIBStageID)HDT_BIB_BIBStageID);
                 if (T.Equals(ThreeValued.TRUE))
                 {
-                    bool b2 = Board_BKS.GetWorkStageBlockInfo();
+                    //bool b2 = Board_BKS.GetWorkStageBlockInfo();
+                    bool b2 = Board_BKS.GetKitBlockInfo(KitID, HDT_BIB_A_PnPInfo.Current_VechicleState);
                     if (!b2)
-                    { 
+                    {
                         //
                         Flag_Booking_A_Error = true;
                         return FlowChart.FCRESULT.CASE1;
@@ -4118,9 +4549,9 @@ namespace TBPP14200
         }
 
         private BasePosInfo GetOffset(BoardHeadID id, PnPStation station, bool bPick = false)
-        { 
-            BasePosInfo Pos  = new BasePosInfo();
-            switch(id)
+        {
+            BasePosInfo Pos = new BasePosInfo();
+            switch (id)
             {
                 case BoardHeadID.HDT_A:
                     {
@@ -4263,7 +4694,7 @@ namespace TBPP14200
                         pos = HDT_BIB_A_PnP.CalcKitPnPPos(HDT_BIB_A_PnPInfo.HDTTray, HDT_BIB_A_PnPInfo.SourceTray, Board_BKS.CurrentKitBlockInfo);  //治具位置
                         HDT_BIB_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", HDT_BIB_A_PnPInfo.SourceStation, BoardHeadID.HDT_A);
                         KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BIB_A, KitShuttleID.TransferShuttleA);
-                        HDT_BIB_A_PnPInfo.WorkingPos_X = HDT_BIB_A_Basic .X- (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + Offset.X;
+                        HDT_BIB_A_PnPInfo.WorkingPos_X = HDT_BIB_A_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + Offset.X;
                         HDT_BIB_A_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + Offset.Y;
                         HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z + Offset.Z;
 
@@ -4276,7 +4707,7 @@ namespace TBPP14200
                         pos = HDT_BIB_A_PnP.CalcKitPnPPos(HDT_BIB_A_PnPInfo.HDTTray, HDT_BIB_A_PnPInfo.SourceTray, Board_BKS.CurrentKitBlockInfo);
                         HDT_BIB_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", HDT_BIB_A_PnPInfo.SourceStation, BoardHeadID.HDT_A);
                         KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BIB_A, KitShuttleID.TransferShuttleB);
-                        HDT_BIB_A_PnPInfo.WorkingPos_X = HDT_BIB_A_Basic .X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + Offset.X;
+                        HDT_BIB_A_PnPInfo.WorkingPos_X = HDT_BIB_A_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + Offset.X;
                         HDT_BIB_A_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + Offset.Y;
                         HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z + Offset.Z;
                     }
@@ -4288,7 +4719,7 @@ namespace TBPP14200
                         HDT_BIB_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", PnPStation.BOARD_A, BIBStageID.BIBStageA);
                         BSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_BSM, "GetBasicInfo", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageA);
                         HDT_BIB_A_PnPInfo.WorkingPos_X = (pos.X) + (HDT_BIB_A_Basic.X) + BoardInfo.XO - BoardInfo.Width + Offset.X;
-                        HDT_BIB_A_PnPInfo.WorkingPos_Y = (pos.Y) + (BSMBasic.Y)  + BoardInfo.YO + Offset.Y;
+                        HDT_BIB_A_PnPInfo.WorkingPos_Y = (pos.Y) + (BSMBasic.Y) + BoardInfo.YO + Offset.Y;
                         HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z + Offset.Z;
                     }
                     break;
@@ -4299,7 +4730,7 @@ namespace TBPP14200
                         HDT_BIB_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", PnPStation.BOARD_B, BoardHeadID.HDT_A);
                         BSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_BSM, "GetBasicInfo", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageB);
                         HDT_BIB_A_PnPInfo.WorkingPos_X = (pos.X) + (HDT_BIB_A_Basic.X) + BoardInfo.XO - BoardInfo.Width + Offset.X;
-                        HDT_BIB_A_PnPInfo.WorkingPos_Y = (pos.Y) + (BSMBasic.Y)  + BoardInfo.YO + Offset.Y;
+                        HDT_BIB_A_PnPInfo.WorkingPos_Y = (pos.Y) + (BSMBasic.Y) + BoardInfo.YO + Offset.Y;
                         HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z + Offset.Z;
                     }
                     break;
@@ -4354,13 +4785,13 @@ namespace TBPP14200
         {
             //BasePosInfo Pos = new BasePosInfo();
             BasePosInfo Pos = new BasePosInfo();
-            Pos.X =HDT_BIB_A_PnPInfo.WorkingPos_X;
-            Pos.Y =HDT_BIB_A_PnPInfo.WorkingPos_Y;
-            Pos.Z =HDT_BIB_A_PnPInfo.WorkingPos_Z;
-            Pos.U =HDT_BIB_A_PnPInfo.WorkingPos_U;
+            Pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X;
+            Pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y;
+            Pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
+            Pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
 
             ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, Pos);
-            
+
             ThreeValued T = ThreeValued.UNKNOWN;
             switch (HDT_BIB_A_PnPInfo.SourceStation)
             {
@@ -4411,7 +4842,7 @@ namespace TBPP14200
             switch (HDT_BIB_A_PnPInfo.SourceStation)
             {
                 case PnPStation.KIT_SHUTTLE_A:
-{
+                    {
                         T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BIB_A, KitShuttleID.TransferShuttleA);
                     }
                     break;
@@ -4525,8 +4956,11 @@ namespace TBPP14200
                 case PnPStation.BOARD_A:
                     {
                         HDT_BIB_A_PnP.DiePakDataExchange(TDEx_HDT_BIB_A, TDEx_Left_Board, Board_BKS.CurrentWorkInfo, AfterPickPnPState);
-                        HDT_BIB_A_BookingInfo = Board_BKS.CurrentWorkInfo;
-                        Board_BKS.WorkBlockDone();
+                        //HDT_BIB_A_BookingInfo = Board_BKS.CurrentWorkInfo;
+                        //Board_BKS.WorkBlockDone();
+                        HDT_BIB_A_BookingInfo = Board_BKS.CurrentKitBlockInfo;
+                        KitShuttleID kitID = HDT_BIB_A_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A ? KitShuttleID.TransferShuttleA : KitShuttleID.TransferShuttleB;
+                        Board_BKS.SocketBlockDone(kitID, HDT_BIB_A_PnPInfo.Current_VechicleState);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Process, CompleteCount);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Missing, LostCount);
                     }
@@ -4534,8 +4968,10 @@ namespace TBPP14200
                 case PnPStation.BOARD_B:
                     {
                         HDT_BIB_A_PnP.DiePakDataExchange(TDEx_HDT_BIB_A, TDEx_Right_Board, Board_BKS.CurrentWorkInfo, AfterPickPnPState);
-                        HDT_BIB_A_BookingInfo = Board_BKS.CurrentWorkInfo;
-                        Board_BKS.WorkBlockDone();
+                        //HDT_BIB_A_BookingInfo = Board_BKS.CurrentWorkInfo;
+                        //Board_BKS.WorkBlockDone();
+                        KitShuttleID kitID = HDT_BIB_A_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A ? KitShuttleID.TransferShuttleA : KitShuttleID.TransferShuttleB;
+                        Board_BKS.SocketBlockDone(kitID, HDT_BIB_A_PnPInfo.Current_VechicleState);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Process, CompleteCount);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Missing, LostCount);
                     }
@@ -4546,7 +4982,7 @@ namespace TBPP14200
                         return FlowChart.FCRESULT.IDLE;
                     }
             }
-            
+
             return FlowChart.FCRESULT.NEXT;
         }
 
@@ -4576,17 +5012,30 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart207_Run()
         {
-            if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            if (HDT_BIB_A_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A || HDT_BIB_A_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_B)
             {
-                return FlowChart.FCRESULT.NEXT;
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "LockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BIB_A, (KitShuttleID)KitID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
             }
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_A, (BIBStageID)HDT_BIB_BIBStageID);
-            if (T.Equals(ThreeValued.TRUE))
+            else
             {
-                return FlowChart.FCRESULT.NEXT;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_A, (BIBStageID)HDT_BIB_BIBStageID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
             }
-            return FlowChart.FCRESULT.IDLE;
+            return FlowChart.FCRESULT.IDLE; 
         }
 
         private FlowChart.FCRESULT flowChart208_Run()
@@ -4623,7 +5072,7 @@ namespace TBPP14200
                         KSMBasic.Y -= (int)(pitchy * KitInfo.YP);
                         HDT_BIB_A_PnPInfo.WorkingPos_X = pos.X + HDT_BIB_A_Basic.X + Offset.X;
                         HDT_BIB_A_PnPInfo.WorkingPos_Y = pos.Y + KSMBasic.Y + Offset.Y;
-                        HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z+ Offset.Z;
+                        HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z + Offset.Z;
                     }
                     break;
                 case PnPStation.BOARD_A:
@@ -4702,6 +5151,173 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
+        private FlowChart.FCRESULT flowChart295_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_A);
+            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_A);
+            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X + Offset;
+            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y + OffsetY;
+            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+            bool bFocus = true;
+            switch (HDT_BIB_A_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
+                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_A, BIBStageID.BIBStageA);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
+                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_A, BIBStageID.BIBStageB);
+                    }
+                    break;
+            }
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE) && bFocus)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart296_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+
+            switch (HDT_BIB_A_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+                    }
+                    break;
+            }
+
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart297_Run()
+        {
+            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X;
+            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y;
+            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
+            pos.ColIndex = HDT_BIB_A_BookingInfo.SocketX;
+            pos.RowIndex = HDT_BIB_A_BookingInfo.SocketY;
+            pos.BoardCount = BoardCount + 1;
+
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.GRAB_CCD, pos);
+            if (T1.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart298_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+        private FlowChart.FCRESULT flowChart303_Run()
+        {
+            bLoadToBox_A = false;
+            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            InspectionState state = InspectionState.Unknow;
+            if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+            {
+                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_A);
+                switch (state)
+                {
+                    case InspectionState.Success:   //有IC 上板未放置有IC為異常
+                        {
+                            //Alarm
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                    case InspectionState.Fail:  //無IC
+                        {
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                    case InspectionState.Error: //無Socket 丟到垃圾桶
+                        {
+                            Point pos = new Point();
+                            BasePosInfo HDT_BIB_A_Basic = new BasePosInfo();
+                            PnPStation TargetStation = PnPStation.BinBox;
+                            pos = HDT_BIB_A_PnP.CalcBoxPnPPos(HDT_BIB_A_PnPInfo.HDTTray, HDT_BIB_A_PnPInfo.TargetTray);
+                            HDT_BIB_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", TargetStation, BoardHeadID.HDT_A);
+                            HDT_BIB_A_PnPInfo.WorkingPos_X = HDT_BIB_A_Basic.X;
+                            HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z;
+                            bLoadToBox_A = true;
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                }
+                return FlowChart.FCRESULT.IDLE;
+            }
+            else
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+        }
+
+        private FlowChart.FCRESULT flowChart304_Run()
+        {
+            string code = string.Format("{0}{1:0000}", "E", "0901");
+            string args = "Board Head A";
+            SYSPara.Alarm.Say(code, args);
+            return FlowChart.FCRESULT.NEXT;
+        }
+
         private FlowChart.FCRESULT flowChart217_Run()
         {
             BasePosInfo pos = new BasePosInfo();
@@ -4761,9 +5377,9 @@ namespace TBPP14200
             {
                 return FlowChart.FCRESULT.NEXT;
             }
-            return FlowChart.FCRESULT.IDLE;            
+            return FlowChart.FCRESULT.IDLE;
 
-            
+
         }
 
         private FlowChart.FCRESULT flowChart216_Run()
@@ -4814,7 +5430,7 @@ namespace TBPP14200
         private FlowChart.FCRESULT flowChart211_Run()
         {
             BasePosInfo Pos = new BasePosInfo();
-            
+
             Pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X;
             Pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y;
             Pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
@@ -4932,53 +5548,117 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private BinDefine GetBinDefine(string bin)
+        private FlowChart.FCRESULT flowChart299_Run()
         {
-            switch (bin)
-            {
-                case "2": { return BinDefine.Bin2; }
-                case "3": { return BinDefine.Bin3; }
-                case "4": { return BinDefine.Bin4; }
-                case "5": { return BinDefine.Bin5; }
-                case "6": { return BinDefine.Bin6; }
-                case "7": { return BinDefine.Bin7; }
-                case "8": { return BinDefine.Bin8; }
-                case "9": { return BinDefine.Bin9; }
-                case "10": { return BinDefine.Bin10; }
-                case "11": { return BinDefine.Bin11; }
-                case "12": { return BinDefine.Bin12; }
-                case "13": { return BinDefine.Bin13; }
-                case "14": { return BinDefine.Bin14; }
-                case "15": { return BinDefine.Bin15; }
-                case "16": { return BinDefine.Bin16; }
-                case "17": { return BinDefine.Bin17; }
-                case "18": { return BinDefine.Bin18; }
-                case "19": { return BinDefine.Bin19; }
-                case "20": { return BinDefine.Bin20; }
-                case "21": { return BinDefine.Bin21; }
-                case "22": { return BinDefine.Bin22; }
-                case "23": { return BinDefine.Bin23; }
-                case "24": { return BinDefine.Bin24; }
-                case "25": { return BinDefine.Bin25; }
-                case "26": { return BinDefine.Bin26; }
-                case "27": { return BinDefine.Bin27; }
-                case "28": { return BinDefine.Bin28; }
-                case "29": { return BinDefine.Bin29; }
-                case "30": { return BinDefine.Bin30; }
-                case "31": { return BinDefine.Bin31; }
-                case "32": { return BinDefine.Bin32; }
-            }
-            return BinDefine.Bin2;
-        }
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
 
-        private FlowChart.FCRESULT flowChart214_Run()
-        {
-            if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_A);
+            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_A);
+            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X + Offset;
+            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y + OffsetY;
+            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+            switch (HDT_BIB_A_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
+                    }
+                    break;
+            }
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
             }
+            return FlowChart.FCRESULT.IDLE;
+        }
 
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_A, (BIBStageID)HDT_BIB_BIBStageID);
+        private FlowChart.FCRESULT flowChart300_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+
+            switch (HDT_BIB_A_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+                    }
+                    break;
+            }
+
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart301_Run()
+        {
+            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
+
+
+            BasePosInfo pos = new BasePosInfo();
+            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X;
+            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y;
+            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
+            pos.ColIndex = HDT_BIB_A_BookingInfo.SocketX;
+            pos.RowIndex = HDT_BIB_A_BookingInfo.SocketY;
+            pos.BoardCount = BoardCount + 1;
+
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.GRAB_CCD_AF, pos);
+            if (T1.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart302_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -4986,150 +5666,80 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart102_Run()
+        private FlowChart.FCRESULT flowChart306_Run()
         {
-            //HDT_BIB_A_BookingInfo = null;
-            return FlowChart.FCRESULT.NEXT;
-        }
+            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
 
-        private FlowChart.FCRESULT flowChart210_Run()
-        {
-            return FlowChart.FCRESULT.NEXT;
-        }
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
 
-        private FlowChart.FCRESULT flowChart218_Run()
-        {
-            switch (HDT_BIB_BIBStageID)
+            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
+
+            InspectionState state = InspectionState.Unknow;
+            if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
             {
-                case BIBStageID.BIBStageA:
-                    {
-                        HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.BOARD_A, TDEx_Left_Board, GlobalDefine.AllBin, PnPStation.BinBox, TDEx_PassBox, GlobalDefine.EmptyBin, 1, 1, VehicleState.TEST_EMPTY_BOOKED);
-                    }
-                    break;
-                case BIBStageID.BIBStageB:
-                    {
-                        HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.BOARD_B, TDEx_Right_Board, GlobalDefine.AllBin, PnPStation.BinBox, TDEx_PassBox, GlobalDefine.EmptyBin, 1, 1, VehicleState.TEST_EMPTY_BOOKED);
-                    }
-                    break;
-                default:
-                    {
-                        //alarm
-                        return FlowChart.FCRESULT.IDLE;
-                    }
-                    break;
+                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_A);
+                switch (state)
+                {
+                    case InspectionState.Success:   //上板後有IC正常
+                        {
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                    case InspectionState.Fail:  //上板後無IC異常
+                    case InspectionState.Error: //異常
+                        {
+                            //Alarm CCD 檢測異常
+                            return FlowChart.FCRESULT.CASE1;    //重新拍攝
+                        }
+                        break;
+                }
+                return FlowChart.FCRESULT.IDLE;
             }
-
-            return FlowChart.FCRESULT.NEXT; 
-        }
-
-        private FlowChart.FCRESULT flowChart219_Run()
-        {
-            Flag_HDT_BIB_B_PnP.DoIt();
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart220_Run()
-        {
-            if (Flag_HDT_BIB_B_PnP.IsDone())
+            else
             {
                 return FlowChart.FCRESULT.NEXT;
+            }
+        }
+
+        private FlowChart.FCRESULT flowChart307_Run()
+        {
+            string code = string.Format("{0}{1:0000}", "E", "0901");
+            string args = "Board Head A";
+            SYSPara.Alarm.Say(code, args);
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart214_Run()
+        {
+            //if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            if (HDT_BIB_A_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A || HDT_BIB_A_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_B)
+            {
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BIB_A, (KitShuttleID)KitID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            else
+            {
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_A, (BIBStageID)HDT_BIB_BIBStageID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
             }
             return FlowChart.FCRESULT.IDLE;
         }
-
-        private FlowChart.FCRESULT flowChart228_Run()
-        {
-            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL);
-            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL);
-            if (b1)
-            {
-                HDT_BIB_B_KitShuttleID = KitShuttleID.TransferShuttleA;
-                return FlowChart.FCRESULT.NEXT;
-            }
-            else if (b2)
-            {
-                HDT_BIB_B_KitShuttleID = KitShuttleID.TransferShuttleB;
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart227_Run()
-        {
-            PnPStation WorkStage = PnPStation.BOARD_A;
-            TrayDataEx TDEx_Temp = TDEx_Left_Board;
-            if (HDT_BIB_BIBStageID.Equals(BIBStageID.BIBStageB))
-            {
-                WorkStage = PnPStation.BOARD_B;
-                TDEx_Temp = TDEx_Right_Board;
-            }
-            switch (HDT_BIB_B_KitShuttleID)
-            {
-                case KitShuttleID.TransferShuttleA:
-                    {
-                        HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.KIT_SHUTTLE_A, TDEx_Left_KitShuttle, GlobalDefine.PassBin, (PnPStation)WorkStage, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.UNTESTED_FULL);
-                    }
-                    break;
-                case KitShuttleID.TransferShuttleB:
-                    {
-                        HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.KIT_SHUTTLE_B, TDEx_Right_KitShuttle, GlobalDefine.PassBin, (PnPStation)WorkStage, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.UNTESTED_FULL);
-                    }
-                    break;
-
-                default:
-                    {
-                        //alarm
-                        return FlowChart.FCRESULT.IDLE;
-                    }
-                    
-            }
-            
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart226_Run()
-        {
-            Flag_HDT_BIB_B_PnP.DoIt();
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart225_Run()
-        {
-            if (Flag_HDT_BIB_B_PnP.IsDone() && Flag_HDT_BIB_A_PnP.IsDone())
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart224_Run()
-        {
-            HDT_BIB_B_KitShuttleID = KitShuttleID.NONE;
-            bool b1 = true;
-            switch (HDT_BIB_B_PnPInfo.SourceStation)
-            {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        if (LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL))
-                            b1 = LeftKitStateControl.StateDone(LeftKitStateControl.State);
-
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        if (RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL))
-                            b1 = RightKitStateControl.StateDone(RightKitStateControl.State);
-                    }
-                    break;
-            }
-
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
+        #endregion
+        #region BoardHead B
         private FlowChart.FCRESULT flowChart7_Run()
         {
             if (Flag_HDT_BIB_B_Action.IsDoIt())
@@ -5185,6 +5795,196 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
+        private FlowChart.FCRESULT flowChart229_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart228_Run()
+        {
+            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL);
+            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL);
+            if (b1)
+            {
+                HDT_BIB_B_KitShuttleID = KitShuttleID.TransferShuttleA;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            else if (b2)
+            {
+                HDT_BIB_B_KitShuttleID = KitShuttleID.TransferShuttleB;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart227_Run()
+        {
+            PnPStation WorkStage = PnPStation.BOARD_A;
+            TrayDataEx TDEx_Temp = TDEx_Left_Board;
+            if (HDT_BIB_BIBStageID.Equals(BIBStageID.BIBStageB))
+            {
+                WorkStage = PnPStation.BOARD_B;
+                TDEx_Temp = TDEx_Right_Board;
+            }
+            switch (HDT_BIB_B_KitShuttleID)
+            {
+                case KitShuttleID.TransferShuttleA:
+                    {
+                        HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.KIT_SHUTTLE_A, TDEx_Left_KitShuttle, GlobalDefine.PassBin, (PnPStation)WorkStage, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.UNTESTED_FULL);
+                    }
+                    break;
+                case KitShuttleID.TransferShuttleB:
+                    {
+                        HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.KIT_SHUTTLE_B, TDEx_Right_KitShuttle, GlobalDefine.PassBin, (PnPStation)WorkStage, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.UNTESTED_FULL);
+                    }
+                    break;
+
+                default:
+                    {
+                        //alarm
+                        return FlowChart.FCRESULT.IDLE;
+                    }
+
+            }
+
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart226_Run()
+        {
+            Flag_HDT_BIB_B_PnP.DoIt();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart225_Run()
+        {
+            if (Flag_HDT_BIB_B_PnP.IsDone() && Flag_HDT_BIB_A_PnP.IsDone())
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart224_Run()
+        {
+            HDT_BIB_B_KitShuttleID = KitShuttleID.NONE;
+            bool b1 = true;
+            switch (HDT_BIB_B_PnPInfo.SourceStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        if (LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL))
+                            b1 = LeftKitStateControl.StateDone(LeftKitStateControl.State);
+
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        if (RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL))
+                            b1 = RightKitStateControl.StateDone(RightKitStateControl.State);
+                    }
+                    break;
+            }
+
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart210_Run()
+        {
+            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED);
+            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED);
+            if (b1)
+            {
+                HDT_BIB_B_KitShuttleID = KitShuttleID.TransferShuttleA;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            else if (b2)
+            {
+                HDT_BIB_B_KitShuttleID = KitShuttleID.TransferShuttleB;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart218_Run()
+        {
+            TrayDataEx TDEx_Temp = HDT_BIB_B_KitShuttleID == KitShuttleID.TransferShuttleA ? TDEx_Left_KitShuttle : TDEx_Right_KitShuttle;
+
+            if (HDT_BIB_B_KitShuttleID == KitShuttleID.TransferShuttleA || HDT_BIB_B_KitShuttleID == KitShuttleID.TransferShuttleB)
+            {
+                switch (HDT_BIB_BIBStageID)
+                {
+                    case BIBStageID.BIBStageA:
+                        {
+                            HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.BOARD_A, TDEx_Left_Board, GlobalDefine.AllBin, PnPStation.BinBox, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.TEST_EMPTY_BOOKED);
+                        }
+                        break;
+                    case BIBStageID.BIBStageB:
+                        {
+                            HDT_BIB_B_PnPInfo = new PnPInfo(TDEx_HDT_BIB_B, PnPStation.BOARD_B, TDEx_Right_Board, GlobalDefine.AllBin, PnPStation.BinBox, TDEx_Temp, GlobalDefine.EmptyBin, 1, 1, VehicleState.TEST_EMPTY_BOOKED);
+                        }
+                        break;
+                    default:
+                        {
+                            //alarm
+                            return FlowChart.FCRESULT.IDLE;
+                        }
+                        break;
+                }
+            }
+
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart219_Run()
+        {
+            Flag_HDT_BIB_B_PnP.DoIt();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart220_Run()
+        {
+            if (Flag_HDT_BIB_B_PnP.IsDone())
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart380_Run()
+        {
+            HDT_BIB_B_KitShuttleID = KitShuttleID.NONE;
+            bool b1 = true;
+            switch (HDT_BIB_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        if (LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED))
+                            b1 = LeftKitStateControl.StateDone(LeftKitStateControl.State);
+
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        if (RightKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY_BOOKED))
+                            b1 = RightKitStateControl.StateDone(RightKitStateControl.State);
+                    }
+                    break;
+            }
+
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        #endregion
+        #region BoardHeadB PnP
         private FlowChart.FCRESULT flowChart157_Run()
         {
             bool b1 = Flag_HDT_BIB_B_PnP.IsDoIt();
@@ -5238,6 +6038,17 @@ namespace TBPP14200
             return FlowChart.FCRESULT.NEXT;
         }
 
+        private FlowChart.FCRESULT flowChart269_Run()
+        {
+            if (Flag_Booking_B_Error || HDTB_NozzleStateIsFail)
+            {
+                Flag_Booking_B_Error = false;
+                HDTB_NozzleStateIsFail = false;
+                return FlowChart.FCRESULT.CASE1;
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
         private FlowChart.FCRESULT flowChart154_Run()
         {
             //HDT_BIB_B_BookingInfo = null;
@@ -5272,7 +6083,8 @@ namespace TBPP14200
         private FlowChart.FCRESULT flowChart239_Run()
         {
             //Pick up-lock
-            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            if (HDT_BIB_B_PnPInfo.SourceStation == PnPStation.KIT_SHUTTLE_A || HDT_BIB_B_PnPInfo.SourceStation == PnPStation.KIT_SHUTTLE_B)
             {
                 KitShuttleID KitID = KitShuttleID.NONE;
                 if (HDT_BIB_B_PnPInfo.SourceStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
@@ -5291,10 +6103,14 @@ namespace TBPP14200
             }
             else
             {
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
                 ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_B, (BIBStageID)HDT_BIB_BIBStageID);
                 if (T.Equals(ThreeValued.TRUE))
                 {
-                    bool b2 = Board_BKS.GetWorkStageBlockInfo();
+                    //bool b2 = Board_BKS.GetWorkStageBlockInfo();
+                    bool b2 = Board_BKS.GetKitBlockInfo(KitID, HDT_BIB_B_PnPInfo.Current_VechicleState);
                     if (!b2)
                     {
                         Flag_Booking_B_Error = true;
@@ -5576,8 +6392,11 @@ namespace TBPP14200
                 case PnPStation.BOARD_A:
                     {
                         HDT_BIB_B_PnP.DiePakDataExchange(TDEx_HDT_BIB_B, TDEx_Left_Board, Board_BKS.CurrentWorkInfo, AfterPickPnPState);
-                        HDT_BIB_B_BookingInfo = Board_BKS.CurrentWorkInfo;
-                        Board_BKS.WorkBlockDone();
+                        //HDT_BIB_B_BookingInfo = Board_BKS.CurrentWorkInfo;
+                        //Board_BKS.WorkBlockDone();
+                        HDT_BIB_B_BookingInfo = Board_BKS.CurrentKitBlockInfo;
+                        KitShuttleID kitID = HDT_BIB_B_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A ? KitShuttleID.TransferShuttleA : KitShuttleID.TransferShuttleB;
+                        Board_BKS.SocketBlockDone(kitID, HDT_BIB_B_PnPInfo.Current_VechicleState);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Process, CompleteCount);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Missing, LostCount);
                     }
@@ -5585,8 +6404,11 @@ namespace TBPP14200
                 case PnPStation.BOARD_B:
                     {
                         HDT_BIB_B_PnP.DiePakDataExchange(TDEx_HDT_BIB_B, TDEx_Right_Board, Board_BKS.CurrentWorkInfo, AfterPickPnPState);
-                        HDT_BIB_B_BookingInfo = Board_BKS.CurrentWorkInfo;
-                        Board_BKS.WorkBlockDone();
+                        //HDT_BIB_B_BookingInfo = Board_BKS.CurrentWorkInfo;
+                        //Board_BKS.WorkBlockDone();
+                        HDT_BIB_B_BookingInfo = Board_BKS.CurrentKitBlockInfo;
+                        KitShuttleID kitID = HDT_BIB_B_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A ? KitShuttleID.TransferShuttleA : KitShuttleID.TransferShuttleB;
+                        Board_BKS.SocketBlockDone(kitID, HDT_BIB_B_PnPInfo.Current_VechicleState);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Process, CompleteCount);
                         GlobalDefine.OEE.UpdateBinQty(BinDefine.Tested, JStatusType.Missing, LostCount);
                     }
@@ -5603,7 +6425,8 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart231_Run()
         {
-            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            if (HDT_BIB_B_PnPInfo.SourceStation == PnPStation.KIT_SHUTTLE_A || HDT_BIB_B_PnPInfo.SourceStation == PnPStation.KIT_SHUTTLE_B)
             {
                 KitShuttleID KitID = KitShuttleID.NONE;
                 if (HDT_BIB_B_PnPInfo.SourceStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
@@ -5627,15 +6450,28 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart251_Run()
         {
-            if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            if (HDT_BIB_B_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A || HDT_BIB_B_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_B)
             {
-                return FlowChart.FCRESULT.NEXT;
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "LockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BIB_B, (KitShuttleID)KitID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
             }
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_B, (BIBStageID)HDT_BIB_BIBStageID);
-            if (T.Equals(ThreeValued.TRUE))
+            else
             {
-                return FlowChart.FCRESULT.NEXT;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "LockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_B, (BIBStageID)HDT_BIB_BIBStageID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
             }
             return FlowChart.FCRESULT.IDLE;
         }
@@ -5751,6 +6587,179 @@ namespace TBPP14200
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart322_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_B);
+            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_B);
+            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X + Offset;
+            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y + OffsetY;
+            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+            bool bFocus = true;
+            switch (HDT_BIB_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
+                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_B, BIBStageID.BIBStageA);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
+                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_B, BIBStageID.BIBStageB);
+                    }
+                    break;
+            }
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE) && bFocus)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart321_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+
+            switch (HDT_BIB_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+                    }
+                    break;
+            }
+
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart315_Run()
+        {
+            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X;
+            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y;
+            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
+            pos.ColIndex = HDT_BIB_B_BookingInfo.SocketX;
+            pos.RowIndex = HDT_BIB_B_BookingInfo.SocketY;
+            pos.BoardCount = BoardCount + 1;
+
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.GRAB_CCD, pos);
+            if (T1.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart316_Run()
+        {
+            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart317_Run()
+        {
+            bLoadToBox_B = false;
+            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            InspectionState state = InspectionState.Unknow;
+            if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+            {
+                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_B);
+                switch (state)
+                {
+                    case InspectionState.Success:   //有IC 上板未放置有IC為異常
+                        {
+                            //Alarm
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                        break;
+                    case InspectionState.Fail:  //無IC
+                        {
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                    case InspectionState.Error: //無Socket 丟到垃圾桶
+                        {
+                            Point pos = new Point();
+                            BasePosInfo HDT_BIB_B_Basic = new BasePosInfo();
+                            PnPStation TargetStation = PnPStation.BinBox;
+                            pos = HDT_BIB_B_PnP.CalcBoxPnPPos(HDT_BIB_B_PnPInfo.HDTTray, HDT_BIB_B_PnPInfo.TargetTray);
+                            HDT_BIB_B_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", TargetStation, BoardHeadID.HDT_B);
+                            HDT_BIB_B_PnPInfo.WorkingPos_X = HDT_BIB_B_Basic.X;
+                            HDT_BIB_B_PnPInfo.WorkingPos_Z = HDT_BIB_B_Basic.Z;
+                            bLoadToBox_B = true;
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                }
+                return FlowChart.FCRESULT.IDLE;
+            }
+            else
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+        }
+
+        private FlowChart.FCRESULT flowChart318_Run()
+        {
+            string code = string.Format("{0}{1:0000}", "E", "0901");
+            string args = "Board Head B";
+            SYSPara.Alarm.Say(code, args);
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart314_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
         }
 
         private FlowChart.FCRESULT flowChart242_Run()
@@ -5991,14 +7000,115 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart247_Run()
+        private FlowChart.FCRESULT flowChart320_Run()
         {
-            if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_B);
+            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_B);
+            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X + Offset;
+            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y + OffsetY;
+            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+            switch (HDT_BIB_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
+                    }
+                    break;
+            }
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
             }
+            return FlowChart.FCRESULT.IDLE;
+        }
 
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_B, (BIBStageID)HDT_BIB_BIBStageID);
+        private FlowChart.FCRESULT flowChart319_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T1 = ThreeValued.TRUE;
+            ThreeValued T2 = ThreeValued.TRUE;
+
+            switch (HDT_BIB_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.BOARD_A:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
+                    }
+                    break;
+                case PnPStation.BOARD_B:
+                    {
+                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
+                    }
+                    break;
+            }
+
+            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart310_Run()
+        {
+            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
+
+            BasePosInfo pos = new BasePosInfo();
+            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X;
+            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y;
+            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
+            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
+            pos.ColIndex = HDT_BIB_B_BookingInfo.SocketX;
+            pos.RowIndex = HDT_BIB_B_BookingInfo.SocketY;
+            pos.BoardCount = BoardCount + 1;
+            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.GRAB_CCD_AF, pos);
+            if (T1.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart311_Run()
+        {
+            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
+
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -6006,26 +7116,133 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT FC_ShuttleA_Run()
+        private FlowChart.FCRESULT flowChart312_Run()
         {
-            if (SYSPara.Lotend)
-            {
-                Flag_LeftKitShuttle_LotEnd.DoIt();
-                return FlowChart.FCRESULT.CASE1;
-            }
+            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
+                return FlowChart.FCRESULT.NEXT;
 
-            bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleA);
-            if (!b)
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
+            if (!b1) return FlowChart.FCRESULT.NEXT;
+
+            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
+
+            InspectionState state = InspectionState.Unknow;
+            if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
             {
+                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_B);
+                switch (state)
+                {
+                    case InspectionState.Success:   //上板後有IC正常
+                        {
+                            return FlowChart.FCRESULT.NEXT;
+                        }
+                        break;
+                    case InspectionState.Fail:  //上板後無IC異常
+                    case InspectionState.Error: //異常
+                        {
+                            //Alarm CCD 檢測異常
+                            return FlowChart.FCRESULT.CASE1;    //重新拍攝
+                        }
+                        break;
+                }
                 return FlowChart.FCRESULT.IDLE;
             }
-
-            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
-            if (b1)
+            else
             {
                 return FlowChart.FCRESULT.NEXT;
             }
+        }
+
+        private FlowChart.FCRESULT flowChart313_Run()
+        {
+            string code = string.Format("{0}{1:0000}", "E", "0901");
+            string args = "Board Head B";
+            SYSPara.Alarm.Say(code, args);
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart247_Run()
+        {
+            //if (!SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            if (HDT_BIB_B_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_A || HDT_BIB_B_PnPInfo.TargetStation == PnPStation.KIT_SHUTTLE_B)
+            {
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BIB_B, (KitShuttleID)KitID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            else
+            {
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "UnlockBIBStage", (BIBStageModuleOwner)BIBStageModuleOwner.HDT_BIB_B, (BIBStageID)HDT_BIB_BIBStageID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
             return FlowChart.FCRESULT.IDLE;
+        }
+        #endregion
+        #endregion
+
+        #region Shuttle A
+        private FlowChart.FCRESULT FC_ShuttleA_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+            //if (SYSPara.Lotend)
+            //{
+            //    Flag_LeftKitShuttle_LotEnd.DoIt();
+            //    return FlowChart.FCRESULT.CASE1;
+            //}
+
+            //bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleA);
+            //if (!b)
+            //{
+            //    return FlowChart.FCRESULT.IDLE;
+            //}
+
+            //bool b1 = LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
+            //if (b1)
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            //return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart360_Run()
+        {
+            //系統結批且作業完成
+            if (SYSPara.Lotend && Flag_LeftKitShuttle_LotEnd.IsDoIt())
+            {
+                int BookingCount = Board_BKS.BoardBookingListCount();
+                if (BookingCount <= 0)
+                {
+                    return FlowChart.FCRESULT.CASE2;
+                }
+            }
+            //未開啟模組
+            bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleA);
+            if (!b)
+            {
+                Flag_LeftKitShuttle_LotEnd.DoIt();
+                return FlowChart.FCRESULT.CASE2;
+            }
+
+            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            {
+                if (LeftKitStateControl.IsStateDone(VehicleState.NONE))
+                {
+                    LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            return FlowChart.FCRESULT.CASE1;
         }
 
         private FlowChart.FCRESULT flowChart105_Run()
@@ -6040,25 +7257,9 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart106_Run()
-        {
-            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
         private FlowChart.FCRESULT flowChart253_Run()
         {
-            if (SYSPara.Lotend && SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
-            {
-                Flag_LeftKitShuttle_LotEnd.DoIt();
-                return FlowChart.FCRESULT.CASE1;
-            }
-
-            if (SYSPara.Lotend &&  Flag_LeftKitShuttle_LotEnd.IsDoIt())
+            if (SYSPara.Lotend && Flag_LeftKitShuttle_LotEnd.IsDoIt())
             {
                 int BookingCount = Board_BKS.BoardBookingListCount();
                 if (BookingCount <= 0)
@@ -6068,6 +7269,16 @@ namespace TBPP14200
             }
 
             bool b1 = LeftKitStateControl.IsStateDone(VehicleState.UNTESTED_EMPTY);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart106_Run()
+        {
+            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
             if (b1)
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -6098,6 +7309,126 @@ namespace TBPP14200
         private FlowChart.FCRESULT flowChart255_Run()
         {
             bool b1 = LeftKitStateControl.IsStateDone(VehicleState.UNTESTED_FULL);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart111_Run()
+        {
+            //bool b1 = LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
+            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.NONE);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart361_Run()
+        {
+            //系統結批且作業完成
+            if (SYSPara.Lotend && Flag_LeftKitShuttle_LotEnd.IsDoIt())
+            {
+                int BookingCount = Board_BKS.BoardBookingListCount();
+                if (BookingCount <= 0)
+                {
+                    return FlowChart.FCRESULT.CASE2;
+                }
+            }
+            //未開啟模組
+            bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleA);
+            if (!b)
+            {
+                Flag_LeftKitShuttle_LotEnd.DoIt();
+                return FlowChart.FCRESULT.CASE2;
+            }
+
+            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
+            {
+                if (LeftKitStateControl.IsStateDone(VehicleState.NONE))
+                {
+                    LeftKitStateControl.StateDoIt(VehicleState.TESTED_EMPTY);
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart112_Run()
+        {
+            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart362_Run()
+        {
+            if (SYSPara.Lotend && Flag_LeftKitShuttle_LotEnd.IsDoIt())
+            {
+                int BookingCount = Board_BKS.BoardBookingListCount();
+                if (BookingCount <= 0)
+                {
+                    return FlowChart.FCRESULT.CASE1;
+                }
+            }
+
+            bool b1 = LeftKitStateControl.IsStateDone(VehicleState.TESTED_EMPTY);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart363_Run()
+        {
+            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.TESTED_EMPTY_BOOKED);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart364_Run()
+        {
+            bool b1 = LeftKitStateControl.IsStateDone(VehicleState.TESTED_EMPTY_BOOKED);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart365_Run()
+        {
+            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.TESTED_FULL);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart359_Run()
+        {
+            bool b1 = LeftKitStateControl.IsStateDone(VehicleState.TESTED_FULL);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart366_Run()
+        {
+            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.NONE);
             if (b1)
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -6145,6 +7476,91 @@ namespace TBPP14200
             }
             return FlowChart.FCRESULT.IDLE;
         }
+        #endregion Shuttle A
+        #region Shuttle B
+        private FlowChart.FCRESULT FC_ShuttleB_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+            //if (SYSPara.Lotend)
+            //{
+            //    Flag_RightKitShuttle_LotEnd.DoIt();
+            //    return FlowChart.FCRESULT.CASE1;
+            //}
+
+            //bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleB);
+            //if (!b)
+            //{
+            //    return FlowChart.FCRESULT.IDLE;
+            //}
+
+            //bool b1 = RightKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
+            //if (b1)
+            //{
+            //    return FlowChart.FCRESULT.NEXT;
+            //}
+            //return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart367_Run()
+        {
+            //系統結批且作業完成
+
+            if (SYSPara.Lotend && Flag_RightKitShuttle_LotEnd.IsDoIt())
+            {
+                int BookingCount = Board_BKS.BoardBookingListCount();
+                if (BookingCount <= 0)
+                {
+                    return FlowChart.FCRESULT.CASE2;
+                }
+            }
+            //未開啟模組
+            bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleB);
+            if (!b)
+            {
+                Flag_RightKitShuttle_LotEnd.DoIt();
+                return FlowChart.FCRESULT.CASE2;
+            }
+
+            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
+            {
+                if (RightKitStateControl.IsStateDone(VehicleState.NONE))
+                {
+                    RightKitStateControl.StateDoIt(VehicleState.TESTED_EMPTY);
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart113_Run()
+        {
+            //系統結批且作業完成
+            if (SYSPara.Lotend && Flag_RightKitShuttle_LotEnd.IsDoIt())
+            {
+                int BookingCount = Board_BKS.BoardBookingListCount();
+                if (BookingCount <= 0)
+                {
+                    return FlowChart.FCRESULT.CASE2;
+                }
+            }
+            //未開啟模組
+            bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleB);
+            if (!b)
+            {
+                Flag_RightKitShuttle_LotEnd.DoIt();
+                return FlowChart.FCRESULT.CASE2;
+            }
+
+            if (SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.LOAD))
+            {
+                if (RightKitStateControl.IsStateDone(VehicleState.NONE))
+                {
+                    RightKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
 
         private FlowChart.FCRESULT flowChart114_Run()
         {
@@ -6159,11 +7575,11 @@ namespace TBPP14200
 
         private FlowChart.FCRESULT flowChart258_Run()
         {
-            if (SYSPara.Lotend && SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
-            {
-                Flag_RightKitShuttle_LotEnd.DoIt();
-                return FlowChart.FCRESULT.CASE1;
-            }
+            //if (SYSPara.Lotend && SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
+            //{
+            //    Flag_RightKitShuttle_LotEnd.DoIt();
+            //    return FlowChart.FCRESULT.CASE1;
+            //}
 
             if (SYSPara.Lotend && Flag_RightKitShuttle_LotEnd.IsDoIt())
             {
@@ -6222,12 +7638,120 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
+        private FlowChart.FCRESULT flowChart119_Run()
+        {
+            bool b1 = RightKitStateControl.StateDoIt(VehicleState.NONE);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart368_Run()
+        {
+            bool b1 = RightKitStateControl.IsStateDoIt(VehicleState.TESTED_EMPTY);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart369_Run()
+        {
+            if (SYSPara.Lotend && Flag_RightKitShuttle_LotEnd.IsDoIt())
+            {
+                int bookingcount = Board_BKS.BoardBookingListCount();
+                if (bookingcount <= 0)
+                {
+                    return FlowChart.FCRESULT.CASE1;
+                }
+            }
+
+            bool b1 = RightKitStateControl.IsStateDone(VehicleState.TESTED_EMPTY);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart370_Run()
+        {
+            bool b1 = RightKitStateControl.StateDoIt(VehicleState.TESTED_EMPTY_BOOKED);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart371_Run()
+        {
+            bool b1 = RightKitStateControl.IsStateDone(VehicleState.TESTED_EMPTY_BOOKED);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart372_Run()
+        {
+            bool b1 = RightKitStateControl.StateDoIt(VehicleState.TESTED_FULL);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart373_Run()
+        {
+            bool b1 = RightKitStateControl.IsStateDone(VehicleState.UNTESTED_FULL);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart374_Run()
+        {
+            bool b1 = RightKitStateControl.StateDoIt(VehicleState.NONE);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
         private FlowChart.FCRESULT flowChart115_Run()
         {
             if (Flag_RightKitShuttle_LotEnd.IsDoIt())
             {
                 Flag_RightKitShuttle_LotEnd.Doing();
             }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        #endregion Shuttle B
+
+        #region BowFeeder A
+        private FlowChart.FCRESULT FC_BowFeederA_Run()
+        {
+            if (SYSPara.Lotend)
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+
+            bool b = (bool)SYSPara.CallProc(ModuleName_BFM, "IsUseBFM", BowlFeederID.BF_A);
+            if (b)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+
             return FlowChart.FCRESULT.IDLE;
         }
 
@@ -6241,7 +7765,7 @@ namespace TBPP14200
 
             bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
             bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
-            
+
             if (HDT_BF_A_KitShuttleID.Equals(KitShuttleID.NONE))
             {
                 if (b1 && HDT_BF_B_KitShuttleID != KitShuttleID.TransferShuttleA)
@@ -6315,8 +7839,8 @@ namespace TBPP14200
                     return FlowChart.FCRESULT.NEXT;
                 }
             }
-            
-            
+
+
             return FlowChart.FCRESULT.IDLE;
         }
 
@@ -6383,6 +7907,19 @@ namespace TBPP14200
             return FlowChart.FCRESULT.NEXT;
         }
 
+        private FlowChart.FCRESULT flowChart292_Run()
+        {
+            KitShuttleID KitID = KitShuttleID.NONE;
+            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "LockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_A, (KitShuttleID)KitID);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
         private FlowChart.FCRESULT flowChart127_Run()
         {
             bool TargetFull = HDT_BF_A_PnPInfo.TargetIsDone;
@@ -6421,54 +7958,27 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart259_Run()
+        private FlowChart.FCRESULT flowChart291_Run()
+        {
+            KitShuttleID KitID = KitShuttleID.NONE;
+            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_A, (KitShuttleID)KitID);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart126_Run()
         {
             return FlowChart.FCRESULT.NEXT;
         }
 
-        private FlowChart.FCRESULT flowChart260_Run()
+        private FlowChart.FCRESULT flowChart125_Run()
         {
-            BasePosInfo Pos = new BasePosInfo();
-            Pos.X = HDT_BF_A_PnPInfo.WorkingPos_X;
-            Pos.Y = HDT_BF_A_PnPInfo.WorkingPos_Y;
-            Pos.Z = HDT_BF_A_PnPInfo.WorkingPos_Z;
-            Pos.U = HDT_BF_A_PnPInfo.WorkingPos_U;
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "SetActionCommand_BFM", BowlFeederID.BF_A, ACTIONMODE.NONE, Pos);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart261_Run()
-        {
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "GetActionResult_BFM", BowlFeederID.BF_A);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                
-                //HDT_TR_PnP.Nozzles.SetState(0, 0, i, j, (byte)1, false);
-                //HDT_BF_A_PnPInfo.SourceTray.SetBin(0, 0, 1, 1, (byte)BinDefine.Empty);
-                TDEx_Top_BFM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
-                for (int y = 0; y < KitInfo.YN; y++)
-                {
-                    for (int x = 0; x < KitInfo.XN; x++)
-                    {
-                        byte bin = HDT_BF_A_PnPInfo.TargetTray.GetBin(0, 0, x, y);
-                        if (bin.Equals((byte)BinDefine.Empty))
-                        {
-                            HDT_BF_A_PnPInfo.TargetTray.SetBin(0, 0, x, y, (byte)BinDefine.Bin1);
-                            GlobalDefine.OEE.UpdateBinQty(BinDefine.Untested, JStatusType.Process, 1);
-                            break;
-                        }
-                    }
-                }
-
-
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
+            return FlowChart.FCRESULT.NEXT;
         }
 
         private FlowChart.FCRESULT flowChart129_Run()
@@ -6490,7 +8000,7 @@ namespace TBPP14200
                 mBFM.SetCanLotEnd();
                 return FlowChart.FCRESULT.NEXT;
             }
-            
+
             return FlowChart.FCRESULT.IDLE;
         }
 
@@ -6506,392 +8016,114 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart132_Run()
+        private FlowChart.FCRESULT flowChart259_Run()
         {
-            if (SYSPara.Lotend && SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
-            {
-                Flag_BottomBowlFeeder_LotEnd.DoIt();
-                return FlowChart.FCRESULT.CASE1;
-            }
-
-            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
-            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
-
-            if (HDT_BF_B_KitShuttleID.Equals(KitShuttleID.NONE))
-            {
-                if (b1 && HDT_BF_A_KitShuttleID != KitShuttleID.TransferShuttleA)
-                {
-                    if (SYSPara.Lotend)
-                    {
-                        bool b3 = LeftKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
-                        if (b3)
-                        {
-                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                            Flag_BottomBowlFeeder_LotEnd.DoIt();
-                            return FlowChart.FCRESULT.CASE1;
-                        }
-                    }
-                    HDT_BF_B_KitShuttleID = KitShuttleID.TransferShuttleA;
-                    return FlowChart.FCRESULT.NEXT;
-                }
-                else if (b2 && HDT_BF_A_KitShuttleID != KitShuttleID.TransferShuttleB)
-                {
-                    if (SYSPara.Lotend)
-                    {
-                        bool b4 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
-                        if (b4)
-                        {
-                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                            Flag_BottomBowlFeeder_LotEnd.DoIt();
-                            return FlowChart.FCRESULT.CASE1;
-                        }
-                    }
-                    HDT_BF_B_KitShuttleID = KitShuttleID.TransferShuttleB;
-                    return FlowChart.FCRESULT.NEXT;
-                }
-                else
-                {
-                    if (SYSPara.Lotend)
-                    {
-                        HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                        Flag_BottomBowlFeeder_LotEnd.DoIt();
-                        return FlowChart.FCRESULT.CASE1;
-                    }
-                }
-            }
-            else
-            {
-                if (HDT_BF_B_KitShuttleID.Equals(KitShuttleID.TransferShuttleA) && b1)
-                {
-                    if (SYSPara.Lotend)
-                    {
-                        bool b5 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
-                        if (b5)
-                        {
-                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                            Flag_BottomBowlFeeder_LotEnd.DoIt();
-                            return FlowChart.FCRESULT.CASE1;
-                        }
-                    }
-                    return FlowChart.FCRESULT.NEXT;
-                }
-                else if (HDT_BF_B_KitShuttleID.Equals(KitShuttleID.TransferShuttleB) && b2)
-                {
-                    if (SYSPara.Lotend)
-                    {
-                        bool b6 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
-                        if (b6)
-                        {
-                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                            Flag_BottomBowlFeeder_LotEnd.DoIt();
-                            return FlowChart.FCRESULT.CASE1;
-                        }
-                    }
-                    return FlowChart.FCRESULT.NEXT;
-                }
-            }
-            
-
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart133_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_BFM, "ChkBowlArrivalDetectionState", BowlFeederID.BF_B, EOnOffState.ON);
-            if (b1.Equals(true))
-            {
-                TDEx_Bottom_BFM.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
-                return FlowChart.FCRESULT.NEXT;
-            }
-            else if (b1.Equals(false))
-            {
-                KitShuttleID KitID = KitShuttleID.NONE;
-                if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
-                if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
-                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_B, (KitShuttleID)KitID);
-                if (T.Equals(ThreeValued.TRUE))
-                {
-                    return FlowChart.FCRESULT.CASE1;
-                }
-                return FlowChart.FCRESULT.IDLE;
-                //return FlowChart.FCRESULT.CASE1;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart134_Run()
-        {
-            TrayDataEx Source;
-            TrayDataEx Target;
-            PnPStation SourceStation;
-            PnPStation TargetStation;
-
-            switch (HDT_BF_B_KitShuttleID)
-            {
-                case KitShuttleID.TransferShuttleA:
-                    {
-                        Target = TDEx_Left_KitShuttle; 
-                        TargetStation = PnPStation.KIT_SHUTTLE_A;
-                    }
-                    break;
-                case KitShuttleID.TransferShuttleB:
-                    {
-                        Target = TDEx_Right_KitShuttle;
-                        TargetStation = PnPStation.KIT_SHUTTLE_B;
-                    }
-                    break;
-                default:
-                    {
-                        //Alarm
-                        return FlowChart.FCRESULT.IDLE;
-                    }
-                    break;
-            }
-            Source = TDEx_Bottom_BFM;
-            SourceStation = PnPStation.BOWLFEEDER_B;
-
-            HDT_BF_B_PnPInfo = new PnPInfo(TDEx_Bottom_BFM, SourceStation, Source, GlobalDefine.PassBin, TargetStation, Target, GlobalDefine.EmptyBin, HDT_BF_B_INFO.Num_X, HDT_BF_B_INFO.Num_Y, VehicleState.UNTESTED_EMPTY_BOOKED);
-            if (HDT_BF_B_PnPInfo.TargetIsDone)
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
             return FlowChart.FCRESULT.NEXT;
         }
 
-        private FlowChart.FCRESULT flowChart136_Run()
+        private FlowChart.FCRESULT flowChart329_Run()
         {
-            bool TargetFull = HDT_BF_B_PnPInfo.TargetIsDone;
-            if (TargetFull || SYSPara.Lotend)
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
-            return FlowChart.FCRESULT.NEXT;
-        }
 
-        private FlowChart.FCRESULT flowChart137_Run()
-        {
-            bool b1 = HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A);
-            bool b2 = HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B);
+            bool b1 = false;
+            Point pos = new Point();
+            BasePosInfo PlaceOffset = new BasePosInfo();
+            BasePosInfo HDT_BF_A_Basic = new BasePosInfo();
+            BasePosInfo KSMBasic = new BasePosInfo();
+
+            switch (HDT_BF_A_PnPInfo.TargetStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_X").ToInt();
+                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_Y").ToInt();
+                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
+
+                        pos = HDT_BF_A_PnP.PreCalcKitPnPPos(HDT_BF_A_PnPInfo.HDTTray, HDT_BF_A_PnPInfo.TargetTray);  //治具位置
+
+                        HDT_BF_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_A, KitShuttleID.TransferShuttleA);
+                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleA);
+                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_A);
+                        HDT_BF_A_PnPInfo.WorkingPos_X = HDT_BF_A_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
+                        HDT_BF_A_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
+                        HDT_BF_A_PnPInfo.WorkingPos_Z = HDT_BF_A_Basic.Z + PlaceOffset.Z;
+                        b1 = true;
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_A_KITB_X").ToInt();
+                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_A_KITB_Y").ToInt();
+                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_A_KITB_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
+
+                        pos = HDT_BF_A_PnP.PreCalcKitPnPPos(HDT_BF_A_PnPInfo.HDTTray, HDT_BF_A_PnPInfo.TargetTray);  //治具位置
+                        HDT_BF_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_A, KitShuttleID.TransferShuttleB);
+                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleB);
+                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_A);
+                        HDT_BF_A_PnPInfo.WorkingPos_X = HDT_BF_A_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
+                        HDT_BF_A_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
+                        HDT_BF_A_PnPInfo.WorkingPos_Z = HDT_BF_A_Basic.Z + PlaceOffset.Z;
+                        b1 = true;
+                    }
+                    break;
+            }
             if (b1)
             {
-                bool b3 = LeftKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
-                bool b5 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY);
-                if (b3 || b5)
-                {
-                    HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                    return FlowChart.FCRESULT.NEXT;
-                }
-            }
-            else if (b2)
-            {
-                bool b4 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
-                bool b6 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY);
-                if (b4 || b6)
-                {
-                    HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
-                    return FlowChart.FCRESULT.NEXT;
-                }
+                return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart266_Run()
-        {
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart265_Run()
+        private FlowChart.FCRESULT flowChart332_Run()
         {
             BasePosInfo Pos = new BasePosInfo();
-            Pos.X = HDT_BF_B_PnPInfo.WorkingPos_X;
-            Pos.U = HDT_BF_B_PnPInfo.WorkingPos_U;
-            Pos.Y = HDT_BF_B_PnPInfo.WorkingPos_Y;
-            Pos.Z = HDT_BF_B_PnPInfo.WorkingPos_Z;
+            Pos.X = HDT_BF_A_PnPInfo.WorkingPos_X;
+            Pos.Y = HDT_BF_A_PnPInfo.WorkingPos_Y;
+            Pos.Z = HDT_BF_A_PnPInfo.WorkingPos_Z;
+            Pos.U = HDT_BF_A_PnPInfo.WorkingPos_U;
 
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "SetActionCommand_BFM", BowlFeederID.BF_B, ACTIONMODE.NONE, Pos);
-            if (T.Equals(ThreeValued.TRUE))
+            ThreeValued T = ThreeValued.UNKNOWN;
+            switch (HDT_BF_A_PnPInfo.TargetStation)
             {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart264_Run()
-        {
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "GetActionResult_BFM", BowlFeederID.BF_B);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                GlobalDefine.OEE.UpdateBinQty(BinDefine.Untested, JStatusType.Process, 1);
-                //TDEx_Bottom_BFM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
-                HDT_BF_B_PnPInfo.SourceTray.SetBin(0, 0, 0, 0, (byte)BinDefine.Empty);
-                for (int y = 0; y < KitInfo.YN; y++)
-                {
-                    for (int x = 0; x < KitInfo.XN; x++)
+                case PnPStation.KIT_SHUTTLE_A:
                     {
-                        byte bin = HDT_BF_B_PnPInfo.TargetTray.GetBin(0, 0, x, y);
-                        if (bin.Equals((byte)BinDefine.Empty))
-                        {
-                            HDT_BF_B_PnPInfo.TargetTray.SetBin(0, 0, x, y, (byte)BinDefine.Bin1);
-                            break;
-                        }
+                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleA, ACTIONMODE.MOVE, Pos);
                     }
-                }
-                return FlowChart.FCRESULT.NEXT;
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleB, ACTIONMODE.MOVE, Pos);
+                    }
+                    break;
             }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart130_Run()
-        {
-            if (Flag_BottomBowlFeeder_LotEnd.IsDoIt())
-            {
-                Flag_BottomBowlFeeder_LotEnd.Doing();
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.CASE1;
-        }
-
-        #endregion
-
-        private FlowChart.FCRESULT flowChart267_Run()
-        {
-            //if (mHDT.mLotendOk)
-            {
-                Flag_BottomHDT_LotEnd.Done();
-                Flag_TopHDT_LotEnd.Done();
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-        #endregion
-
-        private FlowChart.FCRESULT FC_ShuttleB_Run()
-        {
-            if (SYSPara.Lotend)
-            {
-                Flag_RightKitShuttle_LotEnd.DoIt();
-                return FlowChart.FCRESULT.CASE1;
-            }
-
-            bool b = (bool)SYSPara.CallProc(ModuleName_KSM, "IsUseShuttle", KitShuttleID.TransferShuttleB);
-            if (!b)
-            {
-                return FlowChart.FCRESULT.IDLE;
-            }
-
-            bool b1 = RightKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT FC_BowFeederA_Run()
-        {
-            if (SYSPara.Lotend)
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
-
-            bool b = (bool)SYSPara.CallProc(ModuleName_BFM, "IsUseBFM", BowlFeederID.BF_A);
-            if (b)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT FC_BowFeederB_Run()
-        {
-            if (SYSPara.Lotend)
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
-
-            bool b = (bool)SYSPara.CallProc(ModuleName_BFM, "IsUseBFM", BowlFeederID.BF_B);
-            if (b)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart111_Run()
-        {
-            bool b1 = LeftKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart119_Run()
-        {
-            bool b1 = RightKitStateControl.StateDoIt(VehicleState.UNTESTED_EMPTY);
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart268_Run()
-        {
-            if (Flag_Booking_A_Error || HDTA_NozzleStateIsFail)
-            {
-                Flag_Booking_A_Error = false;
-                HDTA_NozzleStateIsFail = false;
-                return FlowChart.FCRESULT.CASE1;
-            }
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart269_Run()
-        {
-            if (Flag_Booking_B_Error || HDTB_NozzleStateIsFail)
-            {
-                Flag_Booking_B_Error = false;
-                HDTB_NozzleStateIsFail = false;
-                return FlowChart.FCRESULT.CASE1;
-            }
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart270_Run()
-        {
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart272_Run()
-        {
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "SetActionCommand_TRM", TRMStation.READBOARCODE, ACTIONMODE.READ);
             if (T.Equals(ThreeValued.TRUE))
             {
-                SYSPara.CurrentBIBID = "";
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart271_Run()
+        private FlowChart.FCRESULT flowChart331_Run()
         {
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_TRM, "GetActionResult_TRM");
-            if (T.Equals(ThreeValued.TRUE))
+            ThreeValued T2 = ThreeValued.UNKNOWN;
+            switch (HDT_BF_A_PnPInfo.TargetStation)
             {
-                SYSPara.CurrentBIBID = (string)SYSPara.CallProc(ModuleName_TRM, "GetBarcodeValue");
-                BoardSeq++;
-                WorkingBoard.BID = SYSPara.CurrentBIBID;
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleA);
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleB);
+                    }
+                    break;
+            }
+
+            if (T2.Equals(ThreeValued.TRUE))
+            {
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart125_Run()
-        {
-            return FlowChart.FCRESULT.NEXT;
         }
 
         private FlowChart.FCRESULT flowChart273_Run()
@@ -6920,7 +8152,6 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        
         private FlowChart.FCRESULT flowChart275_Run()
         {
 
@@ -6938,7 +8169,7 @@ namespace TBPP14200
                         PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_X").ToInt();
                         PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_Y").ToInt();
                         PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
-                        
+
                         pos = HDT_BF_A_PnP.CalcKitPnPPos(HDT_BF_A_PnPInfo.HDTTray, HDT_BF_A_PnPInfo.TargetTray);  //治具位置
                         //private BasePosInfo GetBasicPos(BowlFeederID ID, KitShuttleID ShuttleID)
                         HDT_BF_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_A, KitShuttleID.TransferShuttleA);
@@ -7100,6 +8331,411 @@ namespace TBPP14200
             return FlowChart.FCRESULT.NEXT;
         }
 
+        private FlowChart.FCRESULT flowChart262_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart260_Run()
+        {
+            BasePosInfo Pos = new BasePosInfo();
+            Pos.X = HDT_BF_A_PnPInfo.WorkingPos_X;
+            Pos.Y = HDT_BF_A_PnPInfo.WorkingPos_Y;
+            Pos.Z = HDT_BF_A_PnPInfo.WorkingPos_Z;
+            Pos.U = HDT_BF_A_PnPInfo.WorkingPos_U;
+
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "SetActionCommand_BFM", BowlFeederID.BF_A, ACTIONMODE.NONE, Pos);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart261_Run()
+        {
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "GetActionResult_BFM", BowlFeederID.BF_A);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+
+                //HDT_TR_PnP.Nozzles.SetState(0, 0, i, j, (byte)1, false);
+                //HDT_BF_A_PnPInfo.SourceTray.SetBin(0, 0, 1, 1, (byte)BinDefine.Empty);
+                TDEx_Top_BFM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
+                for (int y = 0; y < KitInfo.YN; y++)
+                {
+                    for (int x = 0; x < KitInfo.XN; x++)
+                    {
+                        byte bin = HDT_BF_A_PnPInfo.TargetTray.GetBin(0, 0, x, y);
+                        if (bin.Equals((byte)BinDefine.Empty))
+                        {
+                            HDT_BF_A_PnPInfo.TargetTray.SetBin(0, 0, x, y, (byte)BinDefine.Bin1);
+                            GlobalDefine.OEE.UpdateBinQty(BinDefine.Untested, JStatusType.Process, 1);
+                            break;
+                        }
+                    }
+                }
+
+
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+        #endregion
+        #region BowFeeder B
+        private FlowChart.FCRESULT FC_BowFeederB_Run()
+        {
+            if (SYSPara.Lotend)
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+
+            bool b = (bool)SYSPara.CallProc(ModuleName_BFM, "IsUseBFM", BowlFeederID.BF_B);
+            if (b)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart132_Run()
+        {
+            if (SYSPara.Lotend && SYSPara.SystemProductionMode.Equals(PRODUCTION_MODE.UNLOAD))
+            {
+                Flag_BottomBowlFeeder_LotEnd.DoIt();
+                return FlowChart.FCRESULT.CASE1;
+            }
+
+            bool b2 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
+            bool b1 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED);
+
+            if (HDT_BF_B_KitShuttleID.Equals(KitShuttleID.NONE))
+            {
+                if (b1 && HDT_BF_A_KitShuttleID != KitShuttleID.TransferShuttleA)
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        bool b3 = LeftKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                        if (b3)
+                        {
+                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                            Flag_BottomBowlFeeder_LotEnd.DoIt();
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                    }
+                    HDT_BF_B_KitShuttleID = KitShuttleID.TransferShuttleA;
+                    return FlowChart.FCRESULT.NEXT;
+                }
+                else if (b2 && HDT_BF_A_KitShuttleID != KitShuttleID.TransferShuttleB)
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        bool b4 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                        if (b4)
+                        {
+                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                            Flag_BottomBowlFeeder_LotEnd.DoIt();
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                    }
+                    HDT_BF_B_KitShuttleID = KitShuttleID.TransferShuttleB;
+                    return FlowChart.FCRESULT.NEXT;
+                }
+                else
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                        Flag_BottomBowlFeeder_LotEnd.DoIt();
+                        return FlowChart.FCRESULT.CASE1;
+                    }
+                }
+            }
+            else
+            {
+                if (HDT_BF_B_KitShuttleID.Equals(KitShuttleID.TransferShuttleA) && b1)
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        bool b5 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                        if (b5)
+                        {
+                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                            Flag_BottomBowlFeeder_LotEnd.DoIt();
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                    }
+                    return FlowChart.FCRESULT.NEXT;
+                }
+                else if (HDT_BF_B_KitShuttleID.Equals(KitShuttleID.TransferShuttleB) && b2)
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        bool b6 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                        if (b6)
+                        {
+                            HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                            Flag_BottomBowlFeeder_LotEnd.DoIt();
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                    }
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+
+
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart133_Run()
+        {
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_BFM, "ChkBowlArrivalDetectionState", BowlFeederID.BF_B, EOnOffState.ON);
+            if (b1.Equals(true))
+            {
+                TDEx_Bottom_BFM.BinReplace((byte)BinDefine.Empty, (byte)BinDefine.Bin1);
+                return FlowChart.FCRESULT.NEXT;
+            }
+            else if (b1.Equals(false))
+            {
+                KitShuttleID KitID = KitShuttleID.NONE;
+                if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+                if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+                ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_B, (KitShuttleID)KitID);
+                if (T.Equals(ThreeValued.TRUE))
+                {
+                    return FlowChart.FCRESULT.CASE1;
+                }
+                return FlowChart.FCRESULT.IDLE;
+                //return FlowChart.FCRESULT.CASE1;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart134_Run()
+        {
+            TrayDataEx Source;
+            TrayDataEx Target;
+            PnPStation SourceStation;
+            PnPStation TargetStation;
+
+            switch (HDT_BF_B_KitShuttleID)
+            {
+                case KitShuttleID.TransferShuttleA:
+                    {
+                        Target = TDEx_Left_KitShuttle;
+                        TargetStation = PnPStation.KIT_SHUTTLE_A;
+                    }
+                    break;
+                case KitShuttleID.TransferShuttleB:
+                    {
+                        Target = TDEx_Right_KitShuttle;
+                        TargetStation = PnPStation.KIT_SHUTTLE_B;
+                    }
+                    break;
+                default:
+                    {
+                        //Alarm
+                        return FlowChart.FCRESULT.IDLE;
+                    }
+                    break;
+            }
+            Source = TDEx_Bottom_BFM;
+            SourceStation = PnPStation.BOWLFEEDER_B;
+
+            HDT_BF_B_PnPInfo = new PnPInfo(TDEx_Bottom_BFM, SourceStation, Source, GlobalDefine.PassBin, TargetStation, Target, GlobalDefine.EmptyBin, HDT_BF_B_INFO.Num_X, HDT_BF_B_INFO.Num_Y, VehicleState.UNTESTED_EMPTY_BOOKED);
+            if (HDT_BF_B_PnPInfo.TargetIsDone)
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart294_Run()
+        {
+            KitShuttleID KitID = KitShuttleID.NONE;
+            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "LockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_B, (KitShuttleID)KitID);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart136_Run()
+        {
+            bool TargetFull = HDT_BF_B_PnPInfo.TargetIsDone;
+            if (TargetFull || SYSPara.Lotend)
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart137_Run()
+        {
+            bool b1 = HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A);
+            bool b2 = HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B);
+            if (b1)
+            {
+                bool b3 = LeftKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                bool b5 = LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY);
+                if (b3 || b5)
+                {
+                    HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            else if (b2)
+            {
+                bool b4 = RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                bool b6 = RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY);
+                if (b4 || b6)
+                {
+                    HDT_BF_B_KitShuttleID = KitShuttleID.NONE;
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart293_Run()
+        {
+            KitShuttleID KitID = KitShuttleID.NONE;
+            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
+            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_B, (KitShuttleID)KitID);
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart130_Run()
+        {
+            if (Flag_BottomBowlFeeder_LotEnd.IsDoIt())
+            {
+                Flag_BottomBowlFeeder_LotEnd.Doing();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart270_Run()
+        {
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart266_Run()
+        {
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart330_Run()
+        {
+            bool b1 = false;
+            Point pos = new Point();
+            BasePosInfo PlaceOffset = new BasePosInfo();
+            BasePosInfo HDT_BF_B_Basic = new BasePosInfo();
+            BasePosInfo KSMBasic = new BasePosInfo();
+
+            switch (HDT_BF_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_B_KITA_X").ToInt();
+                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_B_KITA_Y").ToInt();
+                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_B_KITA_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
+
+                        pos = HDT_BF_B_PnP.PreCalcKitPnPPos(HDT_BF_B_PnPInfo.HDTTray, HDT_BF_B_PnPInfo.TargetTray);  //治具位置
+                        HDT_BF_B_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_B, KitShuttleID.TransferShuttleA);
+                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleA);
+                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_B);
+                        HDT_BF_B_PnPInfo.WorkingPos_X = HDT_BF_B_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
+                        HDT_BF_B_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
+                        HDT_BF_B_PnPInfo.WorkingPos_Z = HDT_BF_B_Basic.Z + PlaceOffset.Z;
+                        b1 = true;
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_B_KITB_X").ToInt();
+                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_B_KITB_Y").ToInt();
+                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_B_KITB_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
+
+                        pos = HDT_BF_B_PnP.CalcKitPnPPos(HDT_BF_B_PnPInfo.HDTTray, HDT_BF_B_PnPInfo.TargetTray);  //治具位置
+                        HDT_BF_B_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_B, KitShuttleID.TransferShuttleB);
+                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleB);
+                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_B);
+                        HDT_BF_B_PnPInfo.WorkingPos_X = HDT_BF_B_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
+                        HDT_BF_B_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
+                        HDT_BF_B_PnPInfo.WorkingPos_Z = HDT_BF_B_Basic.Z + PlaceOffset.Z;
+                        b1 = true;
+                    }
+                    break;
+            }
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart334_Run()
+        {
+            BasePosInfo Pos = new BasePosInfo();
+            Pos.X = HDT_BF_B_PnPInfo.WorkingPos_X;
+            Pos.Y = HDT_BF_B_PnPInfo.WorkingPos_Y;
+            Pos.Z = HDT_BF_B_PnPInfo.WorkingPos_Z;
+            Pos.U = HDT_BF_B_PnPInfo.WorkingPos_U;
+
+            ThreeValued T = ThreeValued.UNKNOWN;
+            switch (HDT_BF_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleA, ACTIONMODE.MOVE, Pos);
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleB, ACTIONMODE.MOVE, Pos);
+                    }
+                    break;
+            }
+            if (T.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart333_Run()
+        {
+            ThreeValued T2 = ThreeValued.UNKNOWN;
+            switch (HDT_BF_B_PnPInfo.TargetStation)
+            {
+                case PnPStation.KIT_SHUTTLE_A:
+                    {
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleA);
+                    }
+                    break;
+                case PnPStation.KIT_SHUTTLE_B:
+                    {
+                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleB);
+                    }
+                    break;
+            }
+
+            if (T2.Equals(ThreeValued.TRUE))
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
         private FlowChart.FCRESULT flowChart290_Run()
         {
             BasePosInfo Pos = new BasePosInfo();
@@ -7108,7 +8744,7 @@ namespace TBPP14200
             Pos.Z = HDT_BF_B_PnPInfo.WorkingPos_Z;
             Pos.U = HDT_BF_B_PnPInfo.WorkingPos_U;
 
-            
+
 
             ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "SetActionCommand_BFM", BowlFeederID.BF_B, ACTIONMODE.PICKUP, Pos);
             if (T.Equals(ThreeValued.TRUE))
@@ -7301,1005 +8937,15 @@ namespace TBPP14200
             return FlowChart.FCRESULT.NEXT;
         }
 
-        private FlowChart.FCRESULT flowChart292_Run()
-        {
-            KitShuttleID KitID = KitShuttleID.NONE;
-            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
-            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "LockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_A, (KitShuttleID)KitID);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart291_Run()
-        {
-            KitShuttleID KitID = KitShuttleID.NONE;
-            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
-            if (HDT_BF_A_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_A, (KitShuttleID)KitID);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart294_Run()
-        {
-            KitShuttleID KitID = KitShuttleID.NONE;
-            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
-            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "LockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_B, (KitShuttleID)KitID);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart293_Run()
-        {
-            KitShuttleID KitID = KitShuttleID.NONE;
-            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_A)) KitID = KitShuttleID.TransferShuttleA;
-            if (HDT_BF_B_PnPInfo.TargetStation.Equals(PnPStation.KIT_SHUTTLE_B)) KitID = KitShuttleID.TransferShuttleB;
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "UnlockTransferShuttle", (KitShuttleOwner)KitShuttleOwner.HDT_BF_B, (KitShuttleID)KitID);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart295_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_A);
-            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_A);
-            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X + Offset;
-            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y + OffsetY;
-            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
-            
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 =  ThreeValued.TRUE;
-            bool bFocus = true;
-            switch(HDT_BIB_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
-                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_A, BIBStageID.BIBStageA);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
-                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_A, BIBStageID.BIBStageB);
-                    }
-                    break;
-            }
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE) && bFocus)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart296_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-
-            switch (HDT_BIB_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
-                    }
-                    break;
-            }
-
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart297_Run()
-        {
-            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X;
-            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y;
-            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
-            pos.ColIndex = HDT_BIB_A_BookingInfo.SocketX;
-            pos.RowIndex = HDT_BIB_A_BookingInfo.SocketY;
-            pos.BoardCount = BoardCount + 1;
-
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.GRAB_CCD, pos);
-            if (T1.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart298_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart299_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_A);
-            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_A);
-            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X + Offset;
-            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y + OffsetY;
-            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-            switch (HDT_BIB_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_A, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
-                    }
-                    break;
-            }
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart300_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-
-            switch (HDT_BIB_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
-                    }
-                    break;
-            }
-
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart301_Run()
-        {
-            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
-
-
-            BasePosInfo pos = new BasePosInfo();
-            pos.X = HDT_BIB_A_PnPInfo.WorkingPos_X;
-            pos.Y = HDT_BIB_A_PnPInfo.WorkingPos_Y;
-            pos.Z = HDT_BIB_A_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_A_PnPInfo.WorkingPos_U;
-            pos.ColIndex = HDT_BIB_A_BookingInfo.SocketX;
-            pos.RowIndex = HDT_BIB_A_BookingInfo.SocketY;
-            pos.BoardCount = BoardCount + 1;
-
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_A, ACTIONMODE.GRAB_CCD_AF, pos);
-            if (T1.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart302_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_A);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private bool bLoadToBox_A = false;
-        private bool bLoadToBox_B = false;
-        private FlowChart.FCRESULT flowChart303_Run()
-        {
-            bLoadToBox_A = false;
-            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            InspectionState state = InspectionState.Unknow;
-            if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-            {
-                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_A);
-                switch (state)
-                {
-                    case InspectionState.Success:   //有IC 上板未放置有IC為異常
-                        {
-                            //Alarm
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                    case InspectionState.Fail:  //無IC
-                        {
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                    case InspectionState.Error: //無Socket 丟到垃圾桶
-                        {
-                            Point pos = new Point();
-                            BasePosInfo HDT_BIB_A_Basic = new BasePosInfo();
-                            PnPStation TargetStation = PnPStation.BinBox;
-                            pos = HDT_BIB_A_PnP.CalcBoxPnPPos(HDT_BIB_A_PnPInfo.HDTTray, HDT_BIB_A_PnPInfo.TargetTray);
-                            HDT_BIB_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", TargetStation, BoardHeadID.HDT_A);
-                            HDT_BIB_A_PnPInfo.WorkingPos_X = HDT_BIB_A_Basic.X;
-                            HDT_BIB_A_PnPInfo.WorkingPos_Z = HDT_BIB_A_Basic.Z;
-                            bLoadToBox_A = true;
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                }
-                return FlowChart.FCRESULT.IDLE;
-            }
-            else
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-        }
-
-        private FlowChart.FCRESULT flowChart306_Run()
-        {
-            if (!HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_A);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_A) return FlowChart.FCRESULT.NEXT;
-
-            InspectionState state = InspectionState.Unknow;
-            if (HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_A_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-            {
-                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_A);
-                switch (state)
-                {
-                    case InspectionState.Success:   //上板後有IC正常
-                        {
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                    case InspectionState.Fail:  //上板後無IC異常
-                    case InspectionState.Error: //異常
-                        {
-                            //Alarm CCD 檢測異常
-                            return FlowChart.FCRESULT.CASE1;    //重新拍攝
-                        }
-                        break;
-                }
-                return FlowChart.FCRESULT.IDLE;
-            }
-            else
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-        }
-
-        private FlowChart.FCRESULT flowChart322_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_B);
-            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_B);
-            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X + Offset;
-            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y + OffsetY;
-            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-            bool bFocus = true;
-            switch (HDT_BIB_B_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
-                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_B, BIBStageID.BIBStageA);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
-                        bFocus = (bool)SYSPara.CallProc(ModuleName_HDT, "SetVisionFocus", BoardHeadID.HDT_B, BIBStageID.BIBStageB);
-                    }
-                    break;
-            }
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE) && bFocus)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart320_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            int Offset = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffset", BoardHeadID.HDT_B);
-            int OffsetY = (int)SYSPara.CallProc(ModuleName_HDT, "GetNozzleCCDOffsetY", BoardHeadID.HDT_B);
-            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X + Offset;
-            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y + OffsetY;
-            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-            switch (HDT_BIB_B_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageA, ACTIONMODE.MOVE, pos);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.MOVE, pos);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.HDT_BIB_B, BIBStageID.BIBStageB, ACTIONMODE.MOVE, pos);
-                    }
-                    break;
-            }
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart321_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-
-            switch (HDT_BIB_B_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
-                    }
-                    break;
-            }
-
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart319_Run()
-        {
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T1 = ThreeValued.TRUE;
-            ThreeValued T2 = ThreeValued.TRUE;
-
-            switch (HDT_BIB_B_PnPInfo.TargetStation)
-            {
-                case PnPStation.BOARD_A:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-                    }
-                    break;
-                case PnPStation.BOARD_B:
-                    {
-                        T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
-                    }
-                    break;
-            }
-
-            if (T1.Equals(ThreeValued.TRUE) && T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart315_Run()
-        {
-            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X;
-            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y;
-            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
-            pos.ColIndex = HDT_BIB_B_BookingInfo.SocketX;
-            pos.RowIndex = HDT_BIB_B_BookingInfo.SocketY;
-            pos.BoardCount = BoardCount + 1;
-
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.GRAB_CCD, pos);
-            if (T1.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart310_Run()
-        {
-            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
-
-            BasePosInfo pos = new BasePosInfo();
-            pos.X = HDT_BIB_B_PnPInfo.WorkingPos_X;
-            pos.Y = HDT_BIB_B_PnPInfo.WorkingPos_Y;
-            pos.Z = HDT_BIB_B_PnPInfo.WorkingPos_Z;
-            pos.U = HDT_BIB_B_PnPInfo.WorkingPos_U;
-            pos.ColIndex = HDT_BIB_B_BookingInfo.SocketX;
-            pos.RowIndex = HDT_BIB_B_BookingInfo.SocketY;
-            pos.BoardCount = BoardCount + 1;
-            ThreeValued T1 = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "SetActionCommand_HDT", BoardHeadID.HDT_B, ACTIONMODE.GRAB_CCD_AF, pos);
-            if (T1.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart316_Run()
-        {
-            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart311_Run()
-        {
-            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_HDT, "GetActionResult_HDT", BoardHeadID.HDT_B);
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart317_Run()
-        {
-            bLoadToBox_B = false;
-            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            InspectionState state = InspectionState.Unknow;
-            if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-            {
-                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_B);
-                switch (state)
-                {
-                    case InspectionState.Success:   //有IC 上板未放置有IC為異常
-                        {
-                            //Alarm
-                            return FlowChart.FCRESULT.CASE1;
-                        }
-                        break;
-                    case InspectionState.Fail:  //無IC
-                        {
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                    case InspectionState.Error: //無Socket 丟到垃圾桶
-                        {
-                            Point pos = new Point();
-                            BasePosInfo HDT_BIB_B_Basic = new BasePosInfo();
-                            PnPStation TargetStation = PnPStation.BinBox;
-                            pos = HDT_BIB_B_PnP.CalcBoxPnPPos(HDT_BIB_B_PnPInfo.HDTTray, HDT_BIB_B_PnPInfo.TargetTray);
-                            HDT_BIB_B_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_HDT, "GetBasicInfo", TargetStation, BoardHeadID.HDT_B);
-                            HDT_BIB_B_PnPInfo.WorkingPos_X = HDT_BIB_B_Basic.X;
-                            HDT_BIB_B_PnPInfo.WorkingPos_Z = HDT_BIB_B_Basic.Z;
-                            bLoadToBox_B = true;
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                }
-                return FlowChart.FCRESULT.IDLE;
-            }
-            else
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-        }
-
-        private FlowChart.FCRESULT flowChart312_Run()
-        {
-            if (!HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) && !HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-                return FlowChart.FCRESULT.NEXT;
-
-            bool b1 = (bool)SYSPara.CallProc(ModuleName_HDT, "bUseCCD", BoardHeadID.HDT_B);
-            if (!b1) return FlowChart.FCRESULT.NEXT;
-
-            if (bLoadToBox_B) return FlowChart.FCRESULT.NEXT;
-
-            InspectionState state = InspectionState.Unknow;
-            if (HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_A) || HDT_BIB_B_PnPInfo.TargetStation.Equals(PnPStation.BOARD_B))
-            {
-                state = (InspectionState)SYSPara.CallProc(ModuleName_HDT, "GetInspectState", BoardHeadID.HDT_B);
-                switch (state)
-                {
-                    case InspectionState.Success:   //上板後有IC正常
-                        {
-                            return FlowChart.FCRESULT.NEXT;
-                        }
-                        break;
-                    case InspectionState.Fail:  //上板後無IC異常
-                    case InspectionState.Error: //異常
-                        {
-                            //Alarm CCD 檢測異常
-                            return FlowChart.FCRESULT.CASE1;    //重新拍攝
-                        }
-                        break;
-                }
-                return FlowChart.FCRESULT.IDLE;
-            }
-            else
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-        }
-
-        private FlowChart.FCRESULT flowChart318_Run()
-        {
-            string code = string.Format("{0}{1:0000}", "E", "0901");
-            string args = "Board Head B";
-            SYSPara.Alarm.Say(code, args);
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart313_Run()
-        {
-            string code = string.Format("{0}{1:0000}", "E", "0901");
-            string args = "Board Head B";
-            SYSPara.Alarm.Say(code, args);
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart304_Run()
-        {
-            string code = string.Format("{0}{1:0000}", "E", "0901");
-            string args = "Board Head A";
-            SYSPara.Alarm.Say(code, args);
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart307_Run()
-        {
-            string code = string.Format("{0}{1:0000}", "E", "0901");
-            string args = "Board Head A";
-            SYSPara.Alarm.Say(code, args);
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart323_Run()
-        {
-            string Msg = SYSPara.PReadValue("VisionJobName").ToString() + "," +
-                               BoardInfo.YN.ToString() + "," +
-                               BoardInfo.YN.ToString() + "," +
-                               BoardInfo.YN.ToString() + "," +
-                               BoardInfo.YN.ToString() + "," +
-                               /*BoardInfo.YN.ToString() +*/ "1," +
-                               /*BoardInfo.XN.ToString() + */"1," +
-                               /*BBoardInfo.YP.ToString() + */"1," +
-                                /*BBoardInfo.XP.ToString() + */"1," +
-                               BoardInfo.DeviceWidth.ToString() + "," +
-                               BoardInfo.DeviceLength.ToString() + "," +
-                               BoardInfo.DeviceHeight.ToString();
-            SYSPara.CallProc(ModuleName_BFM, "AddNewJob", Msg);
-            TM_Homing.Restart();
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart324_Run()
-        {
-            int iRet = (int)SYSPara.CallProc(ModuleName_BFM, "AddNewJobResult");
-            if (iRet.Equals(1))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            else if (iRet.Equals(0))
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
-            if (TM_Homing.On(5000))
-            {
-                //SYSPara.ShowAlarm("E", 902);
-                SYSPara.ShowAlarm("E", (int)AlarmCode.Err_AddNewJobFail);
-                TM_Homing.Restart();
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart325_Run()
-        {
-            string Msg = SYSPara.PReadValue("VisionJobName").ToString();
-            SYSPara.CallProc(ModuleName_BFM, "ChangeJob", Msg);
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart326_Run()
-        {
-            int iRet = (int)SYSPara.CallProc(ModuleName_BFM, "ChangeJobResult");
-            if (iRet.Equals(1))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            else if (iRet.Equals(0))
-            {
-                return FlowChart.FCRESULT.CASE1;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart327_Run()
-        {
-            bool OpenLotHome = !string.IsNullOrEmpty(SYSPara.NewLotInfo.LotNumber);
-            if (SYSPara.ProductionLinkMode.Equals(LinkMode.Saunders) && OpenLotHome)
-            {
-                //BoardDataLink 
-                bool b1 = FormSet.mMainFlow.CreatBoardDataLinkerInfo();
-                if (!b1)
-                {
-                    SYSPara.Alarm.Say("w1001");
-                    return FlowChart.FCRESULT.IDLE;
-                }
-            }
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart328_Run()
-        {
-            bool OpenLotHome = !string.IsNullOrEmpty(SYSPara.NewLotInfo.LotNumber);
-            if (SYSPara.ProductionLinkMode.Equals(LinkMode.Saunders) && OpenLotHome)
-            {
-                //BoardDataLink 
-                
-                int iErrorCode = 0;
-                string sErrorMsg = "";
-                
-                CommandReturn CRR = CommandReturn.CR_Waitting;
-                CRR = BDSMC.SetLotData("LotStartSetLotData", lotinfo_sm, 20000);
-                if (!CRR.Equals(CommandReturn.CR_Waitting))
-                {
-                    BDSMC.ReleaseCommandProcess("LotStartSetLotData");
-
-                    if (CRR.Equals(CommandReturn.CR_Error))
-                    {
-                        BDSMC.GetErrorMessage(ref iErrorCode, ref sErrorMsg);
-                        int Alarm = (iErrorCode + 1400);
-                        SYSPara.ShowAlarm("E", (int)Alarm, "DataLink", sErrorMsg);
-                    }
-                    else
-                    {
-                        return FlowChart.FCRESULT.NEXT;
-                    }
-                }
-                return FlowChart.FCRESULT.IDLE;
-            }
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart329_Run()
-        {
-
-            bool b1 = false;
-            Point pos = new Point();
-            BasePosInfo PlaceOffset = new BasePosInfo();
-            BasePosInfo HDT_BF_A_Basic = new BasePosInfo();
-            BasePosInfo KSMBasic = new BasePosInfo();
-
-            switch (HDT_BF_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_X").ToInt();
-                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_Y").ToInt();
-                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_A_KITA_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
-
-                        pos = HDT_BF_A_PnP.PreCalcKitPnPPos(HDT_BF_A_PnPInfo.HDTTray, HDT_BF_A_PnPInfo.TargetTray);  //治具位置
-
-                        HDT_BF_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_A, KitShuttleID.TransferShuttleA);
-                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleA);
-                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_A);
-                        HDT_BF_A_PnPInfo.WorkingPos_X = HDT_BF_A_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
-                        HDT_BF_A_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
-                        HDT_BF_A_PnPInfo.WorkingPos_Z = HDT_BF_A_Basic.Z + PlaceOffset.Z;
-                        b1 = true;
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_A_KITB_X").ToInt();
-                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_A_KITB_Y").ToInt();
-                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_A_KITB_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
-
-                        pos = HDT_BF_A_PnP.PreCalcKitPnPPos(HDT_BF_A_PnPInfo.HDTTray, HDT_BF_A_PnPInfo.TargetTray);  //治具位置
-                        HDT_BF_A_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_A, KitShuttleID.TransferShuttleB);
-                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleB);
-                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_A);
-                        HDT_BF_A_PnPInfo.WorkingPos_X = HDT_BF_A_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
-                        HDT_BF_A_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
-                        HDT_BF_A_PnPInfo.WorkingPos_Z = HDT_BF_A_Basic.Z + PlaceOffset.Z;
-                        b1 = true;
-                    }
-                    break;
-            }
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart330_Run()
-        {
-            bool b1 = false;
-            Point pos = new Point();
-            BasePosInfo PlaceOffset = new BasePosInfo();
-            BasePosInfo HDT_BF_B_Basic = new BasePosInfo();
-            BasePosInfo KSMBasic = new BasePosInfo();
-
-            switch (HDT_BF_B_PnPInfo.TargetStation)
-            {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_B_KITA_X").ToInt();
-                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_B_KITA_Y").ToInt();
-                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_B_KITA_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
-
-                        pos = HDT_BF_B_PnP.PreCalcKitPnPPos(HDT_BF_B_PnPInfo.HDTTray, HDT_BF_B_PnPInfo.TargetTray);  //治具位置
-                        HDT_BF_B_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_B, KitShuttleID.TransferShuttleA);
-                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleA);
-                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_B);
-                        HDT_BF_B_PnPInfo.WorkingPos_X = HDT_BF_B_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
-                        HDT_BF_B_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP  + PlaceOffset.Y;
-                        HDT_BF_B_PnPInfo.WorkingPos_Z = HDT_BF_B_Basic.Z + PlaceOffset.Z;
-                        b1 = true;
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        PlaceOffset.X = SYSPara.PReadValue("Offset_HDT_BF_B_KITB_X").ToInt();
-                        PlaceOffset.Y = SYSPara.PReadValue("Offset_HDT_BF_B_KITB_Y").ToInt();
-                        PlaceOffset.Z = SYSPara.PReadValue("Offset_HDT_BF_B_KITB_Z_PLACE").ToInt() + KitInfo.Height + KitInfo.DeviceHeight;
-
-                        pos = HDT_BF_B_PnP.CalcKitPnPPos(HDT_BF_B_PnPInfo.HDTTray, HDT_BF_B_PnPInfo.TargetTray);  //治具位置
-                        HDT_BF_B_Basic = (BasePosInfo)SYSPara.CallProc(ModuleName_BFM, "GetBasicPos", BowlFeederID.BF_B, KitShuttleID.TransferShuttleB);
-                        KSMBasic = (BasePosInfo)SYSPara.CallProc(ModuleName_KSM, "GetBasicInfo", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleB);
-                        //int InspectOffsetY = (int)SYSPara.CallProc(ModuleName_BFM, "GetInspectionResultY", BowlFeederID.BF_B);
-                        HDT_BF_B_PnPInfo.WorkingPos_X = HDT_BF_B_Basic.X - (KitInfo.Width / 2) + KitInfo.XO + pos.X * KitInfo.XP + PlaceOffset.X;
-                        HDT_BF_B_PnPInfo.WorkingPos_Y = KSMBasic.Y - (KitInfo.Length / 2) + KitInfo.YO + pos.Y * KitInfo.YP + PlaceOffset.Y;
-                        HDT_BF_B_PnPInfo.WorkingPos_Z = HDT_BF_B_Basic.Z + PlaceOffset.Z;
-                        b1 = true;
-                    }
-                    break;
-            }
-            if (b1)
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart332_Run()
-        {
-            BasePosInfo Pos = new BasePosInfo();
-            Pos.X = HDT_BF_A_PnPInfo.WorkingPos_X;
-            Pos.Y = HDT_BF_A_PnPInfo.WorkingPos_Y;
-            Pos.Z = HDT_BF_A_PnPInfo.WorkingPos_Z;
-            Pos.U = HDT_BF_A_PnPInfo.WorkingPos_U;
-
-            ThreeValued T = ThreeValued.UNKNOWN;
-            switch (HDT_BF_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleA, ACTIONMODE.MOVE, Pos);
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleB, ACTIONMODE.MOVE, Pos);
-                    }
-                    break;
-            }
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart331_Run()
-        {
-            ThreeValued T2 = ThreeValued.UNKNOWN;
-            switch (HDT_BF_A_PnPInfo.TargetStation)
-            {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleA);
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_A, KitShuttleID.TransferShuttleB);
-                    }
-                    break;
-            }
-
-            if (T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart334_Run()
+        private FlowChart.FCRESULT flowChart265_Run()
         {
             BasePosInfo Pos = new BasePosInfo();
             Pos.X = HDT_BF_B_PnPInfo.WorkingPos_X;
+            Pos.U = HDT_BF_B_PnPInfo.WorkingPos_U;
             Pos.Y = HDT_BF_B_PnPInfo.WorkingPos_Y;
             Pos.Z = HDT_BF_B_PnPInfo.WorkingPos_Z;
-            Pos.U = HDT_BF_B_PnPInfo.WorkingPos_U;
 
-            ThreeValued T = ThreeValued.UNKNOWN;
-            switch (HDT_BF_B_PnPInfo.TargetStation)
-            {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleA, ACTIONMODE.MOVE, Pos);
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        T = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "SetActionCommand_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleB, ACTIONMODE.MOVE, Pos);
-                    }
-                    break;
-            }
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "SetActionCommand_BFM", BowlFeederID.BF_B, ACTIONMODE.NONE, Pos);
             if (T.Equals(ThreeValued.TRUE))
             {
                 return FlowChart.FCRESULT.NEXT;
@@ -8307,135 +8953,32 @@ namespace TBPP14200
             return FlowChart.FCRESULT.IDLE;
         }
 
-        private FlowChart.FCRESULT flowChart333_Run()
+        private FlowChart.FCRESULT flowChart264_Run()
         {
-            ThreeValued T2 = ThreeValued.UNKNOWN;
-            switch (HDT_BF_B_PnPInfo.TargetStation)
+            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BFM, "GetActionResult_BFM", BowlFeederID.BF_B);
+            if (T.Equals(ThreeValued.TRUE))
             {
-                case PnPStation.KIT_SHUTTLE_A:
-                    {
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleA);
-                    }
-                    break;
-                case PnPStation.KIT_SHUTTLE_B:
-                    {
-                        T2 = (ThreeValued)SYSPara.CallProc(ModuleName_KSM, "GetActionResult_KSM", KitShuttleOwner.HDT_BF_B, KitShuttleID.TransferShuttleB);
-                    }
-                    break;
-            }
-
-            if (T2.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart336_Run()
-        {
-            bool OpenLotHome = !string.IsNullOrEmpty(SYSPara.NewLotInfo.LotNumber);
-            if (SYSPara.ProductionLinkMode.Equals(LinkMode.Saunders) && OpenLotHome)
-            {
-                //BoardDataLink 
-
-                int iErrorCode = 0;
-                string sErrorMsg = "";
-
-                CommandReturn CRR = CommandReturn.CR_Waitting;
-                CRR = BDSMC.StartLot("LotStartProcess");
-                if (!CRR.Equals(CommandReturn.CR_Waitting))
+                GlobalDefine.OEE.UpdateBinQty(BinDefine.Untested, JStatusType.Process, 1);
+                //TDEx_Bottom_BFM.BinReplace((byte)BinDefine.Bin1, (byte)BinDefine.Empty);
+                HDT_BF_B_PnPInfo.SourceTray.SetBin(0, 0, 0, 0, (byte)BinDefine.Empty);
+                for (int y = 0; y < KitInfo.YN; y++)
                 {
-                    BDSMC.ReleaseCommandProcess("LotStartProcess");
-
-                    if (CRR.Equals(CommandReturn.CR_Error))
+                    for (int x = 0; x < KitInfo.XN; x++)
                     {
-                        BDSMC.GetErrorMessage(ref iErrorCode, ref sErrorMsg);
-                        int Alarm = (iErrorCode + 1400);
-                        SYSPara.ShowAlarm("E", (int)Alarm, "DataLink", sErrorMsg);
-                    }
-                    else
-                    {
-                        return FlowChart.FCRESULT.NEXT;
+                        byte bin = HDT_BF_B_PnPInfo.TargetTray.GetBin(0, 0, x, y);
+                        if (bin.Equals((byte)BinDefine.Empty))
+                        {
+                            HDT_BF_B_PnPInfo.TargetTray.SetBin(0, 0, x, y, (byte)BinDefine.Bin1);
+                            break;
+                        }
                     }
                 }
-                return FlowChart.FCRESULT.IDLE;
-            }
-            return FlowChart.FCRESULT.NEXT;
-        }
-
-        private FlowChart.FCRESULT flowChart335_Run()
-        {
-            //ThreeValued T = ThreeValued.UNKNOWN;
-            //BasePosInfo Pos = new BasePosInfo();
-
-            //if (TRM_WorkStage == BIBStageID.BIBStageA)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageA, ACTIONMODE.LOCK, Pos);
-            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, BIBStageID.BIBStageB, ACTIONMODE.LOCK, Pos);
-            BasePosInfo Pos = new BasePosInfo();
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.TRANSFER, TRM_WorkStage, ACTIONMODE.LOCK, Pos);
-
-            if (T.Equals(ThreeValued.TRUE))
-            {
                 return FlowChart.FCRESULT.NEXT;
             }
             return FlowChart.FCRESULT.IDLE;
         }
+        #endregion
 
-        private FlowChart.FCRESULT flowChart337_Run()
-        {
-            //ThreeValued T = ThreeValued.UNKNOWN;
-
-            //if (TRM_WorkStage == BIBStageID.BIBStageA)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", TRM_WorkStage);
-
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart339_Run()
-        {
-            //ThreeValued T = ThreeValued.UNKNOWN;
-            //BasePosInfo Pos = new BasePosInfo();
-
-            //if (TRM_WorkStage == BIBStageID.BIBStageA)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageA, ACTIONMODE.UNLOCK, Pos);
-            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, BIBStageID.BIBStageB, ACTIONMODE.UNLOCK, Pos);
-            BasePosInfo Pos = new BasePosInfo();
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "SetActionCommand_BSM", BIBStageModuleOwner.NONE, TRM_WorkStage, ACTIONMODE.UNLOCK, Pos);
-
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
-
-        private FlowChart.FCRESULT flowChart338_Run()
-        {
-            //ThreeValued T = ThreeValued.UNKNOWN;
-
-            //if (TRM_WorkStage == BIBStageID.BIBStageA)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageA);
-            //else if (TRM_WorkStage == BIBStageID.BIBStageB)
-            //    T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", BIBStageID.BIBStageB);
-
-            ThreeValued T = (ThreeValued)SYSPara.CallProc(ModuleName_BSM, "GetActionResult_BSM", TRM_WorkStage);
-
-            if (T.Equals(ThreeValued.TRUE))
-            {
-                return FlowChart.FCRESULT.NEXT;
-            }
-            return FlowChart.FCRESULT.IDLE;
-        }
         #region Scan Action
         private FlowChart.FCRESULT FC_Auto_ScanAction_Run()
         {
@@ -8519,5 +9062,8 @@ namespace TBPP14200
             return FlowChart.FCRESULT.NEXT;
         }
         #endregion ScanAction
+
+        #endregion
+
     }
 }
