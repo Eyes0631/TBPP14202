@@ -3,6 +3,7 @@
 ///Note:
 ///1.因為舌板只有單Arm所以一次只能一板
 ///2.TODO:TrayHead Unload 放料後要做OEEUpdate
+///3.直Tray模組有兩組，一組放空Tray一組放料盤，因LeftTray較難放置，故LeftTray放空Tray
 /////////////////////////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -81,6 +82,7 @@ namespace TBPP14200
             Err_StageA_HasNoBoard = 1014,   //E1014,    板台車A無板,     BoardStage A has no board
             Err_StageB_HasBoard = 1015,     //E1015,    板台車B有板,     BoardStage B has board
             Err_StageB_HasNoBoard= 1016,    //E1016,    板台車B無板,     BoardStage B has no board
+            Err_Get_KitShuttle_Error = 1020,    //E1020, 取得作業治具台車錯誤,    Get Kit Shuttle Error
         }
 
         #endregion
@@ -203,6 +205,11 @@ namespace TBPP14200
 
         //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
         private PnPCalculator HDT_TR_PnP = null;
+        private KitShuttleID HDT_TR_KitShuttleID_Load;
+        private KitShuttleID HDT_TR_KitShuttleID_Unload;
+        private KitShuttleID HDT_TR_KitShuttleID_Load_Old;
+        private KitShuttleID HDT_TR_KitShuttleID_Unload_Old;
+        private TrayID HDT_TR_TrayShuttleID;
 
         //HDT BIB Flag
         private JActionFlag Flag_HDT_BIB_A_PnP;
@@ -268,6 +275,8 @@ namespace TBPP14200
         //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
         private JActionFlag Flag_VTray_LotEnd;
         private JActionFlag Flag_HDT_TR_LotEnd;
+        private JActionFlag Flag_LeftTrayMove;
+        private JActionFlag Flag_RightTrayMove;
 
         //MainFlow Lot End Task
         private JActionTask Task_MainFLotEnd;
@@ -276,6 +285,8 @@ namespace TBPP14200
 
         private bool bLoadToBox_A = false;
         private bool bLoadToBox_B = false;
+
+        private bool bHDT_TR_HaveSourceDone = false;
 
         public bool HDTA_NozzleStateIsFail;
         public bool HDTB_NozzleStateIsFail;
@@ -409,6 +420,8 @@ namespace TBPP14200
             //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
             Flag_VTray_LotEnd = new JActionFlag();
             Flag_HDT_TR_LotEnd = new JActionFlag();
+            Flag_LeftTrayMove = new JActionFlag();
+            Flag_RightTrayMove = new JActionFlag();
 
             Task_MainFLotEnd = new JActionTask();
 
@@ -1364,6 +1377,8 @@ namespace TBPP14200
             //v2.0.0.1 20251219 Mars TBPP14202 新增TrayModule & Tray Head
             Flag_VTray_LotEnd.Reset();
             Flag_HDT_TR_LotEnd.Reset();
+            Flag_LeftTrayMove.Reset();
+            Flag_RightTrayMove.Reset();
             
             Flag_HDT_BIB_A_PnP.Reset();
             Flag_HDT_BIB_B_PnP.Reset();
@@ -1381,6 +1396,9 @@ namespace TBPP14200
             Flag_Load_ScanAction.Reset();
             Flag_Load_WorkAction.Reset();
             Flag_SuppleDeviceAction.Reset();
+            HDT_TR_KitShuttleID_Load = KitShuttleID.NONE;
+            HDT_TR_KitShuttleID_Unload = KitShuttleID.NONE;
+            HDT_TR_TrayShuttleID = TrayID.NONE;
 
             //LeftCassette.Reset();
             //RightCassette.Reset();
@@ -9064,6 +9082,654 @@ namespace TBPP14200
         #endregion ScanAction
 
         #endregion
+        #region Left VTray Shuttle
+        private FlowChart.FCRESULT FC_LeftTray_Run_Run()
+        {
+            //LEft Shuttle Start
+            return FlowChart.FCRESULT.NEXT;
+        }
 
+        private FlowChart.FCRESULT flowChart341_Run()
+        {
+            //Is Shuttle Need ToDo
+            if (Flag_LeftTrayMove.IsDoIt())
+            {
+                Flag_LeftTrayMove.Doing();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart342_Run()
+        {
+            //Shuttle Move  
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_LTR, "SetStationMove", HDT_TR_PnPInfo.WorkingPos_Y);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart343_Run()
+        {
+            //Is Move Done?
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_LTR, "GetStationMoveDone");
+            if (b1)
+            {
+                Flag_LeftTrayMove.Done();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart344_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart345_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+        #endregion
+        #region Right VTray Shuttle
+        private FlowChart.FCRESULT FC_RightTray_Run_Run()
+        {
+            //Right Shuttle Start
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart347_Run()
+        {
+            //Is Shuttle Need ToDo?
+            if (Flag_RightTrayMove.IsDoIt())
+            {
+                Flag_RightTrayMove.Doing();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart348_Run()
+        {
+            //Right Shuttle Move
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_RTR, "SetStationMove", HDT_TR_PnPInfo.WorkingPos_Y);
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart349_Run()
+        {
+            //Is Move Done
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_RTR, "GetStationMoveDone");
+            if (b1)
+            {
+                Flag_RightTrayMove.Done();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart350_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart346_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+        #endregion
+        #region Tray Head
+        private FlowChart.FCRESULT FC_TrayHead_Auto_Start_Run()
+        {
+            //Tray Head Action Start
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart340_Run()
+        {
+            //Is UNTESTED_ORDER Shuttle Ready?
+            //判斷台車是否為 UNTESTED_ORDER (BOOKED)
+            if (!HDT_TR_KitShuttleID_Load.Equals(KitShuttleID.NONE))
+            {
+                VehicleState state = VehicleState.NONE;
+                if ((HDT_TR_KitShuttleID_Load == KitShuttleID.TransferShuttleA && LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED)) ||
+                    (HDT_TR_KitShuttleID_Load == KitShuttleID.TransferShuttleB && RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED)))
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        bool bRetTrg = ((HDT_TR_KitShuttleID_Load == KitShuttleID.TransferShuttleA && LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL)) ||
+                                        (HDT_TR_KitShuttleID_Load == KitShuttleID.TransferShuttleB && RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL)));
+                        if (bRetTrg)
+                        {
+                            HDT_TR_KitShuttleID_Load = KitShuttleID.NONE;
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                        return FlowChart.FCRESULT.IDLE;
+                    }
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            else
+            {
+                //如果 HDT_TR_KitShuttleID 為 NONE，則重新取得 Transfer 台車車號
+                //表示之前鎖定的 Transfer 台車動作已完成，所以要更換 Transfer 台車
+                KitShuttleID[] checkOrder;
+
+                if (HDT_TR_KitShuttleID_Load_Old == KitShuttleID.TransferShuttleA)
+                {
+                    checkOrder = new KitShuttleID[] { KitShuttleID.TransferShuttleB, KitShuttleID.TransferShuttleA };
+                }
+                else
+                {
+                    checkOrder = new KitShuttleID[] { KitShuttleID.TransferShuttleA, KitShuttleID.TransferShuttleB };
+                }
+
+                foreach (KitShuttleID id in checkOrder)
+                {
+                    var controller = (id == KitShuttleID.TransferShuttleA) ? LeftKitStateControl : RightKitStateControl;
+
+                    if (controller.IsStateDoIt(VehicleState.UNTESTED_EMPTY_BOOKED))
+                    {
+                        HDT_TR_KitShuttleID_Load = id;
+                        HDT_TR_KitShuttleID_Load_Old = HDT_TR_KitShuttleID_Load;
+                        break; 
+                    }
+                }
+                
+
+                if (!HDT_TR_KitShuttleID_Load.Equals(KitShuttleID.NONE))
+                {
+                    if (SYSPara.Lotend)
+                    {
+                        bool bRetTrg = ((HDT_TR_KitShuttleID_Load == KitShuttleID.TransferShuttleA && LeftKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL)) ||
+                                        (HDT_TR_KitShuttleID_Load == KitShuttleID.TransferShuttleB && RightKitStateControl.IsStateDoIt(VehicleState.UNTESTED_FULL)));
+                        if (bRetTrg)
+                        {
+                            HDT_TR_KitShuttleID_Load = KitShuttleID.NONE;
+                            return FlowChart.FCRESULT.CASE1;
+                        }
+                        return FlowChart.FCRESULT.IDLE;
+                    }
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+
+            //如果找不到 UNTESTED_ORDER 的治具台車，則是卸板，需判斷 TSM 是否已結批
+            //if (SYSPara.Lotend && Flag_FrontKitShuttle_LotEnd.IsDone() && Flag_BackKitShuttle_LotEnd.IsDone())
+            if (SYSPara.Lotend && Flag_LeftKitShuttle_LotEnd.IsDone() && Flag_RightKitShuttle_LotEnd.IsDone())
+            {
+                mHDT_TR.SetCanLotEnd();
+                return FlowChart.FCRESULT.CASE2;
+            }
+            return FlowChart.FCRESULT.CASE1;//無法取得 UNTESTED_ORDER 狀態的 Transfer 台車車號
+        }
+
+        private FlowChart.FCRESULT flowChart381_Run()
+        {
+            //Is Tray Shuttle Load Ready?
+            //上板固定使用右Tray(右軌道比較好放置，故放料盤)
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_RTR, "IsStationReady");
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+
+            //if (HDT_TR_TrayShuttleID != TrayID.NONE)
+            //{
+            //    
+            //    string moduleName = HDT_TR_TrayShuttleID == TrayID.LEFT ? ModuleName_LTR : ModuleName_RTR;
+            //    bool b1 = (bool)SYSPara.CallProc(moduleName, "IsStationReady");
+            //    if (b1)
+            //    {
+            //        return FlowChart.FCRESULT.NEXT;
+            //    }
+            //    HDT_TR_TrayShuttleID = TrayID.NONE;
+            //}
+            
+            //if (HDT_TR_TrayShuttleID == TrayID.NONE)
+            //{
+            //    HDT_TR_TrayShuttleID = (bool)SYSPara.CallProc(ModuleName_LTR, "IsStationReady") ?
+            //        TrayID.LEFT : (bool)SYSPara.CallProc(ModuleName_RTR, "IsStationReady") ? TrayID.RIGHT : TrayID.NONE;
+            //    if (HDT_TR_TrayShuttleID != TrayID.NONE)
+            //    {
+            //        return FlowChart.FCRESULT.NEXT;
+            //    }
+            //}
+            //return FlowChart.FCRESULT.IDLE;
+
+        }
+
+        private FlowChart.FCRESULT flowChart382_Run()
+        {
+            //Set Target & Source
+            TrayDataEx Source;
+            TrayDataEx Target;
+            PnPStation SourceStation;
+            PnPStation TargetStation;
+
+            switch (HDT_TR_KitShuttleID_Load)
+            {
+                case KitShuttleID.TransferShuttleA:
+                    Target = TDEx_Left_KitShuttle;
+                    TargetStation = PnPStation.KIT_SHUTTLE_A;
+                    break;
+                case KitShuttleID.TransferShuttleB:
+                    Target = TDEx_Right_KitShuttle;
+                    TargetStation = PnPStation.KIT_SHUTTLE_B;
+                    break;
+                default:
+                    ShowAlarm("w", (int)AlarmCode.Err_Get_KitShuttle_Error);
+                        return FlowChart.FCRESULT.IDLE;
+            }
+            
+            Source = TDEx_RightTray;
+            SourceStation = PnPStation.TRAY_SHUTTLE_B;
+
+            HDT_TR_PnPInfo = new PnPInfo(TDEx_HDT_TR, SourceStation, Source, GlobalDefine.PassBin, TargetStation, Target, GlobalDefine.EmptyBin, HDT_TR_INFO.Num_X, HDT_TR_INFO.Num_Y, VehicleState.UNTESTED_EMPTY_BOOKED);
+            Flag_HDT_TR_PnP.DoIt();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart386_Run()
+        {
+            //Waiting Flag_HDT_TR_PnP Done
+            if (Flag_HDT_TR_PnP.IsDone())
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart392_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart393_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart385_Run()
+        {
+            //Is TESTED_FULL Shuttle Ready?
+            //判斷台車是否為 TESTED_FULL (Board Head Work Done)
+            if (!HDT_TR_KitShuttleID_Unload.Equals(KitShuttleID.NONE))
+            {
+                if ((HDT_TR_KitShuttleID_Unload == KitShuttleID.TransferShuttleA && LeftKitStateControl.IsStateDoIt(VehicleState.TESTED_FULL)) ||
+                    (HDT_TR_KitShuttleID_Unload == KitShuttleID.TransferShuttleB && RightKitStateControl.IsStateDoIt(VehicleState.TESTED_FULL)))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+            else
+            {
+                //如果 HDT_TR_KitShuttleID 為 NONE，則重新取得 Transfer 台車車號
+                //表示之前鎖定的 Transfer 台車動作已完成，所以要更換 Transfer 台車
+                KitShuttleID[] checkOrder;
+
+                if (HDT_TR_KitShuttleID_Unload_Old == KitShuttleID.TransferShuttleA)
+                {
+                    checkOrder = new KitShuttleID[] { KitShuttleID.TransferShuttleB, KitShuttleID.TransferShuttleA };
+                }
+                else
+                {
+                    checkOrder = new KitShuttleID[] { KitShuttleID.TransferShuttleA, KitShuttleID.TransferShuttleB };
+                }
+
+                foreach (KitShuttleID id in checkOrder)
+                {
+                    var controller = (id == KitShuttleID.TransferShuttleA) ? LeftKitStateControl : RightKitStateControl;
+
+                    if (controller.IsStateDoIt(VehicleState.TESTED_FULL))
+                    {
+                        HDT_TR_KitShuttleID_Unload = id;
+                        HDT_TR_KitShuttleID_Unload_Old = HDT_TR_KitShuttleID_Unload;
+                        break;
+                    }
+                }
+
+                if (!HDT_TR_KitShuttleID_Unload.Equals(KitShuttleID.NONE))
+                {
+                    return FlowChart.FCRESULT.NEXT;
+                }
+            }
+
+            return FlowChart.FCRESULT.CASE1;//無法取得 TESTED_FULL 狀態的 Transfer 台車車號
+        }
+
+        private FlowChart.FCRESULT flowChart387_Run()
+        {
+            //Is Tray Shuttle Unload Ready?
+            bool b1 = (bool)SYSPara.CallProc(ModuleName_LTR, "IsStationReady");
+            if (b1)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+            //if (HDT_TR_TrayShuttleID != TrayID.NONE)
+            //{
+            //    string moduleName = HDT_TR_TrayShuttleID == TrayID.LEFT ? ModuleName_LTR : ModuleName_RTR;
+            //    bool b1 = (bool)SYSPara.CallProc(moduleName, "IsStationReady");
+            //    if (b1)
+            //    {
+            //        return FlowChart.FCRESULT.NEXT;
+            //    }
+            //    HDT_TR_TrayShuttleID = TrayID.NONE;
+            //}
+
+            //if (HDT_TR_TrayShuttleID == TrayID.NONE)
+            //{
+            //    HDT_TR_TrayShuttleID = (bool)SYSPara.CallProc(ModuleName_LTR, "IsStationReady") ?
+            //        TrayID.LEFT : (bool)SYSPara.CallProc(ModuleName_RTR, "IsStationReady") ? TrayID.RIGHT : TrayID.NONE;
+            //    if (HDT_TR_TrayShuttleID != TrayID.NONE)
+            //    {
+            //        return FlowChart.FCRESULT.NEXT;
+            //    }
+            //}
+            //return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart388_Run()
+        {
+            //Set Target & Source
+            TrayDataEx Source;
+            TrayDataEx Target;
+            PnPStation SourceStation;
+            PnPStation TargetStation;
+
+            switch (HDT_TR_KitShuttleID_Unload)
+            {
+                case KitShuttleID.TransferShuttleA:
+                    Source = TDEx_Left_KitShuttle;
+                    SourceStation = PnPStation.KIT_SHUTTLE_A;
+                    break;
+                case KitShuttleID.TransferShuttleB:
+                    Source = TDEx_Right_KitShuttle;
+                    SourceStation = PnPStation.KIT_SHUTTLE_B;
+                    break;
+                
+                default:
+                    {
+                        ShowAlarm("w", (int)AlarmCode.Err_Get_KitShuttle_Error);
+                        return FlowChart.FCRESULT.IDLE;
+                    }
+                //break;
+            }
+
+            Target = TDEx_LeftTray;
+            TargetStation = PnPStation.TRAY_SHUTTLE_A;
+
+            HDT_TR_PnPInfo = new PnPInfo(TDEx_HDT_TR, SourceStation, Source, GlobalDefine.AllBin, TargetStation, Target, GlobalDefine.EmptyBin, HDT_TR_INFO.Num_X, HDT_TR_INFO.Num_Y, VehicleState.TESTED_FULL);
+            
+            Flag_HDT_TR_PnP.DoIt();
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart389_Run()
+        {
+            //Wait Flag_HDT_TR_PnP Done
+            if (Flag_HDT_TR_PnP.IsDone())
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart390_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart391_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart383_Run()
+        {
+            //LotEnding
+            if (mHDT_TR.GetLotEndOk() || mHDT_TR.GetUseModule() == false)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart384_Run()
+        {
+            //LotEnd Ok
+            Flag_HDT_TR_LotEnd.Done();
+            return FlowChart.FCRESULT.IDLE;
+        }
+        #endregion
+        #region Tray Head PnP
+        private FlowChart.FCRESULT FC_TrayHeadPnP_Auto_Start_Run()
+        {
+            //Tray Head PnP Start
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart394_Run()
+        {
+            //Flag_HDT_TR_PnP.IsDoIt
+            if (SYSPara.Lotend &&
+                Flag_HDT_TR_LotEnd.IsDone() &&
+                TDEx_Left_KitShuttle.IsEmpty(GlobalDefine.AllBin) &&
+                TDEx_Right_KitShuttle.IsEmpty(GlobalDefine.AllBin))
+            {
+                return FlowChart.FCRESULT.CASE1;
+            }
+
+            if (Flag_HDT_TR_PnP.IsDoIt())
+            {
+                Flag_HDT_TR_PnP.Doing();
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart399_Run()
+        {
+            //Is Source or Target Full?
+            //結批就不再取新料
+            if (HDT_TR_PnPInfo.SourceStation.Equals(PnPStation.TRAY_SHUTTLE_B) && SYSPara.Lotend)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+
+            bool TargetFull = HDT_TR_PnPInfo.TargetIsDone;
+            bool SourceEmpty = HDT_TR_PnPInfo.SourceIsDone || bHDT_TR_HaveSourceDone;// || bTrayHeadPnPDone;
+            if (TargetFull || SourceEmpty)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart400_Run()
+        {
+            //Set Nozzle Bin (Disable/Enable)
+            HDT_TR_PnP.ResetNozzleBypass(HDT_TR_PnPInfo.SourceTray, HDT_TR_PnPInfo.TargetTray);
+
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart401_Run()
+        {
+            //Tray Head Pickup
+            return default(FlowChart.FCRESULT);
+        }
+
+        private FlowChart.FCRESULT flowChart402_Run()
+        {
+            //Is Source Empty?
+            bool SourceEmpty = HDT_TR_PnPInfo.SourceIsDone;
+            if (SourceEmpty)
+            {
+                bHDT_TR_HaveSourceDone = true;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.CASE1;
+        }
+
+        private FlowChart.FCRESULT flowChart404_Run()
+        {
+            //Reset Source
+            bool bRetSrc = false;
+
+            if (HDT_TR_PnPInfo.SourceIsDone || SYSPara.Lotend)
+            {
+                switch (HDT_TR_PnPInfo.SourceStation)
+                {
+                    //case PnPStation.KIT_SHUTTLE_A:  //不應該出現，只會從左Tray取料
+                    case PnPStation.TRAY_SHUTTLE_B:
+                        bRetSrc = (bool)SYSPara.CallProc(ModuleName_RTR, "SetStationFinish");
+                        break;
+                    case PnPStation.KIT_SHUTTLE_A:
+                        bRetSrc = (bool)LeftKitStateControl.StateDone(VehicleState.TESTED_FULL);
+                        if (bRetSrc)
+                        {
+                            HDT_TR_KitShuttleID_Unload = KitShuttleID.NONE;
+                        }
+                        break;
+                    case PnPStation.KIT_SHUTTLE_B:
+                        bRetSrc = (bool)RightKitStateControl.StateDone(VehicleState.TESTED_FULL);
+                        if (bRetSrc)
+                        {
+                            HDT_TR_KitShuttleID_Unload = KitShuttleID.NONE;
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                bRetSrc = true;
+            }
+            if (bRetSrc)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart405_Run()
+        {
+            //Next
+            return FlowChart.FCRESULT.NEXT;
+        }
+
+        private FlowChart.FCRESULT flowChart403_Run()
+        {
+            //Tray Head Placement
+            return default(FlowChart.FCRESULT);
+        }
+
+        private FlowChart.FCRESULT flowChart398_Run()
+        {
+            //Reset Source
+            if (bHDT_TR_HaveSourceDone)
+            {
+                bHDT_TR_HaveSourceDone = false;
+                return FlowChart.FCRESULT.NEXT;
+            }
+            bool bRetSrc = false;
+
+            if (HDT_TR_PnPInfo.SourceIsDone || SYSPara.Lotend)
+            {
+                switch (HDT_TR_PnPInfo.SourceStation)
+                {
+                    //case PnPStation.KIT_SHUTTLE_A:  //不應該出現，只會從左Tray取料
+                    case PnPStation.TRAY_SHUTTLE_B:
+                        bRetSrc = (bool)SYSPara.CallProc(ModuleName_RTR, "SetStationFinish");
+                        break;
+                    case PnPStation.KIT_SHUTTLE_A:
+                        bRetSrc = (bool)LeftKitStateControl.StateDone(VehicleState.TESTED_FULL);
+                        if (bRetSrc)
+                        {
+                            HDT_TR_KitShuttleID_Unload = KitShuttleID.NONE;
+                        }
+                        break;
+                    case PnPStation.KIT_SHUTTLE_B:
+                        bRetSrc = (bool)RightKitStateControl.StateDone(VehicleState.TESTED_FULL);
+                        if (bRetSrc)
+                        {
+                            HDT_TR_KitShuttleID_Unload = KitShuttleID.NONE;
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                bRetSrc = true;
+            }
+            if (bRetSrc)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart397_Run()
+        {
+            //Reset Target
+            bool bRetTrg = false;
+
+            if (HDT_TR_PnPInfo.TargetIsDone)
+            {
+                switch (HDT_TR_PnPInfo.TargetStation)
+                {
+                    case PnPStation.TRAY_SHUTTLE_A:
+                        //滿料退盤
+                        bRetTrg = (bool)SYSPara.CallProc(ModuleName_LTR, "SetStationFinish");
+                        break;
+                    case PnPStation.KIT_SHUTTLE_A:
+                        bRetTrg = (bool)LeftKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                        HDT_TR_KitShuttleID_Load = KitShuttleID.NONE;
+                        break;
+                    case PnPStation.KIT_SHUTTLE_B:
+                        bRetTrg = (bool)RightKitStateControl.StateDone(VehicleState.UNTESTED_EMPTY_BOOKED);
+                        HDT_TR_KitShuttleID_Load = KitShuttleID.NONE;
+                        break;
+                }
+            }
+            else
+            {
+                bRetTrg = true;
+            }
+            if (bRetTrg)
+            {
+                return FlowChart.FCRESULT.NEXT;
+            }
+            return FlowChart.FCRESULT.IDLE;
+        }
+
+        private FlowChart.FCRESULT flowChart396_Run()
+        {
+            //Flag_HDT_TR_PnP.Done
+            return default(FlowChart.FCRESULT);
+        }
+
+        private FlowChart.FCRESULT flowChart395_Run()
+        {
+            //LotEnd Ok
+            return default(FlowChart.FCRESULT);
+        }
+        #endregion
     }
 }

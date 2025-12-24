@@ -79,7 +79,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>uFr0bXXw7ETMGSmyP6uo1OFcVHGngzWK6dmr37sUW30=</dsig:DigestValue>
+        <dsig:DigestValue>jv9KzPe1mZYp9TQAf++4TTnf04Pd35SgQBubdSYSNe0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -265,37 +265,37 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PaeLibComponent.dll" size="13824">
-      <assemblyIdentity name="PaeLibComponent" version="1.2.9488.25562" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="PaeLibComponent" version="1.2.9489.15307" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>deKO1cMyQPjv5FO0XRoY19BV2uWTN3FAKq5mhTpqfDs=</dsig:DigestValue>
+        <dsig:DigestValue>rDGja476/FvbYV3VSPVNJrNMvD68g8vYGsOMY/rrSXY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PaeLibGeneral.dll" size="35328">
-      <assemblyIdentity name="PaeLibGeneral" version="1.2.9488.25561" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="PaeLibGeneral" version="1.2.9489.15306" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>lSXxZEwPKSdRK/Rd8ir8eFhW93q3fEzuIK0krFsoGjI=</dsig:DigestValue>
+        <dsig:DigestValue>8UKiuZRC+Tbsedn5FLMVlIabo0zhYaZKA22Nn/FlEGo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PaeLibProVSDKEx.dll" size="41472">
-      <assemblyIdentity name="PaeLibProVSDKEx" version="1.5.9488.25561" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="PaeLibProVSDKEx" version="1.5.9489.15307" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>MuWLtsySwvFagvE85RB/A2EhFkDLubIdjGnrmAhHBgc=</dsig:DigestValue>
+        <dsig:DigestValue>XWyZLTTBM/GR5rS3/FlpjuKFvHx2PrtfO5KQ18GnXjA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -408,14 +408,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TBPP14200.exe" size="1909760">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TBPP14200.exe" size="1929728">
       <assemblyIdentity name="TBPP14200" version="2.0.0.1" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>bjZ63GcZaAt3ZJBeyaj+Fc1Wo322/DoTrBpc7F3lsXk=</dsig:DigestValue>
+        <dsig:DigestValue>fxrPVMZNFZKhpyiHcA0xbGbn385QBUWVtNMCbLAVKp4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

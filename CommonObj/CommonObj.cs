@@ -148,6 +148,8 @@ namespace CommonObj
         BOWLFEEDER_B = 6,
         PassBox = 7,
         BinBox=8,
+        TRAY_SHUTTLE_A = 9, //Left Tray Shuttle
+        TRAY_SHUTTLE_B = 10, //Right Tray Shuttle
         WAITING = 99,
     }
 
