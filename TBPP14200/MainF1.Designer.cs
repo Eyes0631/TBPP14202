@@ -71,15 +71,11 @@
             this.tpProductionState = new System.Windows.Forms.TabPage();
             this.lb_UPH = new KCSDK.NumLabel();
             this.lb_BibCount = new KCSDK.NumLabel();
-            this.lb_UnloadPassQty = new KCSDK.NumLabel();
-            this.lb_UnloadFailQty = new KCSDK.NumLabel();
             this.label10 = new System.Windows.Forms.Label();
             this.panel16 = new System.Windows.Forms.Panel();
-            this.panel17 = new System.Windows.Forms.Panel();
             this.tv_RightLoadUnload = new ProVLib.TrayView();
             this.lb_LoadCompletedQty = new KCSDK.NumLabel();
             this.panel18 = new System.Windows.Forms.Panel();
-            this.panel19 = new System.Windows.Forms.Panel();
             this.tv_LeftLoadUnload = new ProVLib.TrayView();
             this.lb_LoadProcessQty = new KCSDK.NumLabel();
             this.button2 = new System.Windows.Forms.Button();
@@ -98,19 +94,10 @@
             this.lb_LBoardID = new System.Windows.Forms.Label();
             this.lb_UnloadProcessQty = new KCSDK.NumLabel();
             this.panel20 = new System.Windows.Forms.Panel();
-            this.panel21 = new System.Windows.Forms.Panel();
             this.tv_Transfer = new ProVLib.TrayView();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.panel15 = new System.Windows.Forms.Panel();
-            this.tv_BottomBowlFeeder = new ProVLib.TrayView();
-            this.tv_TopBowlFeeder = new ProVLib.TrayView();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
             this.tv_ClamSheel = new ProVLib.TrayView();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel13 = new System.Windows.Forms.Panel();
-            this.tv_HDT_BottomBF = new ProVLib.TrayView();
-            this.tv_HDT_TopBF = new ProVLib.TrayView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.tv_LeftBoard = new ProVLib.TrayView();
@@ -151,6 +138,17 @@
             this.tpMainFlow = new System.Windows.Forms.TabPage();
             this.tpCommunication = new System.Windows.Forms.TabPage();
             this.tmUIRefresh = new System.Windows.Forms.Timer(this.components);
+            this.tv_LeftTray = new ProVLib.TrayView();
+            this.label36 = new System.Windows.Forms.Label();
+            this.tv_RightTray = new ProVLib.TrayView();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tv_HDT_TR = new ProVLib.TrayView();
+            this.label5 = new System.Windows.Forms.Label();
+            this.numLabel1 = new KCSDK.NumLabel();
+            this.numLabel2 = new KCSDK.NumLabel();
             this.pnlControl.SuspendLayout();
             this.LightLayoutPanel.SuspendLayout();
             this.pnlTop.SuspendLayout();
@@ -169,9 +167,7 @@
             this.panel25.SuspendLayout();
             this.panel23.SuspendLayout();
             this.panel20.SuspendLayout();
-            this.panel14.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel7.SuspendLayout();
@@ -199,9 +195,9 @@
             this.pnlControl.Controls.Add(this.btnStart);
             this.pnlControl.Controls.Add(this.lbRunState);
             this.pnlControl.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlControl.Location = new System.Drawing.Point(1160, 2);
+            this.pnlControl.Location = new System.Drawing.Point(1301, 2);
             this.pnlControl.Name = "pnlControl";
-            this.pnlControl.Size = new System.Drawing.Size(200, 737);
+            this.pnlControl.Size = new System.Drawing.Size(200, 984);
             this.pnlControl.TabIndex = 0;
             // 
             // LightLayoutPanel
@@ -328,7 +324,7 @@
             this.lbNowTime.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold);
             this.lbNowTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
             this.lbNowTime.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbNowTime.Location = new System.Drawing.Point(0, 691);
+            this.lbNowTime.Location = new System.Drawing.Point(0, 938);
             this.lbNowTime.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.lbNowTime.Name = "lbNowTime";
             this.lbNowTime.Size = new System.Drawing.Size(200, 23);
@@ -342,7 +338,7 @@
             this.lbVersion.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold);
             this.lbVersion.ForeColor = System.Drawing.Color.Silver;
             this.lbVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbVersion.Location = new System.Drawing.Point(0, 714);
+            this.lbVersion.Location = new System.Drawing.Point(0, 961);
             this.lbVersion.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.lbVersion.Name = "lbVersion";
             this.lbVersion.Size = new System.Drawing.Size(200, 23);
@@ -514,7 +510,7 @@
             this.pnlTop.Location = new System.Drawing.Point(2, 2);
             this.pnlTop.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1158, 63);
+            this.pnlTop.Size = new System.Drawing.Size(1299, 63);
             this.pnlTop.TabIndex = 3;
             // 
             // pnlPackage
@@ -530,7 +526,7 @@
             this.pnlPackage.Location = new System.Drawing.Point(0, 0);
             this.pnlPackage.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.pnlPackage.Name = "pnlPackage";
-            this.pnlPackage.Size = new System.Drawing.Size(1158, 63);
+            this.pnlPackage.Size = new System.Drawing.Size(1299, 63);
             this.pnlPackage.TabIndex = 4;
             // 
             // lbPackage
@@ -583,7 +579,7 @@
             this.lbPackageName.Font = new System.Drawing.Font("微軟正黑體", 18F);
             this.lbPackageName.Location = new System.Drawing.Point(549, 10);
             this.lbPackageName.Name = "lbPackageName";
-            this.lbPackageName.Size = new System.Drawing.Size(375, 40);
+            this.lbPackageName.Size = new System.Drawing.Size(516, 40);
             this.lbPackageName.TabIndex = 6;
             this.lbPackageName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -595,7 +591,7 @@
             this.pnlUser.Controls.Add(this.btnChangeUser);
             this.pnlUser.Controls.Add(this.lbUserType);
             this.pnlUser.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlUser.Location = new System.Drawing.Point(927, 0);
+            this.pnlUser.Location = new System.Drawing.Point(1068, 0);
             this.pnlUser.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.pnlUser.Name = "pnlUser";
             this.pnlUser.Size = new System.Drawing.Size(227, 59);
@@ -631,9 +627,9 @@
             // 
             this.pnlAlarmGrid.Controls.Add(this.lvArmGrid);
             this.pnlAlarmGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlAlarmGrid.Location = new System.Drawing.Point(2, 649);
+            this.pnlAlarmGrid.Location = new System.Drawing.Point(2, 896);
             this.pnlAlarmGrid.Name = "pnlAlarmGrid";
-            this.pnlAlarmGrid.Size = new System.Drawing.Size(1158, 90);
+            this.pnlAlarmGrid.Size = new System.Drawing.Size(1299, 90);
             this.pnlAlarmGrid.TabIndex = 7;
             // 
             // lvArmGrid
@@ -655,7 +651,7 @@
             this.lvArmGrid.Location = new System.Drawing.Point(0, 0);
             this.lvArmGrid.MultiSelect = false;
             this.lvArmGrid.Name = "lvArmGrid";
-            this.lvArmGrid.Size = new System.Drawing.Size(1158, 90);
+            this.lvArmGrid.Size = new System.Drawing.Size(1299, 90);
             this.lvArmGrid.TabIndex = 0;
             this.lvArmGrid.UseCompatibleStateImageBehavior = false;
             this.lvArmGrid.View = System.Windows.Forms.View.Details;
@@ -693,7 +689,7 @@
             this.pnlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContainer.Location = new System.Drawing.Point(2, 65);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(1158, 584);
+            this.pnlContainer.Size = new System.Drawing.Size(1299, 831);
             this.pnlContainer.TabIndex = 8;
             // 
             // tabMachineState
@@ -710,20 +706,26 @@
             this.tabMachineState.Location = new System.Drawing.Point(0, 0);
             this.tabMachineState.Name = "tabMachineState";
             this.tabMachineState.SelectedIndex = 0;
-            this.tabMachineState.Size = new System.Drawing.Size(1158, 584);
+            this.tabMachineState.Size = new System.Drawing.Size(1299, 831);
             this.tabMachineState.TabIndex = 0;
             // 
             // tpProductionState
             // 
             this.tpProductionState.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(221)))));
+            this.tpProductionState.Controls.Add(this.numLabel2);
+            this.tpProductionState.Controls.Add(this.numLabel1);
+            this.tpProductionState.Controls.Add(this.tv_HDT_TR);
+            this.tpProductionState.Controls.Add(this.label5);
+            this.tpProductionState.Controls.Add(this.panel18);
+            this.tpProductionState.Controls.Add(this.tv_LeftTray);
+            this.tpProductionState.Controls.Add(this.panel16);
+            this.tpProductionState.Controls.Add(this.label36);
+            this.tpProductionState.Controls.Add(this.tv_RightTray);
+            this.tpProductionState.Controls.Add(this.label37);
             this.tpProductionState.Controls.Add(this.lb_UPH);
             this.tpProductionState.Controls.Add(this.lb_BibCount);
-            this.tpProductionState.Controls.Add(this.lb_UnloadPassQty);
-            this.tpProductionState.Controls.Add(this.lb_UnloadFailQty);
             this.tpProductionState.Controls.Add(this.label10);
-            this.tpProductionState.Controls.Add(this.panel16);
             this.tpProductionState.Controls.Add(this.lb_LoadCompletedQty);
-            this.tpProductionState.Controls.Add(this.panel18);
             this.tpProductionState.Controls.Add(this.lb_LoadProcessQty);
             this.tpProductionState.Controls.Add(this.button2);
             this.tpProductionState.Controls.Add(this.lb_LoadMissingQty);
@@ -731,9 +733,7 @@
             this.tpProductionState.Controls.Add(this.panel22);
             this.tpProductionState.Controls.Add(this.lb_UnloadProcessQty);
             this.tpProductionState.Controls.Add(this.panel20);
-            this.tpProductionState.Controls.Add(this.panel14);
             this.tpProductionState.Controls.Add(this.panel5);
-            this.tpProductionState.Controls.Add(this.panel4);
             this.tpProductionState.Controls.Add(this.panel1);
             this.tpProductionState.Controls.Add(this.panel2);
             this.tpProductionState.Controls.Add(this.panel7);
@@ -743,7 +743,7 @@
             this.tpProductionState.Location = new System.Drawing.Point(4, 44);
             this.tpProductionState.Name = "tpProductionState";
             this.tpProductionState.Padding = new System.Windows.Forms.Padding(3);
-            this.tpProductionState.Size = new System.Drawing.Size(1150, 536);
+            this.tpProductionState.Size = new System.Drawing.Size(1291, 783);
             this.tpProductionState.TabIndex = 0;
             this.tpProductionState.Text = "生 產 狀 態";
             // 
@@ -755,11 +755,11 @@
             this.lb_UPH.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.lb_UPH.CaptionWidth = 150;
             this.lb_UPH.CheckLimit = false;
-            this.lb_UPH.Location = new System.Drawing.Point(384, 634);
+            this.lb_UPH.Location = new System.Drawing.Point(509, 705);
             this.lb_UPH.LowerLimit = 0D;
             this.lb_UPH.Name = "lb_UPH";
             this.lb_UPH.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_UPH.Size = new System.Drawing.Size(356, 30);
+            this.lb_UPH.Size = new System.Drawing.Size(490, 30);
             this.lb_UPH.TabIndex = 121;
             this.lb_UPH.Unit = "K/H";
             this.lb_UPH.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
@@ -777,11 +777,11 @@
             this.lb_BibCount.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.lb_BibCount.CaptionWidth = 150;
             this.lb_BibCount.CheckLimit = false;
-            this.lb_BibCount.Location = new System.Drawing.Point(15, 634);
+            this.lb_BibCount.Location = new System.Drawing.Point(13, 705);
             this.lb_BibCount.LowerLimit = 0D;
             this.lb_BibCount.Name = "lb_BibCount";
             this.lb_BibCount.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_BibCount.Size = new System.Drawing.Size(356, 30);
+            this.lb_BibCount.Size = new System.Drawing.Size(490, 30);
             this.lb_BibCount.TabIndex = 120;
             this.lb_BibCount.Unit = "pcs";
             this.lb_BibCount.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
@@ -791,59 +791,15 @@
             this.lb_BibCount.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(137)))), ((int)(((byte)(195)))), ((int)(((byte)(97)))));
             this.lb_BibCount.ValueFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             // 
-            // lb_UnloadPassQty
-            // 
-            this.lb_UnloadPassQty.BGColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
-            this.lb_UnloadPassQty.Caption = "Pass Qty";
-            this.lb_UnloadPassQty.CaptionColor = System.Drawing.Color.Black;
-            this.lb_UnloadPassQty.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            this.lb_UnloadPassQty.CaptionWidth = 100;
-            this.lb_UnloadPassQty.CheckLimit = false;
-            this.lb_UnloadPassQty.Location = new System.Drawing.Point(1009, 95);
-            this.lb_UnloadPassQty.LowerLimit = 0D;
-            this.lb_UnloadPassQty.Name = "lb_UnloadPassQty";
-            this.lb_UnloadPassQty.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_UnloadPassQty.Size = new System.Drawing.Size(208, 30);
-            this.lb_UnloadPassQty.TabIndex = 117;
-            this.lb_UnloadPassQty.Unit = "pcs";
-            this.lb_UnloadPassQty.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            this.lb_UnloadPassQty.UnitWidth = 50;
-            this.lb_UnloadPassQty.UpperLimit = 0D;
-            this.lb_UnloadPassQty.Value = "0";
-            this.lb_UnloadPassQty.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(137)))), ((int)(((byte)(195)))), ((int)(((byte)(97)))));
-            this.lb_UnloadPassQty.ValueFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            // 
-            // lb_UnloadFailQty
-            // 
-            this.lb_UnloadFailQty.BGColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
-            this.lb_UnloadFailQty.Caption = "Fail Qty";
-            this.lb_UnloadFailQty.CaptionColor = System.Drawing.Color.Black;
-            this.lb_UnloadFailQty.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            this.lb_UnloadFailQty.CaptionWidth = 100;
-            this.lb_UnloadFailQty.CheckLimit = false;
-            this.lb_UnloadFailQty.Location = new System.Drawing.Point(1009, 303);
-            this.lb_UnloadFailQty.LowerLimit = 0D;
-            this.lb_UnloadFailQty.Name = "lb_UnloadFailQty";
-            this.lb_UnloadFailQty.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_UnloadFailQty.Size = new System.Drawing.Size(208, 30);
-            this.lb_UnloadFailQty.TabIndex = 118;
-            this.lb_UnloadFailQty.Unit = "pcs";
-            this.lb_UnloadFailQty.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            this.lb_UnloadFailQty.UnitWidth = 50;
-            this.lb_UnloadFailQty.UpperLimit = 0D;
-            this.lb_UnloadFailQty.Value = "0";
-            this.lb_UnloadFailQty.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(137)))), ((int)(((byte)(195)))), ((int)(((byte)(97)))));
-            this.lb_UnloadFailQty.ValueFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
-            // 
             // label10
             // 
             this.label10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
             this.label10.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold);
             this.label10.ForeColor = System.Drawing.Color.Green;
             this.label10.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label10.Location = new System.Drawing.Point(16, 387);
+            this.label10.Location = new System.Drawing.Point(13, 579);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(513, 30);
+            this.label10.Size = new System.Drawing.Size(986, 30);
             this.label10.TabIndex = 119;
             this.label10.Text = "Production Information";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -851,21 +807,12 @@
             // panel16
             // 
             this.panel16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel16.Controls.Add(this.panel17);
+            this.panel16.Controls.Add(this.label4);
             this.panel16.Controls.Add(this.tv_RightLoadUnload);
-            this.panel16.Location = new System.Drawing.Point(377, 558);
+            this.panel16.Location = new System.Drawing.Point(273, 379);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(367, 74);
+            this.panel16.Size = new System.Drawing.Size(258, 196);
             this.panel16.TabIndex = 112;
-            // 
-            // panel17
-            // 
-            this.panel17.BackgroundImage = global::TBPP14200.Properties.Resources.LoadUnload;
-            this.panel17.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel17.Location = new System.Drawing.Point(0, 0);
-            this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(363, 32);
-            this.panel17.TabIndex = 5;
             // 
             // tv_RightLoadUnload
             // 
@@ -874,10 +821,10 @@
             this.tv_RightLoadUnload.ColorCount = 27;
             this.tv_RightLoadUnload.DataVCL = null;
             this.tv_RightLoadUnload.IsDoubleBufferdOn = true;
-            this.tv_RightLoadUnload.Location = new System.Drawing.Point(5, 35);
+            this.tv_RightLoadUnload.Location = new System.Drawing.Point(3, 30);
             this.tv_RightLoadUnload.Name = "tv_RightLoadUnload";
             this.tv_RightLoadUnload.ShowText = false;
-            this.tv_RightLoadUnload.Size = new System.Drawing.Size(355, 33);
+            this.tv_RightLoadUnload.Size = new System.Drawing.Size(246, 159);
             this.tv_RightLoadUnload.UseSelectBesideBinArray = false;
             // 
             // lb_LoadCompletedQty
@@ -888,11 +835,11 @@
             this.lb_LoadCompletedQty.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.lb_LoadCompletedQty.CaptionWidth = 220;
             this.lb_LoadCompletedQty.CheckLimit = false;
-            this.lb_LoadCompletedQty.Location = new System.Drawing.Point(16, 451);
+            this.lb_LoadCompletedQty.Location = new System.Drawing.Point(13, 643);
             this.lb_LoadCompletedQty.LowerLimit = 0D;
             this.lb_LoadCompletedQty.Name = "lb_LoadCompletedQty";
             this.lb_LoadCompletedQty.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_LoadCompletedQty.Size = new System.Drawing.Size(513, 30);
+            this.lb_LoadCompletedQty.Size = new System.Drawing.Size(490, 30);
             this.lb_LoadCompletedQty.TabIndex = 115;
             this.lb_LoadCompletedQty.Unit = "pcs";
             this.lb_LoadCompletedQty.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
@@ -905,21 +852,12 @@
             // panel18
             // 
             this.panel18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel18.Controls.Add(this.panel19);
+            this.panel18.Controls.Add(this.label3);
             this.panel18.Controls.Add(this.tv_LeftLoadUnload);
-            this.panel18.Location = new System.Drawing.Point(8, 556);
+            this.panel18.Location = new System.Drawing.Point(8, 379);
             this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(367, 74);
+            this.panel18.Size = new System.Drawing.Size(253, 196);
             this.panel18.TabIndex = 111;
-            // 
-            // panel19
-            // 
-            this.panel19.BackgroundImage = global::TBPP14200.Properties.Resources.LoadUnload;
-            this.panel19.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel19.Location = new System.Drawing.Point(0, 0);
-            this.panel19.Name = "panel19";
-            this.panel19.Size = new System.Drawing.Size(363, 32);
-            this.panel19.TabIndex = 5;
             // 
             // tv_LeftLoadUnload
             // 
@@ -928,10 +866,10 @@
             this.tv_LeftLoadUnload.ColorCount = 27;
             this.tv_LeftLoadUnload.DataVCL = null;
             this.tv_LeftLoadUnload.IsDoubleBufferdOn = true;
-            this.tv_LeftLoadUnload.Location = new System.Drawing.Point(5, 35);
+            this.tv_LeftLoadUnload.Location = new System.Drawing.Point(3, 30);
             this.tv_LeftLoadUnload.Name = "tv_LeftLoadUnload";
             this.tv_LeftLoadUnload.ShowText = false;
-            this.tv_LeftLoadUnload.Size = new System.Drawing.Size(356, 33);
+            this.tv_LeftLoadUnload.Size = new System.Drawing.Size(244, 160);
             this.tv_LeftLoadUnload.UseSelectBesideBinArray = false;
             // 
             // lb_LoadProcessQty
@@ -942,11 +880,11 @@
             this.lb_LoadProcessQty.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.lb_LoadProcessQty.CaptionWidth = 220;
             this.lb_LoadProcessQty.CheckLimit = false;
-            this.lb_LoadProcessQty.Location = new System.Drawing.Point(16, 420);
+            this.lb_LoadProcessQty.Location = new System.Drawing.Point(13, 612);
             this.lb_LoadProcessQty.LowerLimit = 0D;
             this.lb_LoadProcessQty.Name = "lb_LoadProcessQty";
             this.lb_LoadProcessQty.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_LoadProcessQty.Size = new System.Drawing.Size(513, 30);
+            this.lb_LoadProcessQty.Size = new System.Drawing.Size(490, 30);
             this.lb_LoadProcessQty.TabIndex = 113;
             this.lb_LoadProcessQty.Unit = "pcs";
             this.lb_LoadProcessQty.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
@@ -974,11 +912,11 @@
             this.lb_LoadMissingQty.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.lb_LoadMissingQty.CaptionWidth = 220;
             this.lb_LoadMissingQty.CheckLimit = true;
-            this.lb_LoadMissingQty.Location = new System.Drawing.Point(16, 482);
+            this.lb_LoadMissingQty.Location = new System.Drawing.Point(13, 674);
             this.lb_LoadMissingQty.LowerLimit = 0D;
             this.lb_LoadMissingQty.Name = "lb_LoadMissingQty";
             this.lb_LoadMissingQty.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_LoadMissingQty.Size = new System.Drawing.Size(513, 30);
+            this.lb_LoadMissingQty.Size = new System.Drawing.Size(490, 30);
             this.lb_LoadMissingQty.TabIndex = 116;
             this.lb_LoadMissingQty.Unit = "pcs";
             this.lb_LoadMissingQty.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
@@ -1009,7 +947,7 @@
             this.panel22.Controls.Add(this.panel23);
             this.panel22.Location = new System.Drawing.Point(6, 13);
             this.panel22.Name = "panel22";
-            this.panel22.Size = new System.Drawing.Size(999, 36);
+            this.panel22.Size = new System.Drawing.Size(994, 36);
             this.panel22.TabIndex = 108;
             // 
             // panel28
@@ -1032,6 +970,7 @@
             this.lb_RunMode.TabIndex = 1;
             this.lb_RunMode.Text = "Mode";
             this.lb_RunMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_RunMode.Click += new System.EventHandler(this.lb_RunMode_Click);
             // 
             // panel27
             // 
@@ -1120,11 +1059,11 @@
             this.lb_UnloadProcessQty.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
             this.lb_UnloadProcessQty.CaptionWidth = 220;
             this.lb_UnloadProcessQty.CheckLimit = false;
-            this.lb_UnloadProcessQty.Location = new System.Drawing.Point(16, 513);
+            this.lb_UnloadProcessQty.Location = new System.Drawing.Point(509, 612);
             this.lb_UnloadProcessQty.LowerLimit = 0D;
             this.lb_UnloadProcessQty.Name = "lb_UnloadProcessQty";
             this.lb_UnloadProcessQty.OverLimitColor = System.Drawing.Color.Red;
-            this.lb_UnloadProcessQty.Size = new System.Drawing.Size(513, 30);
+            this.lb_UnloadProcessQty.Size = new System.Drawing.Size(490, 30);
             this.lb_UnloadProcessQty.TabIndex = 114;
             this.lb_UnloadProcessQty.Unit = "pcs";
             this.lb_UnloadProcessQty.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
@@ -1137,21 +1076,12 @@
             // panel20
             // 
             this.panel20.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel20.Controls.Add(this.panel21);
+            this.panel20.Controls.Add(this.label2);
             this.panel20.Controls.Add(this.tv_Transfer);
-            this.panel20.Location = new System.Drawing.Point(536, 345);
+            this.panel20.Location = new System.Drawing.Point(535, 348);
             this.panel20.Name = "panel20";
-            this.panel20.Size = new System.Drawing.Size(208, 211);
+            this.panel20.Size = new System.Drawing.Size(202, 227);
             this.panel20.TabIndex = 107;
-            // 
-            // panel21
-            // 
-            this.panel21.BackgroundImage = global::TBPP14200.Properties.Resources.Transfer;
-            this.panel21.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel21.Location = new System.Drawing.Point(0, 0);
-            this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(204, 32);
-            this.panel21.TabIndex = 5;
             // 
             // tv_Transfer
             // 
@@ -1160,66 +1090,20 @@
             this.tv_Transfer.ColorCount = 27;
             this.tv_Transfer.DataVCL = null;
             this.tv_Transfer.IsDoubleBufferdOn = true;
-            this.tv_Transfer.Location = new System.Drawing.Point(5, 35);
+            this.tv_Transfer.Location = new System.Drawing.Point(5, 30);
             this.tv_Transfer.Name = "tv_Transfer";
             this.tv_Transfer.ShowText = false;
-            this.tv_Transfer.Size = new System.Drawing.Size(193, 170);
+            this.tv_Transfer.Size = new System.Drawing.Size(189, 189);
             this.tv_Transfer.UseSelectBesideBinArray = false;
-            // 
-            // panel14
-            // 
-            this.panel14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel14.Controls.Add(this.panel15);
-            this.panel14.Controls.Add(this.tv_BottomBowlFeeder);
-            this.panel14.Controls.Add(this.tv_TopBowlFeeder);
-            this.panel14.Location = new System.Drawing.Point(850, 54);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(75, 287);
-            this.panel14.TabIndex = 106;
-            // 
-            // panel15
-            // 
-            this.panel15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.panel15.BackgroundImage = global::TBPP14200.Properties.Resources.Bowl_Feeder;
-            this.panel15.Location = new System.Drawing.Point(5, 71);
-            this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(64, 142);
-            this.panel15.TabIndex = 5;
-            // 
-            // tv_BottomBowlFeeder
-            // 
-            this.tv_BottomBowlFeeder.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_BottomBowlFeeder.BinColorBuf")));
-            this.tv_BottomBowlFeeder.CellColorGradient = 0;
-            this.tv_BottomBowlFeeder.ColorCount = 10;
-            this.tv_BottomBowlFeeder.DataVCL = null;
-            this.tv_BottomBowlFeeder.IsDoubleBufferdOn = true;
-            this.tv_BottomBowlFeeder.Location = new System.Drawing.Point(5, 215);
-            this.tv_BottomBowlFeeder.Name = "tv_BottomBowlFeeder";
-            this.tv_BottomBowlFeeder.ShowText = false;
-            this.tv_BottomBowlFeeder.Size = new System.Drawing.Size(65, 65);
-            this.tv_BottomBowlFeeder.UseSelectBesideBinArray = false;
-            // 
-            // tv_TopBowlFeeder
-            // 
-            this.tv_TopBowlFeeder.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_TopBowlFeeder.BinColorBuf")));
-            this.tv_TopBowlFeeder.CellColorGradient = 0;
-            this.tv_TopBowlFeeder.ColorCount = 10;
-            this.tv_TopBowlFeeder.DataVCL = null;
-            this.tv_TopBowlFeeder.IsDoubleBufferdOn = true;
-            this.tv_TopBowlFeeder.Location = new System.Drawing.Point(5, 5);
-            this.tv_TopBowlFeeder.Name = "tv_TopBowlFeeder";
-            this.tv_TopBowlFeeder.ShowText = false;
-            this.tv_TopBowlFeeder.Size = new System.Drawing.Size(65, 65);
-            this.tv_TopBowlFeeder.UseSelectBesideBinArray = false;
             // 
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel5.Controls.Add(this.panel9);
             this.panel5.Controls.Add(this.tv_ClamSheel);
-            this.panel5.Location = new System.Drawing.Point(748, 346);
+            this.panel5.Location = new System.Drawing.Point(743, 346);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(260, 290);
+            this.panel5.Size = new System.Drawing.Size(258, 229);
             this.panel5.TabIndex = 105;
             // 
             // panel9
@@ -1228,7 +1112,7 @@
             this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel9.Location = new System.Drawing.Point(0, 0);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(256, 32);
+            this.panel9.Size = new System.Drawing.Size(254, 32);
             this.panel9.TabIndex = 5;
             // 
             // tv_ClamSheel
@@ -1238,57 +1122,11 @@
             this.tv_ClamSheel.ColorCount = 27;
             this.tv_ClamSheel.DataVCL = null;
             this.tv_ClamSheel.IsDoubleBufferdOn = true;
-            this.tv_ClamSheel.Location = new System.Drawing.Point(5, 35);
+            this.tv_ClamSheel.Location = new System.Drawing.Point(2, 35);
             this.tv_ClamSheel.Name = "tv_ClamSheel";
             this.tv_ClamSheel.ShowText = false;
-            this.tv_ClamSheel.Size = new System.Drawing.Size(250, 250);
+            this.tv_ClamSheel.Size = new System.Drawing.Size(247, 188);
             this.tv_ClamSheel.UseSelectBesideBinArray = false;
-            // 
-            // panel4
-            // 
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.panel13);
-            this.panel4.Controls.Add(this.tv_HDT_BottomBF);
-            this.panel4.Controls.Add(this.tv_HDT_TopBF);
-            this.panel4.Location = new System.Drawing.Point(931, 52);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(75, 287);
-            this.panel4.TabIndex = 104;
-            // 
-            // panel13
-            // 
-            this.panel13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.panel13.BackgroundImage = global::TBPP14200.Properties.Resources.BowlFeeder_PnP;
-            this.panel13.Location = new System.Drawing.Point(5, 71);
-            this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(64, 142);
-            this.panel13.TabIndex = 5;
-            // 
-            // tv_HDT_BottomBF
-            // 
-            this.tv_HDT_BottomBF.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_HDT_BottomBF.BinColorBuf")));
-            this.tv_HDT_BottomBF.CellColorGradient = 0;
-            this.tv_HDT_BottomBF.ColorCount = 10;
-            this.tv_HDT_BottomBF.DataVCL = null;
-            this.tv_HDT_BottomBF.IsDoubleBufferdOn = true;
-            this.tv_HDT_BottomBF.Location = new System.Drawing.Point(5, 215);
-            this.tv_HDT_BottomBF.Name = "tv_HDT_BottomBF";
-            this.tv_HDT_BottomBF.ShowText = false;
-            this.tv_HDT_BottomBF.Size = new System.Drawing.Size(65, 65);
-            this.tv_HDT_BottomBF.UseSelectBesideBinArray = false;
-            // 
-            // tv_HDT_TopBF
-            // 
-            this.tv_HDT_TopBF.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_HDT_TopBF.BinColorBuf")));
-            this.tv_HDT_TopBF.CellColorGradient = 0;
-            this.tv_HDT_TopBF.ColorCount = 10;
-            this.tv_HDT_TopBF.DataVCL = null;
-            this.tv_HDT_TopBF.IsDoubleBufferdOn = true;
-            this.tv_HDT_TopBF.Location = new System.Drawing.Point(5, 5);
-            this.tv_HDT_TopBF.Name = "tv_HDT_TopBF";
-            this.tv_HDT_TopBF.ShowText = false;
-            this.tv_HDT_TopBF.Size = new System.Drawing.Size(65, 65);
-            this.tv_HDT_TopBF.UseSelectBesideBinArray = false;
             // 
             // panel1
             // 
@@ -1360,7 +1198,7 @@
             this.panel7.Controls.Add(this.panel6);
             this.panel7.Controls.Add(this.tv_HDT_BottomBoard);
             this.panel7.Controls.Add(this.tv_HDT_TopBoard);
-            this.panel7.Location = new System.Drawing.Point(540, 52);
+            this.panel7.Location = new System.Drawing.Point(535, 52);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(75, 287);
             this.panel7.TabIndex = 101;
@@ -1371,7 +1209,7 @@
             this.panel6.BackgroundImage = global::TBPP14200.Properties.Resources.未命名;
             this.panel6.Location = new System.Drawing.Point(5, 71);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(64, 142);
+            this.panel6.Size = new System.Drawing.Size(66, 142);
             this.panel6.TabIndex = 6;
             // 
             // tv_HDT_BottomBoard
@@ -1384,7 +1222,7 @@
             this.tv_HDT_BottomBoard.Location = new System.Drawing.Point(5, 215);
             this.tv_HDT_BottomBoard.Name = "tv_HDT_BottomBoard";
             this.tv_HDT_BottomBoard.ShowText = false;
-            this.tv_HDT_BottomBoard.Size = new System.Drawing.Size(65, 65);
+            this.tv_HDT_BottomBoard.Size = new System.Drawing.Size(67, 65);
             this.tv_HDT_BottomBoard.UseSelectBesideBinArray = false;
             // 
             // tv_HDT_TopBoard
@@ -1397,7 +1235,7 @@
             this.tv_HDT_TopBoard.Location = new System.Drawing.Point(5, 5);
             this.tv_HDT_TopBoard.Name = "tv_HDT_TopBoard";
             this.tv_HDT_TopBoard.ShowText = false;
-            this.tv_HDT_TopBoard.Size = new System.Drawing.Size(65, 65);
+            this.tv_HDT_TopBoard.Size = new System.Drawing.Size(67, 65);
             this.tv_HDT_TopBoard.UseSelectBesideBinArray = false;
             // 
             // panel3
@@ -1407,9 +1245,9 @@
             this.panel3.Controls.Add(this.panel10);
             this.panel3.Controls.Add(this.tv_RightKit);
             this.panel3.Controls.Add(this.tv_LeftKit);
-            this.panel3.Location = new System.Drawing.Point(630, 52);
+            this.panel3.Location = new System.Drawing.Point(616, 52);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(205, 290);
+            this.panel3.Size = new System.Drawing.Size(175, 290);
             this.panel3.TabIndex = 100;
             // 
             // panel11
@@ -1417,9 +1255,9 @@
             this.panel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.panel11.BackgroundImage = global::TBPP14200.Properties.Resources.Right_Kit_Shuttle;
             this.panel11.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel11.Location = new System.Drawing.Point(171, 0);
+            this.panel11.Location = new System.Drawing.Point(140, 0);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(30, 286);
+            this.panel11.Size = new System.Drawing.Size(31, 286);
             this.panel11.TabIndex = 4;
             // 
             // panel10
@@ -1439,10 +1277,10 @@
             this.tv_RightKit.ColorCount = 10;
             this.tv_RightKit.DataVCL = null;
             this.tv_RightKit.IsDoubleBufferdOn = true;
-            this.tv_RightKit.Location = new System.Drawing.Point(105, 5);
+            this.tv_RightKit.Location = new System.Drawing.Point(89, 5);
             this.tv_RightKit.Name = "tv_RightKit";
             this.tv_RightKit.ShowText = false;
-            this.tv_RightKit.Size = new System.Drawing.Size(65, 280);
+            this.tv_RightKit.Size = new System.Drawing.Size(49, 280);
             this.tv_RightKit.UseSelectBesideBinArray = false;
             // 
             // tv_LeftKit
@@ -1455,7 +1293,7 @@
             this.tv_LeftKit.Location = new System.Drawing.Point(35, 5);
             this.tv_LeftKit.Name = "tv_LeftKit";
             this.tv_LeftKit.ShowText = false;
-            this.tv_LeftKit.Size = new System.Drawing.Size(65, 280);
+            this.tv_LeftKit.Size = new System.Drawing.Size(49, 280);
             this.tv_LeftKit.UseSelectBesideBinArray = false;
             // 
             // pnl異常通知
@@ -1826,10 +1664,159 @@
             // 
             this.tmUIRefresh.Tick += new System.EventHandler(this.tmUIRefresh_Tick);
             // 
+            // tv_LeftTray
+            // 
+            this.tv_LeftTray.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_LeftTray.BinColorBuf")));
+            this.tv_LeftTray.CellColorGradient = 0;
+            this.tv_LeftTray.ColorCount = 10;
+            this.tv_LeftTray.DataVCL = null;
+            this.tv_LeftTray.IsDoubleBufferdOn = true;
+            this.tv_LeftTray.Location = new System.Drawing.Point(794, 144);
+            this.tv_LeftTray.Name = "tv_LeftTray";
+            this.tv_LeftTray.ShowText = false;
+            this.tv_LeftTray.Size = new System.Drawing.Size(100, 195);
+            this.tv_LeftTray.UseSelectBesideBinArray = false;
+            // 
+            // label36
+            // 
+            this.label36.BackColor = System.Drawing.Color.Blue;
+            this.label36.ForeColor = System.Drawing.SystemColors.Control;
+            this.label36.Location = new System.Drawing.Point(794, 118);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(100, 25);
+            this.label36.TabIndex = 233;
+            this.label36.Text = "L-Tray";
+            this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tv_RightTray
+            // 
+            this.tv_RightTray.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_RightTray.BinColorBuf")));
+            this.tv_RightTray.CellColorGradient = 0;
+            this.tv_RightTray.ColorCount = 10;
+            this.tv_RightTray.DataVCL = null;
+            this.tv_RightTray.IsDoubleBufferdOn = true;
+            this.tv_RightTray.Location = new System.Drawing.Point(900, 144);
+            this.tv_RightTray.Name = "tv_RightTray";
+            this.tv_RightTray.ShowText = false;
+            this.tv_RightTray.Size = new System.Drawing.Size(100, 195);
+            this.tv_RightTray.UseSelectBesideBinArray = false;
+            // 
+            // label37
+            // 
+            this.label37.BackColor = System.Drawing.Color.Blue;
+            this.label37.ForeColor = System.Drawing.SystemColors.Control;
+            this.label37.Location = new System.Drawing.Point(900, 118);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(100, 25);
+            this.label37.TabIndex = 232;
+            this.label37.Text = "R-Tray";
+            this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.Blue;
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(4, 2);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(190, 25);
+            this.label2.TabIndex = 234;
+            this.label2.Text = "Transfer";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.Blue;
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(3, 2);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(244, 25);
+            this.label3.TabIndex = 235;
+            this.label3.Text = "Load Port 1";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.Blue;
+            this.label4.ForeColor = System.Drawing.SystemColors.Control;
+            this.label4.Location = new System.Drawing.Point(2, 2);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(248, 25);
+            this.label4.TabIndex = 236;
+            this.label4.Text = "Load Port 2";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tv_HDT_TR
+            // 
+            this.tv_HDT_TR.BinColorBuf = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("tv_HDT_TR.BinColorBuf")));
+            this.tv_HDT_TR.CellColorGradient = 0;
+            this.tv_HDT_TR.ColorCount = 10;
+            this.tv_HDT_TR.DataVCL = null;
+            this.tv_HDT_TR.IsDoubleBufferdOn = true;
+            this.tv_HDT_TR.Location = new System.Drawing.Point(793, 78);
+            this.tv_HDT_TR.Name = "tv_HDT_TR";
+            this.tv_HDT_TR.ShowText = false;
+            this.tv_HDT_TR.Size = new System.Drawing.Size(206, 38);
+            this.tv_HDT_TR.UseSelectBesideBinArray = false;
+            // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.Color.Blue;
+            this.label5.ForeColor = System.Drawing.SystemColors.Control;
+            this.label5.Location = new System.Drawing.Point(792, 52);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(208, 25);
+            this.label5.TabIndex = 236;
+            this.label5.Text = "Tray Head";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // numLabel1
+            // 
+            this.numLabel1.BGColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
+            this.numLabel1.Caption = "Load Completed Qty";
+            this.numLabel1.CaptionColor = System.Drawing.Color.Black;
+            this.numLabel1.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            this.numLabel1.CaptionWidth = 220;
+            this.numLabel1.CheckLimit = false;
+            this.numLabel1.Location = new System.Drawing.Point(509, 643);
+            this.numLabel1.LowerLimit = 0D;
+            this.numLabel1.Name = "numLabel1";
+            this.numLabel1.OverLimitColor = System.Drawing.Color.Red;
+            this.numLabel1.Size = new System.Drawing.Size(490, 30);
+            this.numLabel1.TabIndex = 238;
+            this.numLabel1.Unit = "pcs";
+            this.numLabel1.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            this.numLabel1.UnitWidth = 50;
+            this.numLabel1.UpperLimit = 0D;
+            this.numLabel1.Value = "0";
+            this.numLabel1.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(137)))), ((int)(((byte)(195)))), ((int)(((byte)(97)))));
+            this.numLabel1.ValueFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            // 
+            // numLabel2
+            // 
+            this.numLabel2.BGColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
+            this.numLabel2.Caption = "Load Missing Qty";
+            this.numLabel2.CaptionColor = System.Drawing.Color.Black;
+            this.numLabel2.CaptionFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            this.numLabel2.CaptionWidth = 220;
+            this.numLabel2.CheckLimit = true;
+            this.numLabel2.Location = new System.Drawing.Point(509, 674);
+            this.numLabel2.LowerLimit = 0D;
+            this.numLabel2.Name = "numLabel2";
+            this.numLabel2.OverLimitColor = System.Drawing.Color.Red;
+            this.numLabel2.Size = new System.Drawing.Size(490, 30);
+            this.numLabel2.TabIndex = 239;
+            this.numLabel2.Unit = "pcs";
+            this.numLabel2.UnitFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            this.numLabel2.UnitWidth = 50;
+            this.numLabel2.UpperLimit = 0D;
+            this.numLabel2.Value = "0";
+            this.numLabel2.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(137)))), ((int)(((byte)(195)))), ((int)(((byte)(97)))));
+            this.numLabel2.ValueFont = new System.Drawing.Font("微軟正黑體", 14F, System.Drawing.FontStyle.Bold);
+            // 
             // MainF1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(1362, 741);
+            this.ClientSize = new System.Drawing.Size(1503, 988);
             this.Controls.Add(this.pnlContainer);
             this.Controls.Add(this.pnlAlarmGrid);
             this.Controls.Add(this.pnlTop);
@@ -1863,9 +1850,7 @@
             this.panel25.ResumeLayout(false);
             this.panel23.ResumeLayout(false);
             this.panel20.ResumeLayout(false);
-            this.panel14.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
@@ -1944,15 +1929,11 @@
         private KCSDK.ThreeColorLight ledGreen;
         private KCSDK.NumLabel lb_UPH;
         private KCSDK.NumLabel lb_BibCount;
-        private KCSDK.NumLabel lb_UnloadPassQty;
-        private KCSDK.NumLabel lb_UnloadFailQty;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel panel16;
-        private System.Windows.Forms.Panel panel17;
         public ProVLib.TrayView tv_RightLoadUnload;
         private KCSDK.NumLabel lb_LoadCompletedQty;
         private System.Windows.Forms.Panel panel18;
-        private System.Windows.Forms.Panel panel19;
         public ProVLib.TrayView tv_LeftLoadUnload;
         private KCSDK.NumLabel lb_LoadProcessQty;
         private System.Windows.Forms.Button button2;
@@ -1971,19 +1952,10 @@
         private System.Windows.Forms.Label lb_LBoardID;
         private KCSDK.NumLabel lb_UnloadProcessQty;
         private System.Windows.Forms.Panel panel20;
-        private System.Windows.Forms.Panel panel21;
         public ProVLib.TrayView tv_Transfer;
-        private System.Windows.Forms.Panel panel14;
-        private System.Windows.Forms.Panel panel15;
-        private ProVLib.TrayView tv_BottomBowlFeeder;
-        private ProVLib.TrayView tv_TopBowlFeeder;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel9;
         public ProVLib.TrayView tv_ClamSheel;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel13;
-        private ProVLib.TrayView tv_HDT_BottomBF;
-        private ProVLib.TrayView tv_HDT_TopBF;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel12;
         public ProVLib.TrayView tv_LeftBoard;
@@ -1999,6 +1971,17 @@
         private System.Windows.Forms.Panel panel10;
         private ProVLib.TrayView tv_RightKit;
         private ProVLib.TrayView tv_LeftKit;
+        private ProVLib.TrayView tv_LeftTray;
+        private System.Windows.Forms.Label label36;
+        private ProVLib.TrayView tv_RightTray;
+        private System.Windows.Forms.Label label37;
+        private KCSDK.NumLabel numLabel2;
+        private KCSDK.NumLabel numLabel1;
+        private ProVLib.TrayView tv_HDT_TR;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label2;
     }
 }
 

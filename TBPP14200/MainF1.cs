@@ -1330,5 +1330,10 @@ namespace TBPP14200
 
             tmUIRefresh.Enabled = true;
         }
+
+        private void lb_RunMode_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
